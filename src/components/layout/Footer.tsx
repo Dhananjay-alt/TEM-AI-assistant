@@ -40,6 +40,11 @@ export function Footer() {
             </div>
             <ul className="space-y-1.5 text-slate-700">
               <li>
+                <Link href="/anatomy" className="hover:text-[#FF5722] hover:underline flex items-center gap-1.5 font-bold text-slate-900">
+                  → TEM Column Anatomy (Dissection)
+                </Link>
+              </li>
+              <li>
                 <Link href="/ask" className="hover:text-[#FF5722] hover:underline flex items-center gap-1.5">
                   → Ask Carter AI Tutor
                 </Link>

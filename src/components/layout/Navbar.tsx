@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Compass,
+  Layers,
 } from "lucide-react";
 import { ScientificBadge } from "@/components/ui/ScientificBadge";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
+    { href: "/anatomy", label: "Anatomy", icon: <Layers className="w-3.5 h-3.5" /> },
     { href: "/ask", label: "Ask Carter", icon: <Zap className="w-3.5 h-3.5" /> },
     { href: "/simulator", label: "Simulator", icon: <Atom className="w-3.5 h-3.5" /> },
     { href: "/image-analysis", label: "Image Lab", icon: <Eye className="w-3.5 h-3.5" /> },
@@ -98,7 +100,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center gap-1 font-mono text-xs font-bold">
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 font-mono text-[11px] xl:text-xs font-bold">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -106,7 +108,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-2.5 py-1.5 transition-all flex items-center gap-1.5 border-2 select-none",
+                  "px-1.5 xl:px-2.5 py-1 transition-all flex items-center gap-1 border-2 select-none",
                   isActive
                     ? "bg-[#0F172A] text-white border-[#0F172A] shadow-neo-xs"
                     : "border-transparent text-slate-800 hover:border-[#0F172A] hover:bg-surface-warm"
