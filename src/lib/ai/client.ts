@@ -31,8 +31,9 @@ export function getGenAIClient(): GoogleGenAI | null {
 }
 
 export const AI_CONFIG = {
-  modelName: "gemini-1.5-pro",
-  visionModelName: "gemini-1.5-pro",
-  provider: "Google Gemini Pro",
+  modelName: "gemini-3-flash-preview",
+  fallbackModelName: "gemini-3.5-flash",
+  visionModelName: "gemini-3-flash-preview",
+  provider: "Google Gemini 3 Flash (Live AI)",
   isLive: IS_LIVE_AI_AVAILABLE,
 };
