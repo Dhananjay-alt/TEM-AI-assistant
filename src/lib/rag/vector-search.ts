@@ -81,19 +81,27 @@ export function retrieveCarterKnowledge(
       }
     }
 
-    // Direct multi-word phrase bonuses
+    // Direct multi-word phrase bonuses for high precision
     const lowerQuery = query.toLowerCase();
-    if (lowerQuery.includes("diffraction contrast") && chunk.chapterNumber === 22) score += 10;
-    if (lowerQuery.includes("burgers") && chunk.chapterNumber === 23) score += 10;
-    if (lowerQuery.includes("ewald") && chunk.chapterNumber === 11) score += 10;
-    if (lowerQuery.includes("scherzer") && chunk.chapterNumber === 28) score += 10;
-    if (lowerQuery.includes("wavelength") && chunk.chapterNumber === 1) score += 10;
-    if (lowerQuery.includes("saed") && chunk.chapterNumber === 12) score += 10;
-    if (lowerQuery.includes("camera length") && chunk.chapterNumber === 12) score += 10;
-    if (lowerQuery.includes("eds") && chunk.chapterNumber === 33) score += 10;
-    if (lowerQuery.includes("eels") && chunk.chapterNumber === 37) score += 10;
-    if (lowerQuery.includes("field emission") && chunk.chapterNumber === 5) score += 10;
-    if (lowerQuery.includes("aberration") && chunk.chapterNumber === 6) score += 10;
+    if ((lowerQuery.includes("kikuchi") || lowerQuery.includes("kikuchi line") || lowerQuery.includes("kikuchi band")) && chunk.chapterNumber === 19) score += 25;
+    if ((lowerQuery.includes("sem") || lowerQuery.includes("tem vs") || lowerQuery.includes("vs sem")) && chunk.chunkId === "carter-ch1-s3") score += 25;
+    if ((lowerQuery.includes("centered dark") || lowerQuery.includes("cdf") || (lowerQuery.includes("bright") && lowerQuery.includes("dark"))) && chunk.chapterNumber === 13) score += 25;
+    if ((lowerQuery.includes("haadf") || lowerQuery.includes("stem") || lowerQuery.includes("z-contrast") || lowerQuery.includes("z contrast") || lowerQuery.includes("annular dark")) && chunk.chapterNumber === 24) score += 25;
+    if ((lowerQuery.includes("cbed") || lowerQuery.includes("convergent beam") || lowerQuery.includes("kossel") || lowerQuery.includes("holz")) && chunk.chapterNumber === 18) score += 25;
+    if ((lowerQuery.includes("eds vs eels") || lowerQuery.includes("eels vs eds") || (lowerQuery.includes("eds") && lowerQuery.includes("eels"))) && chunk.chapterNumber === 38) score += 25;
+    if ((lowerQuery.includes("sample prep") || lowerQuery.includes("specimen prep") || lowerQuery.includes("electropolish") || lowerQuery.includes("ion mill") || lowerQuery.includes("fib") || lowerQuery.includes("lift out")) && chunk.chapterNumber === 10) score += 25;
+    if ((lowerQuery.includes("alignment") || lowerQuery.includes("eucentric") || lowerQuery.includes("wobbler") || lowerQuery.includes("astigmatism") || lowerQuery.includes("stigmator")) && chunk.chapterNumber === 4) score += 25;
+    if ((lowerQuery.includes("diffraction contrast") || lowerQuery.includes("amplitude contrast") || lowerQuery.includes("mass-thickness")) && chunk.chapterNumber === 22) score += 25;
+    if ((lowerQuery.includes("burgers") || lowerQuery.includes("g.b") || lowerQuery.includes("g·b") || lowerQuery.includes("dislocation")) && chunk.chapterNumber === 23) score += 25;
+    if ((lowerQuery.includes("ewald") || lowerQuery.includes("reciprocal space") || lowerQuery.includes("reciprocal lattice")) && chunk.chapterNumber === 11) score += 25;
+    if ((lowerQuery.includes("scherzer") || lowerQuery.includes("ctf") || lowerQuery.includes("contrast transfer") || lowerQuery.includes("hrtem") || lowerQuery.includes("lattice fringe")) && chunk.chapterNumber === 28) score += 25;
+    if ((lowerQuery.includes("wavelength") || lowerQuery.includes("de broglie") || lowerQuery.includes("accelerating voltage") || lowerQuery.includes("abbe")) && chunk.chunkId === "carter-ch1-s1") score += 25;
+    if ((lowerQuery.includes("saed") || lowerQuery.includes("camera length") || lowerQuery.includes("camera constant") || lowerQuery.includes("r*d") || lowerQuery.includes("r·d") || lowerQuery.includes("r d =")) && chunk.chapterNumber === 12) score += 25;
+    if ((lowerQuery.includes("eds") || lowerQuery.includes("edx") || lowerQuery.includes("cliff-lorimer") || lowerQuery.includes("characteristic x-ray")) && chunk.chapterNumber === 33) score += 20;
+    if ((lowerQuery.includes("eels") || lowerQuery.includes("zero loss") || lowerQuery.includes("plasmon") || lowerQuery.includes("core-loss") || lowerQuery.includes("elnes")) && chunk.chapterNumber === 37) score += 20;
+    if ((lowerQuery.includes("field emission") || lowerQuery.includes("feg") || lowerQuery.includes("thermionic") || lowerQuery.includes("lab6") || lowerQuery.includes("gun")) && chunk.chapterNumber === 5) score += 20;
+    if ((lowerQuery.includes("aberration") || lowerQuery.includes("spherical aberration") || lowerQuery.includes("chromatic aberration") || lowerQuery.includes("cs") || lowerQuery.includes("cc")) && chunk.chapterNumber === 6) score += 20;
+    if ((lowerQuery.includes("elastic") || lowerQuery.includes("inelastic") || lowerQuery.includes("scattering")) && chunk.chapterNumber === 2) score += 15;
 
     return {
       chunk,
