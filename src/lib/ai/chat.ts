@@ -56,15 +56,13 @@ export async function generateCarterChatResponse(
 
       const text = response.text || "";
       if (text.trim().length > 0) {
-        // Parse into Carter vs Additional if formatted
-        const carterSplit = text.split(/### ADDITIONAL SCIENTIFIC EXPLANATION/i);
-        const fromCarterPart = carterSplit[0] || text;
-        const additionalPart = carterSplit[1] || "";
+        // Robustly parse into Carter Grounding vs Additional Scientific Explanation
+        const { fromCarter, additionalExplanation } = parseGroundedResponse(text);
 
         return {
           answer: text,
-          fromCarter: fromCarterPart.replace(/### FROM CARTER/i, "").trim(),
-          additionalExplanation: additionalPart.trim(),
+          fromCarter: fromCarter || (additionalExplanation ? "" : text),
+          additionalExplanation: additionalExplanation,
           citations: ragResult.sources,
           mode,
           isLiveAi: true,
@@ -80,6 +78,9 @@ export async function generateCarterChatResponse(
   // 4. Grounded Carter Fallback Engine (Demo Mode)
   return buildGroundedDemoResponse(query, mode, examSubtype, ragResult);
 }
+
+import { parseGroundedResponse } from "./chat-parser";
+export { parseGroundedResponse };
 
 function buildGroundedDemoResponse(
   query: string,

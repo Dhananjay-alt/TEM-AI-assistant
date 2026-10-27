@@ -17,6 +17,8 @@ import {
 import { Message } from "./types";
 import { CitationCard } from "./CitationCard";
 import { ToolLauncher } from "./ToolLauncher";
+import { MarkdownRenderer } from "./MarkdownRenderer";
+import { parseGroundedResponse } from "@/lib/ai/chat-parser";
 
 interface MessageItemProps {
   message: Message;
@@ -30,11 +32,23 @@ export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageIt
 
   const isAssistant = message.role === "assistant";
 
+  // Assistant Message: dynamically split if old or unsplit response in localStorage
+  const parsed = isAssistant && (!message.fromCarter && !message.additionalExplanation && message.content)
+    ? parseGroundedResponse(message.content)
+    : { fromCarter: message.fromCarter || "", additionalExplanation: message.additionalExplanation || "" };
+
+  const carterText = parsed.fromCarter || message.fromCarter;
+  const additionalText = parsed.additionalExplanation || message.additionalExplanation;
+  const hasDedicatedCarter = Boolean(carterText && carterText.trim().length > 0);
+  const hasAdditional = Boolean(additionalText && additionalText.trim().length > 0);
+  const hasSplitContent = hasDedicatedCarter || hasAdditional;
+  const primarySource = message.citations?.[0];
+
   const handleCopy = () => {
     const fullText = [
       message.content,
-      message.fromCarter ? `\n\n--- FROM CARTER ---\n${message.fromCarter}` : "",
-      message.additionalExplanation ? `\n\n--- SCIENTIFIC EXPLANATION ---\n${message.additionalExplanation}` : "",
+      carterText ? `\n\n--- FROM CARTER ---\n${carterText}` : "",
+      additionalText ? `\n\n--- SCIENTIFIC EXPLANATION ---\n${additionalText}` : "",
     ].join("");
 
     navigator.clipboard.writeText(fullText.trim());
@@ -63,10 +77,6 @@ export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageIt
       </div>
     );
   }
-
-  // Assistant Message
-  const hasSplitContent = Boolean(message.fromCarter && message.additionalExplanation);
-  const primarySource = message.citations?.[0];
 
   return (
     <div className="flex justify-start select-text py-3">
@@ -111,15 +121,15 @@ export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageIt
           </div>
         </div>
 
-        {/* Section 1: Standard / Overview Answer */}
-        {message.content && !hasSplitContent && (
-          <div className="p-4 bg-white border-2 border-[#09090B] rounded-xl shadow-hard-xs font-grotesk text-sm sm:text-[15px] leading-relaxed text-[#09090B] whitespace-pre-wrap">
-            {message.content}
+        {/* Section 1: Standard / Overview Answer (Fallback if no split sections) */}
+        {!hasSplitContent && message.content && (
+          <div className="p-4 bg-white border-2 border-[#09090B] rounded-xl shadow-hard-xs">
+            <MarkdownRenderer content={message.content} />
           </div>
         )}
 
         {/* Section 2: Grounded "FROM CARTER" Textbook Card */}
-        {message.fromCarter && (
+        {hasDedicatedCarter && (
           <div className="bg-white border-2 border-[#09090B] rounded-xl shadow-hard-xs overflow-hidden">
             <div className="px-3.5 py-2 bg-[#F8F4E8] border-b-2 border-[#09090B] flex items-center justify-between">
               <div className="flex items-center gap-2 font-display text-xs text-[#09090B] uppercase tracking-wide">
@@ -137,14 +147,14 @@ export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageIt
               )}
             </div>
 
-            <div className="p-3.5 font-mono text-xs sm:text-[13px] text-slate-800 leading-relaxed whitespace-pre-wrap">
-              {message.fromCarter}
+            <div className="p-4 bg-white">
+              <MarkdownRenderer content={carterText!} />
             </div>
           </div>
         )}
 
         {/* Section 3: Distinct Additional Scientific Explanation / Guidance */}
-        {message.additionalExplanation && (
+        {hasAdditional && (
           <div className="bg-[#F8F4E8] border-2 border-[#09090B] rounded-xl shadow-hard-xs overflow-hidden">
             <div className="px-3.5 py-2 bg-white border-b-2 border-[#09090B] flex items-center justify-between">
               <div className="flex items-center gap-2 font-display text-xs text-[#09090B] uppercase tracking-wide">
@@ -164,8 +174,8 @@ export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageIt
               </span>
             </div>
 
-            <div className="p-3.5 font-grotesk text-xs sm:text-sm text-[#09090B] leading-relaxed whitespace-pre-wrap">
-              {message.additionalExplanation}
+            <div className="p-4 bg-[#F8F4E8]/60">
+              <MarkdownRenderer content={additionalText!} />
             </div>
           </div>
         )}
