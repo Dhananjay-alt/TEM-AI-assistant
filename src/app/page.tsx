@@ -1,12 +1,12 @@
 import React from "react";
-import { ChatShell } from "@/components/agent/ChatShell";
+import { SuperdesignView } from "@/components/superdesign/SuperdesignView";
 
 export const metadata = {
-  title: "TEM-AI — Carter Agent | Transmission Electron Microscopy Intelligence",
+  title: "Superdesign | The Design Agent",
   description:
-    "An AI assistant grounded in David B. Williams & C. Barry Carter's TEM textbook. Featuring interactive Socratic tutoring, exam grading, and column diagnostics.",
+    "We turn the unseen into the unforgettable. A design agency for those who dare to disappear to be found. Integrated with TEM-AI Carter Agent.",
 };
 
 export default function HomePage() {
-  return <ChatShell />;
+  return <SuperdesignView />;
 }
