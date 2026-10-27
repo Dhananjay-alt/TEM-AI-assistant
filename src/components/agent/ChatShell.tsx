@@ -13,7 +13,7 @@ const STORAGE_KEY = "tem_ai_conversations_v2";
 export function ChatShell() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string>("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentMode, setCurrentMode] = useState<ChatMode>("ASK");
   const [examSubtype, setExamSubtype] = useState<"2mark" | "5mark" | "10mark" | "viva" | "mcq">("5mark");
   const [inputQuery, setInputQuery] = useState("");
@@ -23,9 +23,9 @@ export function ChatShell() {
   // Initialize from localStorage or create default conversation
   useEffect(() => {
     setIsClient(true);
-    // Desktop default open sidebar
-    if (window.innerWidth >= 1024) {
-      setSidebarOpen(true);
+    // On mobile, collapse sidebar by default; on desktop keep open
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
     }
 
     try {
@@ -250,7 +250,37 @@ export function ChatShell() {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#F8F4E8] text-[#09090B]">
+    <div className="fixed inset-0 flex w-full h-full overflow-hidden bg-[#050505] text-white selection:bg-[#FF4500] selection:text-white font-sans">
+      {/* Background Atmosphere */}
+      <div className="absolute inset-0 pointer-events-none select-none z-0">
+        <div className="absolute top-0 left-0 w-full h-full opacity-35 mix-blend-screen">
+          <img
+            src="https://framerusercontent.com/images/9zvwRJAavKKacVyhFCwHyXW1U.png?width=1536&height=1024"
+            alt="Atmosphere"
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/40 to-[#050505]" />
+      </div>
+
+      {/* Floating Surrealist Hand Left (Atmospheric background) */}
+      <div className="absolute -left-[12%] top-[-10%] md:left-[-5%] md:top-[-10%] w-[45vw] md:w-[35vw] max-w-[700px] z-0 pointer-events-none mix-blend-hard-light opacity-25 animate-float-left">
+        <img
+          src="https://framerusercontent.com/images/KNhiA5A2ykNYqNkj04Hk6BVg5A.png?width=1540&height=1320"
+          alt="Hand Reaching"
+          className="w-full h-auto object-contain"
+        />
+      </div>
+
+      {/* Floating Surrealist Hand Right (Atmospheric background) */}
+      <div className="absolute -right-[12%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[40vw] md:w-[30vw] max-w-[600px] z-0 pointer-events-none mix-blend-hard-light opacity-25 animate-float-right">
+        <img
+          src="https://framerusercontent.com/images/X89VFCABCEjjZ4oLGa3PjbOmsA.png?width=1542&height=1002"
+          alt="Hand Receiving"
+          className="w-full h-auto object-contain"
+        />
+      </div>
+
       {/* Left Collapsible Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}
@@ -263,7 +293,7 @@ export function ChatShell() {
       />
 
       {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col h-full min-w-0 bg-[#F8F4E8] relative overflow-hidden">
+      <main className="flex-1 flex flex-col h-full min-w-0 bg-transparent relative overflow-hidden z-10">
         <ChatHeader
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewConversation}

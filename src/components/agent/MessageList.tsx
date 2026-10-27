@@ -18,10 +18,15 @@ export function MessageList({
   onSelectPrompt,
   onRegenerate,
 }: MessageListProps) {
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, isLoading]);
 
   if (messages.length === 0) {
@@ -33,7 +38,10 @@ export function MessageList({
   }
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-6 py-4 space-y-4 max-w-4xl mx-auto w-full">
+    <div
+      ref={containerRef}
+      className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-6 py-4 space-y-4 max-w-4xl mx-auto w-full"
+    >
       {messages.map((msg) => (
         <MessageItem
           key={msg.id}
@@ -45,16 +53,16 @@ export function MessageList({
 
       {isLoading && (
         <div className="flex justify-start py-2">
-          <div className="p-3.5 bg-white border-2 border-[#09090B] rounded-xl shadow-hard-sm flex items-center gap-3">
-            <div className="w-4 h-4 rounded-full border-2 border-[#09090B] border-t-transparent animate-spin" />
-            <div className="font-mono text-xs font-bold text-[#09090B]">
-              Querying Carter textbook chapters &amp; formulating verified answer...
+          <div className="p-3.5 bg-[#111111]/90 backdrop-blur-md border border-white/15 rounded-xl shadow-[0_0_20px_rgba(255,69,0,0.15)] flex items-center gap-3">
+            <div className="w-4 h-4 rounded-full border-2 border-[#FF4500] border-t-transparent animate-spin" />
+            <div className="font-mono text-xs font-medium text-white/80">
+              Querying Carter textbook chapters &amp; synthesizing answer...
             </div>
           </div>
         </div>
       )}
 
-      <div ref={bottomRef} className="h-4" />
+      <div className="h-4" />
     </div>
   );
 }

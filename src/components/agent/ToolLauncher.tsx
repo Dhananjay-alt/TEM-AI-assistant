@@ -106,27 +106,27 @@ export function ToolLauncher({ query = "", answer = "", citations = [] }: ToolLa
     <div className="pt-2">
       <Link
         href={tool.href}
-        className="group flex items-center justify-between p-3 bg-white hover:bg-[#D2E823] border-2 border-[#09090B] rounded-xl shadow-hard-xs hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all select-none"
+        className="group flex items-center justify-between p-3.5 bg-[#111111]/90 hover:bg-[#18181b] border border-white/10 hover:border-[#FF4500]/60 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(255,69,0,0.15)] transition-all select-none cursor-pointer"
       >
-        <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="w-7 h-7 bg-[#F8F4E8] group-hover:bg-white border-2 border-[#09090B] rounded-lg flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-3 overflow-hidden">
+          <div className="w-8 h-8 bg-white/5 group-hover:bg-[#FF4500] group-hover:text-black border border-white/10 rounded-lg flex items-center justify-center shrink-0 text-white transition-colors">
             {tool.icon}
           </div>
           <div className="overflow-hidden">
             <div className="flex items-center gap-2">
-              <span className="font-display font-black text-xs uppercase text-[#09090B]">
+              <span className="font-serif font-bold text-xs text-white">
                 {tool.title}
               </span>
-              <span className="text-[9px] font-mono font-bold bg-[#09090B] text-[#D2E823] px-1.5 py-0.2 rounded">
+              <span className="text-[9px] font-mono font-bold bg-[#FF4500]/15 text-[#FF4500] border border-[#FF4500]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
                 {tool.tag}
               </span>
             </div>
-            <p className="text-[11px] font-grotesk text-slate-700 truncate">
+            <p className="text-[11px] font-sans text-white/50 truncate mt-0.5">
               {tool.description}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1 font-mono text-[11px] font-bold text-[#09090B] shrink-0 pl-2">
+        <div className="flex items-center gap-1 font-sans text-xs font-semibold text-[#FF4500] shrink-0 pl-3">
           <span className="hidden sm:inline">Launch Tool</span>
           <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </div>

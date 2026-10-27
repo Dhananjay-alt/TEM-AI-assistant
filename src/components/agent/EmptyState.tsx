@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, ArrowRight, BookOpen, Layers, Atom, Eye, Wrench, FileQuestion } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 
 interface EmptyStateProps {
   onSelectPrompt: (prompt: string) => void;
@@ -32,64 +32,53 @@ const PROMPT_SUGGESTIONS = [
     tag: "INSTRUMENT ANATOMY",
     chapter: "Carter Ch. 6 & 9",
   },
-  {
-    title: "Compare Bright-Field and Dark-Field",
-    prompt: "Compare Bright-Field (BF), Displaced-Aperture DF, and Centered Dark-Field (CDF) imaging in detail.",
-    tag: "DIFFRACTION CONTRAST",
-    chapter: "Carter Ch. 13",
-  },
-  {
-    title: "How to determine Burgers vector g·b = 0?",
-    prompt: "How do you determine a dislocation's Burgers vector using the two-beam g·b = 0 invisibility criterion?",
-    tag: "DEFECT ANALYSIS",
-    chapter: "Carter Ch. 23",
-  },
 ];
 
 export function EmptyState({ onSelectPrompt }: EmptyStateProps) {
-  // Show 4 top prompt cards in empty state so the chat input is always immediately visible
-  const displayedPrompts = PROMPT_SUGGESTIONS.slice(0, 4);
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-2 sm:py-4 flex flex-col items-center justify-center text-center space-y-4 sm:space-y-5 select-none my-auto">
-      {/* Top Badge */}
-      <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#D2E823] text-[#09090B] border-2 border-[#09090B] rounded-full text-[11px] font-display font-black tracking-tight uppercase shadow-hard-xs">
-        <Sparkles className="w-3 h-3 fill-current" />
+    <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8 select-none my-auto z-10 relative">
+      {/* Top Luxury Pill Badge */}
+      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FF4500]/10 text-[#FF4500] border border-[#FF4500]/30 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase shadow-[0_0_20px_rgba(255,69,0,0.2)]">
+        <Sparkles className="w-3.5 h-3.5 fill-current animate-pulse text-[#FF4500]" />
         <span>CARTER AGENT // ELECTRON OPTICS INTELLIGENCE</span>
       </div>
 
-      {/* Main Headline */}
-      <div className="space-y-1.5 max-w-xl">
-        <h1 className="text-2xl sm:text-4xl font-display uppercase tracking-tight text-[#09090B] leading-none">
-          Ask anything about TEM.
+      {/* Main Luxury Headline */}
+      <div className="space-y-3 max-w-xl">
+        <h1 className="text-3xl sm:text-5xl font-serif text-white leading-[1.1] tracking-tight">
+          Superintelligence for{" "}
+          <span className="italic font-normal text-white/90">Electron Microscopy.</span>
         </h1>
-        <p className="font-grotesk text-xs sm:text-sm text-slate-700 max-w-md mx-auto leading-relaxed">
-          Understand electron optics, diffraction, imaging, contrast mechanisms, specimen preparation, or troubleshoot a TEM column.
+        <p className="font-sans text-xs sm:text-sm text-white/60 max-w-md mx-auto leading-relaxed">
+          Ask anything about electron optics, diffraction crystallography, phase contrast, Scherzer defocus, or troubleshoot your TEM column.
         </p>
-        <p className="font-mono text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-          Grounded in David B. Williams &amp; C. Barry Carter, <em>Transmission Electron Microscopy</em>.
+        <p className="font-mono text-[10px] text-white/40 font-medium uppercase tracking-widest">
+          Grounded in David B. Williams &amp; C. Barry Carter, <span className="italic text-white/60">Transmission Electron Microscopy</span>.
         </p>
       </div>
 
-      {/* 4 Sleek Suggestion Prompt Chips */}
-      <div className="w-full max-w-xl flex flex-wrap items-center justify-center gap-2 pt-1">
-        {displayedPrompts.map((item, idx) => (
+      {/* 4 Sleek Obsidian Suggestion Prompt Cards */}
+      <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+        {PROMPT_SUGGESTIONS.map((item, idx) => (
           <button
             key={idx}
             type="button"
             onClick={() => onSelectPrompt(item.prompt)}
-            className="group px-3 py-2 bg-white hover:bg-[#D2E823] border-2 border-[#09090B] rounded-xl shadow-hard-xs hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2 text-left"
+            className="group p-3 bg-[#111111]/90 hover:bg-[#18181b] border border-white/10 hover:border-[#FF4500]/60 rounded-xl transition-all flex flex-col justify-between text-left gap-2 shadow-lg hover:shadow-[0_0_20px_rgba(255,69,0,0.15)] cursor-pointer"
           >
-            <span className="font-mono text-[9px] font-bold bg-[#09090B] text-[#D2E823] group-hover:bg-[#09090B] group-hover:text-white px-1.5 py-0.5 rounded shrink-0">
-              {item.tag}
-            </span>
-            <span className="font-display text-xs text-[#09090B] font-bold leading-none">
+            <div className="flex items-center justify-between w-full">
+              <span className="font-mono text-[9px] font-bold bg-[#FF4500]/15 text-[#FF4500] border border-[#FF4500]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                {item.tag}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 text-white/40 group-hover:text-[#FF4500] group-hover:translate-x-0.5 transition-all" />
+            </div>
+            <span className="font-sans text-xs text-white/90 group-hover:text-white font-medium leading-snug">
               {item.title}
             </span>
-            <ArrowRight className="w-3 h-3 text-[#09090B] opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
           </button>
         ))}
       </div>
     </div>
   );
 }
+

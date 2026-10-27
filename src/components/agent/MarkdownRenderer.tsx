@@ -25,69 +25,69 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
     .trim();
 
   return (
-    <div className={`prose-tem font-grotesk text-sm sm:text-[15px] leading-relaxed text-[#09090B] ${className}`}>
+    <div className={`prose-tem font-sans text-sm sm:text-[15px] leading-relaxed text-white/90 ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
           h1: ({ node, ...props }) => (
-            <h1 className="font-display font-black text-lg sm:text-xl text-[#09090B] mt-4 mb-2 tracking-tight" {...props} />
+            <h1 className="font-serif font-bold text-lg sm:text-xl text-white mt-4 mb-2 tracking-tight" {...props} />
           ),
           h2: ({ node, ...props }) => (
-            <h2 className="font-display font-bold text-base sm:text-lg text-[#09090B] mt-3.5 mb-2 tracking-tight border-b border-slate-300 pb-1" {...props} />
+            <h2 className="font-serif font-semibold text-base sm:text-lg text-white mt-4 mb-2 tracking-tight border-b border-white/10 pb-1" {...props} />
           ),
           h3: ({ node, ...props }) => (
-            <h3 className="font-display font-bold text-sm sm:text-base text-[#09090B] mt-3 mb-1.5 uppercase tracking-wide flex items-center gap-1.5" {...props} />
+            <h3 className="font-serif font-medium text-sm sm:text-base text-[#FF4500] mt-3 mb-1.5 uppercase tracking-wide flex items-center gap-1.5" {...props} />
           ),
           h4: ({ node, ...props }) => (
-            <h4 className="font-display font-bold text-xs sm:text-sm text-slate-800 mt-2 mb-1 uppercase" {...props} />
+            <h4 className="font-sans font-bold text-xs sm:text-sm text-white/80 mt-2 mb-1 uppercase tracking-wider" {...props} />
           ),
           p: ({ node, ...props }) => (
-            <p className="mb-2.5 last:mb-0 leading-relaxed break-words" {...props} />
+            <p className="mb-2.5 last:mb-0 leading-relaxed break-words text-white/85" {...props} />
           ),
           strong: ({ node, ...props }) => (
-            <strong className="font-bold text-[#09090B]" {...props} />
+            <strong className="font-bold text-white" {...props} />
           ),
           em: ({ node, ...props }) => (
-            <em className="italic text-slate-800" {...props} />
+            <em className="italic text-white/80" {...props} />
           ),
           ul: ({ node, ...props }) => (
-            <ul className="list-disc pl-5 my-2 space-y-1 marker:text-[#09090B]" {...props} />
+            <ul className="list-disc pl-5 my-2 space-y-1 marker:text-[#FF4500]" {...props} />
           ),
           ol: ({ node, ...props }) => (
-            <ol className="list-decimal pl-5 my-2 space-y-1 marker:font-bold marker:font-mono marker:text-xs marker:text-[#09090B]" {...props} />
+            <ol className="list-decimal pl-5 my-2 space-y-1 marker:font-bold marker:font-mono marker:text-xs marker:text-[#FF4500]" {...props} />
           ),
           li: ({ node, ...props }) => (
-            <li className="leading-relaxed pl-1" {...props} />
+            <li className="leading-relaxed pl-1 text-white/85" {...props} />
           ),
           blockquote: ({ node, ...props }) => (
-            <blockquote className="border-l-4 border-[#09090B] bg-[#F8F4E8] pl-3.5 py-1.5 my-2.5 italic text-slate-800 rounded-r" {...props} />
+            <blockquote className="border-l-2 border-[#FF4500] bg-white/5 pl-3.5 py-1.5 my-2.5 italic text-white/80 rounded-r-lg" {...props} />
           ),
           table: ({ node, ...props }) => (
-            <div className="overflow-x-auto my-3 border-2 border-[#09090B] rounded-lg shadow-hard-xs">
+            <div className="overflow-x-auto my-3 border border-white/15 rounded-xl shadow-lg">
               <table className="w-full text-left text-xs border-collapse" {...props} />
             </div>
           ),
           thead: ({ node, ...props }) => (
-            <thead className="bg-[#09090B] text-[#D2E823] font-mono uppercase font-bold" {...props} />
+            <thead className="bg-[#18181b] text-[#FF4500] font-mono uppercase font-bold border-b border-white/10" {...props} />
           ),
           tbody: ({ node, ...props }) => (
-            <tbody className="divide-y divide-slate-200 bg-white" {...props} />
+            <tbody className="divide-y divide-white/10 bg-[#0d0d0e]" {...props} />
           ),
           tr: ({ node, ...props }) => (
-            <tr className="hover:bg-slate-50 transition-colors" {...props} />
+            <tr className="hover:bg-white/5 transition-colors" {...props} />
           ),
           th: ({ node, ...props }) => (
-            <th className="px-3 py-2 border-r border-slate-700 last:border-r-0 font-bold" {...props} />
+            <th className="px-3 py-2 border-r border-white/10 last:border-r-0 font-bold" {...props} />
           ),
           td: ({ node, ...props }) => (
-            <td className="px-3 py-2 border-r border-slate-200 last:border-r-0 font-grotesk text-slate-800" {...props} />
+            <td className="px-3 py-2 border-r border-white/10 last:border-r-0 font-sans text-white/80" {...props} />
           ),
           code: ({ node, inline, className, children, ...props }: any) => {
             if (inline) {
               return (
                 <code
-                  className="font-mono text-[12px] bg-slate-200/80 text-[#09090B] border border-slate-300 px-1 py-0.5 rounded font-semibold"
+                  className="font-mono text-[12px] bg-white/10 text-[#FF4500] border border-white/15 px-1.5 py-0.5 rounded font-semibold"
                   {...props}
                 >
                   {children}
@@ -95,14 +95,14 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
               );
             }
             return (
-              <pre className="overflow-x-auto my-2.5 p-3 bg-[#09090B] text-[#F8F4E8] border-2 border-[#09090B] rounded-lg font-mono text-xs leading-normal">
+              <pre className="overflow-x-auto my-2.5 p-3.5 bg-[#09090b] text-white border border-white/15 rounded-xl font-mono text-xs leading-normal">
                 <code className={className} {...props}>
                   {children}
                 </code>
               </pre>
             );
           },
-          hr: () => <hr className="my-3 border-t-2 border-slate-300" />,
+          hr: () => <hr className="my-3 border-t border-white/10" />,
         }}
       >
         {normalizedContent}

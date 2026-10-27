@@ -38,9 +38,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#F8F4E8] text-[#09090B] font-grotesk selection:bg-[#D2E823] selection:text-[#09090B] relative">
-        {/* Global SVG Noise Overlay (3% opacity) */}
-        <div className="fixed inset-0 pointer-events-none bg-noise z-30 opacity-70" aria-hidden="true" />
+      <body className="min-h-screen flex flex-col bg-[#050505] text-white font-sans selection:bg-[#FF4500] selection:text-white relative antialiased">
+        {/* Global SVG Noise Overlay (subtle surrealist texture) */}
+        <div className="fixed inset-0 pointer-events-none bg-noise z-30 opacity-20" aria-hidden="true" />
 
         {/* Interactive Custom Mix-Blend Cursor */}
         <CustomCursor />

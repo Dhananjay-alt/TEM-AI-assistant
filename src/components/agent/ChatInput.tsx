@@ -53,7 +53,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="shrink-0 p-2.5 sm:p-3.5 bg-gradient-to-t from-[#F8F4E8] via-[#F8F4E8] to-transparent z-20">
+    <div className="shrink-0 p-2.5 sm:p-4 bg-gradient-to-t from-[#050505] via-[#050505]/95 to-transparent z-20">
       <div className="max-w-4xl mx-auto">
         <form
           onSubmit={(e) => {
@@ -62,7 +62,7 @@ export function ChatInput({
               onSend();
             }
           }}
-          className="bg-white border-2 border-[#09090B] rounded-2xl shadow-hard-lg focus-within:ring-2 focus-within:ring-[#D2E823] transition-all p-3 sm:p-3.5 space-y-2.5"
+          className="bg-[#111111]/90 backdrop-blur-xl border border-white/15 focus-within:border-[#FF4500] focus-within:shadow-[0_0_25px_rgba(255,69,0,0.25)] rounded-2xl transition-all p-3 sm:p-3.5 space-y-2.5 shadow-2xl"
         >
           {/* Multiline Textarea */}
           <textarea
@@ -73,11 +73,11 @@ export function ChatInput({
             onKeyDown={handleKeyDown}
             disabled={isLoading}
             placeholder="Ask Carter about TEM (e.g., 'Explain Scherzer defocus' or 'How does diffraction contrast occur?')..."
-            className="w-full bg-transparent resize-none font-grotesk text-sm sm:text-base text-[#09090B] placeholder:text-slate-400 focus:outline-none leading-relaxed"
+            className="w-full bg-transparent resize-none font-sans text-sm sm:text-base text-white placeholder:text-white/35 focus:outline-none leading-relaxed"
           />
 
           {/* Bottom Controls Bar */}
-          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
             {/* Mode Selector Dropdown */}
             <ModeSelectorDropdown
               currentMode={currentMode}
@@ -87,19 +87,19 @@ export function ChatInput({
             />
 
             <div className="flex items-center gap-2">
-              <span className="hidden md:inline font-mono text-[10px] text-slate-400 select-none">
-                <kbd className="px-1 py-0.5 bg-slate-100 border border-slate-300 rounded text-[9px]">Shift</kbd> + <kbd className="px-1 py-0.5 bg-slate-100 border border-slate-300 rounded text-[9px]">Enter</kbd> for newline
+              <span className="hidden md:inline font-mono text-[10px] text-white/40 select-none">
+                <kbd className="px-1.5 py-0.5 bg-white/10 border border-white/20 rounded text-[9px] text-white/70">Shift</kbd> + <kbd className="px-1.5 py-0.5 bg-white/10 border border-white/20 rounded text-[9px] text-white/70">Enter</kbd> for newline
               </span>
 
               {/* Send Button */}
               <button
                 type="submit"
                 disabled={isLoading || !inputQuery.trim()}
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#D2E823] hover:bg-[#c2d815] text-[#09090B] border-2 border-[#09090B] rounded-xl font-display font-black shadow-hard-xs hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-1 active:translate-y-1 active:shadow-none disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-hard-xs transition-all flex items-center justify-center shrink-0 select-none"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#FF4500] hover:bg-[#ff5c26] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(255,69,0,0.4)] disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center shrink-0 select-none cursor-pointer"
                 title="Send message (Enter)"
               >
                 {isLoading ? (
-                  <div className="w-4 h-4 rounded-full border-2 border-[#09090B] border-t-transparent animate-spin" />
+                  <div className="w-4 h-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
                 ) : (
                   <ArrowUp className="w-5 h-5 stroke-[2.5]" />
                 )}
@@ -108,7 +108,7 @@ export function ChatInput({
           </div>
         </form>
 
-        <p className="text-[10px] font-mono text-center text-slate-500 pt-2 select-none">
+        <p className="text-[10px] font-mono text-center text-white/40 pt-2 select-none">
           TEM-AI is grounded in Williams &amp; Carter. Always cross-verify critical operating parameters with instrument manufacturer manuals.
         </p>
       </div>
