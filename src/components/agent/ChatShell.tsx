@@ -162,6 +162,12 @@ export function ChatShell() {
     setInputQuery("");
     setIsLoading(true);
 
+    // Extract recent conversation history for multi-turn context
+    const recentHistory = messages.slice(-6).map((m) => ({
+      role: m.role,
+      content: m.content || m.additionalExplanation || m.fromCarter || "",
+    }));
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -170,6 +176,7 @@ export function ChatShell() {
           query: text,
           mode: currentMode,
           examSubtype: currentMode === "EXAM" ? examSubtype : undefined,
+          history: recentHistory,
         }),
       });
 
@@ -256,7 +263,7 @@ export function ChatShell() {
       />
 
       {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col h-full min-w-0 bg-[#F8F4E8] relative">
+      <main className="flex-1 flex flex-col h-full min-w-0 bg-[#F8F4E8] relative overflow-hidden">
         <ChatHeader
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewConversation}

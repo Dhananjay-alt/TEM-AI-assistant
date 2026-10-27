@@ -36,6 +36,13 @@ export function ChatInput({
     }
   }, [inputQuery]);
 
+  // Auto-focus textarea on mount and after sending/loading completes
+  useEffect(() => {
+    if (!isLoading && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isLoading]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -46,7 +53,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="p-3 sm:p-4 bg-gradient-to-t from-[#F8F4E8] via-[#F8F4E8] to-transparent">
+    <div className="shrink-0 p-2.5 sm:p-3.5 bg-gradient-to-t from-[#F8F4E8] via-[#F8F4E8] to-transparent z-20">
       <div className="max-w-4xl mx-auto">
         <form
           onSubmit={(e) => {

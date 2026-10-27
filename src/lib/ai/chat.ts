@@ -19,13 +19,28 @@ export interface ChatResponse {
   suggestedQuestions?: string[];
 }
 
+export interface HistoryMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 export async function generateCarterChatResponse(
   query: string,
   mode: ChatMode = "ASK",
-  examSubtype?: "2mark" | "5mark" | "10mark" | "viva" | "mcq"
+  examSubtype?: "2mark" | "5mark" | "10mark" | "viva" | "mcq",
+  history?: HistoryMessage[]
 ): Promise<ChatResponse> {
-  // 1. Retrieve grounded Carter knowledge
-  const ragResult = retrieveCarterKnowledge(query, 3);
+  // 1. Contextualize query for RAG if this is a follow-up or summary request
+  const lastUserMsg = history?.filter((h) => h.role === "user").slice(-1)[0];
+  const isFollowUp = Boolean(
+    lastUserMsg &&
+    (query.length < 45 || /^(summary|summarize|explain|what about|how about|why|compare|and|now|give me|tell me)\b/i.test(query.trim()))
+  );
+  const ragQuery = (isFollowUp && lastUserMsg)
+    ? `${lastUserMsg.content} ${query}`
+    : query;
+
+  const ragResult = retrieveCarterKnowledge(ragQuery, 3);
   const bestMatch = ragResult.bestMatch;
 
   // 2. Build system instruction based on mode
@@ -34,7 +49,16 @@ export async function generateCarterChatResponse(
   if (mode === "EXAM") modeInstruction = `${SYSTEM_PROMPTS.EXAM_MODE}\nSpecific Exam Subtype: ${examSubtype || "5mark"}`;
   if (mode === "EXPERIMENT") modeInstruction = SYSTEM_PROMPTS.EXPERIMENT_MODE;
 
-  const fullPrompt = `${SYSTEM_PROMPTS.BASE_CARTER}\n\n${modeInstruction}\n\n--- RETRIEVED CARTER TEXTBOOK GROUND TRUTH ---\n${ragResult.carterContextText}\n-----------------------------------------------\n\nStudent Query: "${query}"\n\nPlease formulate your answer now. Distinguish explicitly between "### FROM CARTER" (grounded in the textbook context) and "### ADDITIONAL SCIENTIFIC EXPLANATION".`;
+  // Format previous conversation turns for multi-turn conversational continuity
+  let conversationHistoryText = "";
+  if (history && history.length > 0) {
+    const recentHistory = history.slice(-4);
+    conversationHistoryText = "\n\n--- PREVIOUS CONVERSATION TURNS IN THIS SESSION ---\n" +
+      recentHistory.map((h) => `${h.role === "user" ? "Student" : "Carter Agent"}: ${h.content.slice(0, 450)}`).join("\n\n") +
+      "\n----------------------------------------------------\n";
+  }
+
+  const fullPrompt = `${SYSTEM_PROMPTS.BASE_CARTER}\n\n${modeInstruction}\n\n--- RETRIEVED CARTER TEXTBOOK GROUND TRUTH ---\n${ragResult.carterContextText}\n-----------------------------------------------${conversationHistoryText}\n\nCurrent Student Query: "${query}"\n\nPlease formulate your answer now. Distinguish explicitly between "### FROM CARTER" (grounded in the textbook context) and "### ADDITIONAL SCIENTIFIC EXPLANATION". Maintain conversational continuity with the previous turns if this is a follow-up question or request for a summary.`;
 
   // 3. If Live Gemini Pro is available, attempt API call
   const client = getGenAIClient();

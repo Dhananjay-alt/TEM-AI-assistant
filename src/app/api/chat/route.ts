@@ -4,7 +4,7 @@ import { generateCarterChatResponse, ChatMode } from "@/lib/ai/chat";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { query, mode = "ASK", examSubtype } = body;
+    const { query, mode = "ASK", examSubtype, history } = body;
 
     if (!query || typeof query !== "string") {
       return NextResponse.json(
@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
     const response = await generateCarterChatResponse(
       query,
       mode as ChatMode,
-      examSubtype
+      examSubtype,
+      history
     );
 
     return NextResponse.json(response);
