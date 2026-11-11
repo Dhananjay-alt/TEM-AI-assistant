@@ -5,6 +5,7 @@
 import { getGenAIClient, IS_LIVE_AI_AVAILABLE, AI_CONFIG } from "./client";
 import { SYSTEM_PROMPTS } from "./prompts";
 import { retrieveCarterKnowledge, RetrievedSource } from "@/lib/rag/vector-search";
+import { retrieveSources, markSupportingLines, sourceLabel } from "@/lib/rag/retrieve";
 
 export type ChatMode = "ASK" | "TUTOR" | "EXAM" | "EXPERIMENT";
 
@@ -30,37 +31,36 @@ export async function generateCarterChatResponse(
   examSubtype?: "2mark" | "5mark" | "10mark" | "viva" | "mcq",
   history?: HistoryMessage[]
 ): Promise<ChatResponse> {
-  // 1. Contextualize query for RAG if this is a follow-up or summary request
+  // 1. Short follow-ups ("why?", "and for 300 kV?") are searched together with the previous question
   const lastUserMsg = history?.filter((h) => h.role === "user").slice(-1)[0];
   const isFollowUp = Boolean(
     lastUserMsg &&
     (query.length < 45 || /^(summary|summarize|explain|what about|how about|why|compare|and|now|give me|tell me)\b/i.test(query.trim()))
   );
-  const ragQuery = (isFollowUp && lastUserMsg)
-    ? `${lastUserMsg.content} ${query}`
-    : query;
+  const ragQuery = isFollowUp && lastUserMsg ? `${lastUserMsg.content} ${query}` : query;
 
-  const ragResult = retrieveCarterKnowledge(ragQuery, 3);
-  const bestMatch = ragResult.bestMatch;
+  const retrieval = retrieveSources(ragQuery, 4);
+  const sources = retrieval.sources;
 
-  // 2. Build system instruction based on mode
+  // 2. Instructions for the selected mode
   let modeInstruction = SYSTEM_PROMPTS.ASK_MODE;
   if (mode === "TUTOR") modeInstruction = SYSTEM_PROMPTS.TUTOR_MODE;
-  if (mode === "EXAM") modeInstruction = `${SYSTEM_PROMPTS.EXAM_MODE}\nSpecific Exam Subtype: ${examSubtype || "5mark"}`;
+  if (mode === "EXAM") modeInstruction = `${SYSTEM_PROMPTS.EXAM_MODE}\nRequested format: ${examSubtype || "5mark"}`;
   if (mode === "EXPERIMENT") modeInstruction = SYSTEM_PROMPTS.EXPERIMENT_MODE;
 
-  // Format previous conversation turns for multi-turn conversational continuity
   let conversationHistoryText = "";
   if (history && history.length > 0) {
-    const recentHistory = history.slice(-4);
-    conversationHistoryText = "\n\n--- PREVIOUS CONVERSATION TURNS IN THIS SESSION ---\n" +
-      recentHistory.map((h) => `${h.role === "user" ? "Student" : "Carter Agent"}: ${h.content.slice(0, 450)}`).join("\n\n") +
-      "\n----------------------------------------------------\n";
+    conversationHistoryText =
+      "\n\nEARLIER IN THIS CONVERSATION\n" +
+      history
+        .slice(-4)
+        .map((h) => `${h.role === "user" ? "User" : "Assistant"}: ${h.content.slice(0, 450)}`)
+        .join("\n\n");
   }
 
-  const fullPrompt = `${SYSTEM_PROMPTS.BASE_CARTER}\n\n${modeInstruction}\n\n--- RETRIEVED CARTER TEXTBOOK GROUND TRUTH ---\n${ragResult.carterContextText}\n-----------------------------------------------${conversationHistoryText}\n\nCurrent Student Query: "${query}"\n\nPlease formulate your answer now. Distinguish explicitly between "### FROM CARTER" (grounded in the textbook context) and "### ADDITIONAL SCIENTIFIC EXPLANATION". Maintain conversational continuity with the previous turns if this is a follow-up question or request for a summary.`;
+  const fullPrompt = `${SYSTEM_PROMPTS.BASE_CARTER}\n\n${modeInstruction}\n\nSOURCES\n${retrieval.contextText}${conversationHistoryText}\n\nQUESTION\n${query}`;
 
-  // 3. If Live Gemini Pro is available, attempt API call
+  // 3. Live model
   const client = getGenAIClient();
   if (client && IS_LIVE_AI_AVAILABLE) {
     try {
@@ -71,36 +71,70 @@ export async function generateCarterChatResponse(
           contents: fullPrompt,
         });
       } catch (primaryErr) {
-        console.warn(`Primary model ${AI_CONFIG.modelName} failed, attempting fallback to ${AI_CONFIG.fallbackModelName}:`, primaryErr);
+        console.warn(`Primary model ${AI_CONFIG.modelName} failed, trying ${AI_CONFIG.fallbackModelName}:`, primaryErr);
         response = await client.models.generateContent({
           model: AI_CONFIG.fallbackModelName || "gemini-3.5-flash",
           contents: fullPrompt,
         });
       }
 
-      const text = response.text || "";
-      if (text.trim().length > 0) {
-        // Robustly parse into Carter Grounding vs Additional Scientific Explanation
-        const { fromCarter, additionalExplanation } = parseGroundedResponse(text);
-
+      const text = (response.text || "").trim();
+      if (text.length > 0) {
+        markSupportingLines(sources, text, query);
         return {
           answer: text,
-          fromCarter: fromCarter || (additionalExplanation ? "" : text),
-          additionalExplanation: additionalExplanation,
-          citations: ragResult.sources,
+          fromCarter: "",
+          additionalExplanation: "",
+          citations: sources,
           mode,
           isLiveAi: true,
           provider: AI_CONFIG.provider,
-          suggestedQuestions: generateSuggestedQuestions(query, bestMatch),
+          suggestedQuestions: generateSuggestedQuestions(query, sources[0] || null),
         };
       }
     } catch (apiError) {
-      console.warn("Live Gemini API call failed, falling back to grounded Carter simulation:", apiError);
+      console.warn("Live model call failed, using the offline answer:", apiError);
     }
   }
 
-  // 4. Grounded Carter Fallback Engine (Demo Mode)
-  return buildGroundedDemoResponse(query, mode, examSubtype, ragResult);
+  // 4. Offline answers (no API key, or the model call failed)
+  if (retrieval.fromPdf) {
+    // Without a model we do not paraphrase the book: we point to the passages.
+    const answer =
+      "The language model is not available, so this is a list of the most relevant passages rather than a written answer. Select a reference to open the page.\n\n" +
+      sources.map((s, i) => `- ${sourceLabel(s)} [${i + 1}]`).join("\n");
+    markSupportingLines(sources, "", query);
+    return {
+      answer,
+      fromCarter: "",
+      additionalExplanation: "",
+      citations: sources,
+      mode,
+      isLiveAi: false,
+      provider: "Offline (passage search only)",
+      suggestedQuestions: [],
+    };
+  }
+
+  const legacy = retrieveCarterKnowledge(ragQuery, 3);
+  const demo = buildGroundedDemoResponse(query, mode, examSubtype, legacy);
+  // The offline answer is written from the first stored summary, so cite it.
+  const answer = demo.answer
+    .replace(/^### EXECUTIVE SUMMARY\n/m, "### Summary\n")
+    .replace(/^### FROM CARTER[^\n]*/m, "### From the stored summary [1]")
+    .replace(/^### ADDITIONAL SCIENTIFIC EXPLANATION/m, "### Explanation")
+    .replace(/^### TUTOR STEP-BY-STEP GUIDANCE/m, "### Step by step")
+    .replace(/^### MODEL EXAMINATION ANSWER/m, "### Model answer")
+    .replace(/^### LABORATORY DIAGNOSTIC PROCEDURE/m, "### Diagnostic procedure");
+  markSupportingLines(sources, answer, query);
+  return {
+    ...demo,
+    answer,
+    fromCarter: "",
+    additionalExplanation: "",
+    citations: sources,
+    provider: "Offline (stored summaries)",
+  };
 }
 
 import { parseGroundedResponse } from "./chat-parser";

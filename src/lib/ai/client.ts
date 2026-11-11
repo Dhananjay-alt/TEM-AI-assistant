@@ -34,6 +34,6 @@ export const AI_CONFIG = {
   modelName: "gemini-3-flash-preview",
   fallbackModelName: "gemini-3.5-flash",
   visionModelName: "gemini-3-flash-preview",
-  provider: "Google Gemini 3 Flash (Live AI)",
+  provider: "Gemini",
   isLive: IS_LIVE_AI_AVAILABLE,
 };
