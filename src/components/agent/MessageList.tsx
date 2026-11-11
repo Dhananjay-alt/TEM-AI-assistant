@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Message } from "./types";
 import { MessageItem } from "./MessageItem";
 import { EmptyState } from "./EmptyState";
@@ -8,62 +8,59 @@ import { EmptyState } from "./EmptyState";
 interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
+  bookTitle?: string;
+  activeCitation: { messageId: string; index: number } | null;
+  onOpenCitation: (messageId: string, index: number) => void;
   onSelectPrompt: (prompt: string) => void;
-  onRegenerate?: (messageId: string) => void;
+  onRegenerate: (messageId: string) => void;
 }
 
 export function MessageList({
   messages,
   isLoading,
+  bookTitle,
+  activeCitation,
+  onOpenCitation,
   onSelectPrompt,
   onRegenerate,
 }: MessageListProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [messages, isLoading]);
+    endRef.current?.scrollIntoView({ block: "end" });
+  }, [messages.length, isLoading]);
 
-  if (messages.length === 0) {
+  if (messages.length === 0 && !isLoading) {
     return (
-      <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 py-2 w-full flex flex-col justify-center items-center">
-        <EmptyState onSelectPrompt={onSelectPrompt} />
+      <div className="flex-1 overflow-y-auto">
+        <EmptyState onSelectPrompt={onSelectPrompt} bookTitle={bookTitle} />
       </div>
     );
   }
 
+  const lastAssistantId = [...messages].reverse().find((m) => m.role === "assistant")?.id;
+
   return (
-    <div
-      ref={containerRef}
-      className="flex-1 min-h-0 overflow-y-auto w-full px-3 sm:px-6 py-4"
-    >
-      <div className="max-w-4xl mx-auto space-y-4 w-full">
-        {messages.map((msg) => (
+    <div className="flex-1 overflow-y-auto">
+      <div className="mx-auto w-full max-w-3xl space-y-8 px-4 py-8 sm:px-6">
+        {messages.map((m) => (
           <MessageItem
-            key={msg.id}
-            message={msg}
-            onSelectPrompt={onSelectPrompt}
-            onRegenerate={onRegenerate}
+            key={m.id}
+            message={m}
+            activeCitation={activeCitation?.messageId === m.id ? activeCitation.index : null}
+            onOpenCitation={onOpenCitation}
+            onSelectPrompt={m.id === lastAssistantId && !isLoading ? onSelectPrompt : undefined}
+            onRegenerate={m.id === lastAssistantId && !isLoading ? onRegenerate : undefined}
           />
         ))}
 
         {isLoading && (
-          <div className="flex justify-start py-2">
-            <div className="p-3.5 bg-[#111111]/90 backdrop-blur-md border border-white/15 rounded-xl shadow-[0_0_20px_rgba(255,69,0,0.15)] flex items-center gap-3">
-              <div className="w-4 h-4 rounded-full border-2 border-[#FF4500] border-t-transparent animate-spin" />
-              <div className="font-mono text-xs font-medium text-white/80">
-                Querying Carter textbook chapters &amp; synthesizing answer...
-              </div>
-            </div>
+          <div className="flex items-center gap-2 text-sm text-muted" role="status">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+            Searching the text and writing an answer…
           </div>
         )}
-
-        <div className="h-4" />
+        <div ref={endRef} />
       </div>
     </div>
   );

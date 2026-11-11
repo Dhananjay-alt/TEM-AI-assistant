@@ -2,22 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  Plus,
-  MessageSquare,
-  Trash2,
-  Layers,
-  Atom,
-  Eye,
-  FileQuestion,
-  Network,
-  Wrench,
-  PanelLeftClose,
-  Sparkles,
-  ExternalLink,
-  BookOpen,
-} from "lucide-react";
+import { PanelLeftClose, Plus, Trash2 } from "lucide-react";
 import { Conversation } from "./types";
+import { TOOL_LINKS } from "@/lib/nav";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -38,200 +25,99 @@ export function Sidebar({
   onNewConversation,
   onDeleteConversation,
 }: SidebarProps) {
-  // Group conversations into TODAY vs PREVIOUS
-  const now = Date.now();
-  const oneDayMs = 24 * 60 * 60 * 1000;
+  const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  const groups = [
+    { label: "Today", items: conversations.filter((c) => c.updatedAt >= dayAgo) },
+    { label: "Earlier", items: conversations.filter((c) => c.updatedAt < dayAgo) },
+  ].filter((g) => g.items.length > 0);
 
-  const todayConvos = conversations.filter((c) => now - c.updatedAt < oneDayMs);
-  const previousConvos = conversations.filter((c) => now - c.updatedAt >= oneDayMs);
-
-  const supportingTools = [
-    { label: "TEM Anatomy", href: "/anatomy", icon: <Layers className="w-3.5 h-3.5" /> },
-    { label: "Diffraction Lab", href: "/simulator", icon: <Atom className="w-3.5 h-3.5" /> },
-    { label: "Micrograph Lab", href: "/image-analysis", icon: <Eye className="w-3.5 h-3.5" /> },
-    { label: "Exam Mode", href: "/exam", icon: <FileQuestion className="w-3.5 h-3.5" /> },
-    { label: "Concept Map", href: "/knowledge-map", icon: <Network className="w-3.5 h-3.5" /> },
-    { label: "Carter Reader", href: "/learn", icon: <BookOpen className="w-3.5 h-3.5" /> },
-  ];
+  if (!isOpen) return null;
 
   return (
     <>
-      {/* Mobile Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-[#09090B]/60 backdrop-blur-sm z-40 lg:hidden"
-          onClick={onToggle}
-          aria-hidden="true"
-        />
-      )}
+      <div className="fixed inset-0 z-30 bg-black/40 lg:hidden" onClick={onToggle} aria-hidden="true" />
 
-      {/* Sidebar Drawer / Container */}
       <aside
-        className={`fixed lg:static top-0 bottom-0 left-0 z-50 w-72 shrink-0 h-full bg-[#09090b]/95 backdrop-blur-xl border-r border-white/10 flex flex-col justify-between transition-transform duration-200 select-none text-white ${
-          isOpen ? "translate-x-0" : "-translate-x-full lg:hidden"
-        }`}
+        className="fixed inset-y-0 left-0 z-40 flex w-[272px] flex-col border-r border-line bg-surface lg:static lg:z-auto lg:shrink-0"
+        aria-label="Conversations and tools"
       >
-        {/* Top Header & Brand */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#FF4500] to-[#b32b00] text-black font-serif font-black text-sm rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(255,69,0,0.4)] group-hover:scale-105 transition-transform">
-              ★
-            </div>
-            <div>
-              <div className="font-serif text-sm font-bold text-white tracking-tight leading-tight flex items-center gap-1">
-                <span>TEM-AI.</span>
-              </div>
-              <div className="font-mono text-[9px] font-semibold text-[#FF4500] tracking-widest uppercase">
-                CARTER AGENT
-              </div>
-            </div>
+        <div className="flex h-12 items-center justify-between px-3">
+          <Link href="/" className="px-1 font-serif text-[17px] font-semibold tracking-tight text-foreground">
+            TEM-AI
           </Link>
-
           <button
             type="button"
             onClick={onToggle}
-            className="p-1.5 hover:bg-white/10 text-white/70 hover:text-white border border-transparent hover:border-white/10 rounded-lg transition-colors cursor-pointer"
-            title="Collapse sidebar"
+            aria-label="Hide sidebar"
+            title="Hide sidebar"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-foreground"
           >
-            <PanelLeftClose className="w-4 h-4" />
+            <PanelLeftClose className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Action Button: + New Conversation */}
-        <div className="p-3 border-b border-white/10">
+        <div className="px-3 pb-2">
           <button
             type="button"
             onClick={onNewConversation}
-            className="w-full py-2.5 px-3 bg-[#18181b] hover:bg-[#FF4500] text-white hover:text-black border border-white/10 hover:border-[#FF4500] rounded-xl font-sans text-xs font-semibold tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer group"
+            className="flex w-full items-center gap-2 rounded-md border border-line px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-2 transition-colors"
           >
-            <Plus className="w-4 h-4 text-[#FF4500] group-hover:text-black transition-colors" />
-            <span>New Conversation</span>
+            <Plus className="h-4 w-4" />
+            New conversation
           </button>
         </div>
 
-        {/* Scrollable Middle: Conversation History & Tools */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-5">
-          {/* Section: Today */}
-          <div className="space-y-1">
-            <div className="px-2 font-mono text-[10px] font-bold text-white/40 uppercase tracking-wider">
-              TODAY
+        <nav className="flex-1 overflow-y-auto px-3 pb-3" aria-label="Conversations">
+          {groups.map((group) => (
+            <div key={group.label} className="mt-3">
+              <div className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-faint">{group.label}</div>
+              <ul>
+                {group.items.map((c) => {
+                  const active = c.id === activeConversationId;
+                  return (
+                    <li key={c.id} className="group relative">
+                      <button
+                        type="button"
+                        onClick={() => onSelectConversation(c.id)}
+                        aria-current={active ? "true" : undefined}
+                        className={`w-full truncate rounded-md py-1.5 pl-2 pr-8 text-left text-sm transition-colors ${
+                          active ? "bg-surface-2 font-medium text-foreground" : "text-muted hover:bg-surface-2 hover:text-foreground"
+                        }`}
+                      >
+                        {c.title}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onDeleteConversation(c.id)}
+                        aria-label={`Delete conversation: ${c.title}`}
+                        title="Delete"
+                        className="absolute right-1 top-1/2 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-faint hover:text-danger group-hover:inline-flex focus-visible:inline-flex"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
+          ))}
+        </nav>
 
-            {todayConvos.length === 0 ? (
-              <div className="px-2 py-1.5 text-[11px] font-sans text-white/30 italic">
-                No conversations today
-              </div>
-            ) : (
-              todayConvos.map((conv) => (
-                <div
-                  key={conv.id}
-                  className={`group flex items-center justify-between px-3 py-2 rounded-xl border transition-all cursor-pointer ${
-                    conv.id === activeConversationId
-                      ? "bg-white/10 border-[#FF4500]/60 text-white shadow-[0_0_12px_rgba(255,69,0,0.15)] font-medium"
-                      : "border-transparent text-white/70 hover:bg-white/5 hover:text-white hover:border-white/10"
-                  }`}
-                  onClick={() => onSelectConversation(conv.id)}
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <MessageSquare className={`w-3.5 h-3.5 shrink-0 transition-colors ${
-                      conv.id === activeConversationId ? "text-[#FF4500]" : "text-white/40 group-hover:text-white"
-                    }`} />
-                    <span className="font-sans text-xs truncate">{conv.title}</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteConversation(conv.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 hover:text-[#FF4500] p-1 rounded transition-opacity"
-                    title="Delete conversation"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Section: Previous */}
-          {previousConvos.length > 0 && (
-            <div className="space-y-1">
-              <div className="px-2 font-mono text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                PREVIOUS
-              </div>
-
-              {previousConvos.map((conv) => (
-                <div
-                  key={conv.id}
-                  className={`group flex items-center justify-between px-3 py-2 rounded-xl border transition-all cursor-pointer ${
-                    conv.id === activeConversationId
-                      ? "bg-white/10 border-[#FF4500]/60 text-white shadow-[0_0_12px_rgba(255,69,0,0.15)] font-medium"
-                      : "border-transparent text-white/70 hover:bg-white/5 hover:text-white hover:border-white/10"
-                  }`}
-                  onClick={() => onSelectConversation(conv.id)}
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <MessageSquare className={`w-3.5 h-3.5 shrink-0 transition-colors ${
-                      conv.id === activeConversationId ? "text-[#FF4500]" : "text-white/40 group-hover:text-white"
-                    }`} />
-                    <span className="font-sans text-xs truncate">{conv.title}</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteConversation(conv.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 hover:text-[#FF4500] p-1 rounded transition-opacity"
-                    title="Delete conversation"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Section: Supporting Tools */}
-          <div className="space-y-1 pt-3 border-t border-white/10">
-            <div className="px-2 font-mono text-[10px] font-bold text-white/40 uppercase tracking-wider flex items-center justify-between">
-              <span>SUPPORTING TOOLS</span>
-            </div>
-
-            <div className="space-y-1">
-              {supportingTools.map((tool) => (
+        <div className="border-t border-line px-3 py-3">
+          <div className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-faint">Tools</div>
+          <ul>
+            {TOOL_LINKS.map((t) => (
+              <li key={t.href}>
                 <Link
-                  key={tool.href}
-                  href={tool.href}
-                  className="flex items-center justify-between px-2.5 py-1.5 text-white/60 hover:text-white hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 transition-all text-xs font-sans group"
+                  href={t.href}
+                  title={t.description}
+                  className="block rounded-md px-2 py-1.5 text-sm text-muted hover:bg-surface-2 hover:text-foreground transition-colors"
                 >
-                  <span className="flex items-center gap-2">
-                    <span className="text-white/40 group-hover:text-[#FF4500] transition-colors">{tool.icon}</span>
-                    <span>{tool.label}</span>
-                  </span>
-                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-white/40" />
+                  {t.label}
                 </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Sidebar Footer */}
-        <div className="p-3 border-t border-white/10 bg-[#050505] space-y-2 text-xs">
-          <div className="flex items-center justify-between font-mono text-[10px]">
-            <span className="text-white/60">Williams &amp; Carter 2nd Ed</span>
-            <span className="bg-[#FF4500]/15 text-[#FF4500] px-2 py-0.5 rounded-full font-bold border border-[#FF4500]/30">
-              40+ CH
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 font-mono text-[10px] text-white/40">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF4500] animate-pulse" />
-            <span>AI: Google Gemini 3 Flash Grounded</span>
-          </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </aside>
     </>

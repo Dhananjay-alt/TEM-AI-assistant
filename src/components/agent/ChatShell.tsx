@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { ChatMode, ChatResponse } from "@/lib/ai/chat";
 import { Message, Conversation } from "./types";
 import { Sidebar } from "./Sidebar";
-import { ChatHeader } from "./ChatHeader";
+import { ChatHeader, BookStatus } from "./ChatHeader";
+import { SourceViewer } from "./SourceViewer";
 import { MessageList } from "./MessageList";
 import { ChatInput } from "./ChatInput";
 
@@ -19,6 +20,8 @@ export function ChatShell() {
   const [inputQuery, setInputQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [book, setBook] = useState<BookStatus | null>(null);
+  const [openCitation, setOpenCitation] = useState<{ messageId: string; index: number } | null>(null);
 
   // Initialize from localStorage or create default conversation
   useEffect(() => {
@@ -47,7 +50,7 @@ export function ChatShell() {
     const initialId = `conv-${Date.now()}`;
     const initialConv: Conversation = {
       id: initialId,
-      title: "New TEM Inquiry",
+      title: "New conversation",
       createdAt: Date.now(),
       updatedAt: Date.now(),
       messages: [],
@@ -67,6 +70,22 @@ export function ChatShell() {
     }
   }, [conversations, isClient]);
 
+  // Is the textbook PDF indexed? (decides what a reference opens)
+  useEffect(() => {
+    fetch("/api/book/status")
+      .then((r) => r.json())
+      .then(setBook)
+      .catch(() => setBook({ available: false }));
+  }, []);
+
+  // Close the source viewer with Escape
+  useEffect(() => {
+    if (!openCitation) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenCitation(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openCitation]);
+
   // Current active conversation
   const activeConversation =
     conversations.find((c) => c.id === activeConversationId) || conversations[0];
@@ -76,7 +95,7 @@ export function ChatShell() {
     const newId = `conv-${Date.now()}`;
     const newConv: Conversation = {
       id: newId,
-      title: "New TEM Inquiry",
+      title: "New conversation",
       createdAt: Date.now(),
       updatedAt: Date.now(),
       messages: [],
@@ -84,6 +103,7 @@ export function ChatShell() {
     };
     setConversations((prev) => [newConv, ...prev]);
     setActiveConversationId(newId);
+    setOpenCitation(null);
     setInputQuery("");
     // Close sidebar on mobile
     if (window.innerWidth < 1024) {
@@ -93,6 +113,7 @@ export function ChatShell() {
 
   const handleSelectConversation = (id: string) => {
     setActiveConversationId(id);
+    setOpenCitation(null);
     const conv = conversations.find((c) => c.id === id);
     if (conv?.mode) {
       setCurrentMode(conv.mode);
@@ -111,7 +132,7 @@ export function ChatShell() {
         return [
           {
             id: newId,
-            title: "New TEM Inquiry",
+            title: "New conversation",
             createdAt: Date.now(),
             updatedAt: Date.now(),
             messages: [],
@@ -141,7 +162,7 @@ export function ChatShell() {
     // Update active conversation title if it's the first message
     const updatedTitle =
       messages.length === 0
-        ? text.slice(0, 32) + (text.length > 32 ? "..." : "")
+        ? text.slice(0, 48) + (text.length > 48 ? "…" : "")
         : activeConversation.title;
 
     setConversations((prev) =>
@@ -216,7 +237,7 @@ export function ChatShell() {
         id: `asst-err-${Date.now()}`,
         role: "assistant",
         content:
-          "Unable to complete request. Please ensure the query matches TEM concepts or retry your enquiry.",
+          "The request could not be completed. Check that the server is running, then try again.",
         mode: currentMode,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
@@ -249,39 +270,19 @@ export function ChatShell() {
     }
   };
 
+  const openMessage = openCitation ? messages.find((m) => m.id === openCitation.messageId) : undefined;
+  const openSource = openCitation ? openMessage?.citations?.[openCitation.index] : undefined;
+
+  const handleOpenCitation = (messageId: string, index: number) => {
+    setOpenCitation((cur) =>
+      cur && cur.messageId === messageId && cur.index === index ? null : { messageId, index }
+    );
+    // the viewer needs the room on medium screens
+    if (window.innerWidth < 1280) setSidebarOpen(false);
+  };
+
   return (
-    <div className="fixed inset-0 flex w-full h-full overflow-hidden bg-[#050505] text-white selection:bg-[#FF4500] selection:text-white font-sans">
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0 pointer-events-none select-none z-0">
-        <div className="absolute top-0 left-0 w-full h-full opacity-35 mix-blend-screen">
-          <img
-            src="https://framerusercontent.com/images/9zvwRJAavKKacVyhFCwHyXW1U.png?width=1536&height=1024"
-            alt="Atmosphere"
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/40 to-[#050505]" />
-      </div>
-
-      {/* Floating Surrealist Hand Left (Atmospheric background) */}
-      <div className="absolute -left-[12%] top-[-10%] md:left-[-5%] md:top-[-10%] w-[45vw] md:w-[35vw] max-w-[700px] z-0 pointer-events-none mix-blend-hard-light opacity-25 animate-float-left">
-        <img
-          src="https://framerusercontent.com/images/KNhiA5A2ykNYqNkj04Hk6BVg5A.png?width=1540&height=1320"
-          alt="Hand Reaching"
-          className="w-full h-auto object-contain"
-        />
-      </div>
-
-      {/* Floating Surrealist Hand Right (Atmospheric background) */}
-      <div className="absolute -right-[12%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[40vw] md:w-[30vw] max-w-[600px] z-0 pointer-events-none mix-blend-hard-light opacity-25 animate-float-right">
-        <img
-          src="https://framerusercontent.com/images/X89VFCABCEjjZ4oLGa3PjbOmsA.png?width=1542&height=1002"
-          alt="Hand Receiving"
-          className="w-full h-auto object-contain"
-        />
-      </div>
-
-      {/* Left Collapsible Sidebar */}
+    <div className="fixed inset-0 flex overflow-hidden bg-background text-foreground">
       <Sidebar
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -292,25 +293,25 @@ export function ChatShell() {
         onDeleteConversation={handleDeleteConversation}
       />
 
-      {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col h-full min-w-0 bg-transparent relative overflow-hidden z-10">
+      <div className="flex min-w-0 flex-1 flex-col">
         <ChatHeader
+          sidebarOpen={sidebarOpen}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewConversation}
-          currentMode={currentMode}
-          provider={messages[messages.length - 1]?.provider}
-          isLiveAi={messages[messages.length - 1]?.isLiveAi}
+          title={activeConversation?.title || "New conversation"}
+          book={book}
         />
 
-        {/* Message Stream or Empty State */}
         <MessageList
           messages={messages}
           isLoading={isLoading}
+          bookTitle={book?.available ? book.title : undefined}
+          activeCitation={openCitation}
+          onOpenCitation={handleOpenCitation}
           onSelectPrompt={(prompt) => handleSend(prompt)}
           onRegenerate={handleRegenerate}
         />
 
-        {/* Sticky Chat Input */}
         <ChatInput
           inputQuery={inputQuery}
           setInputQuery={setInputQuery}
@@ -321,7 +322,11 @@ export function ChatShell() {
           examSubtype={examSubtype}
           onSelectExamSubtype={setExamSubtype}
         />
-      </main>
+      </div>
+
+      {openCitation && openSource && (
+        <SourceViewer source={openSource} index={openCitation.index} onClose={() => setOpenCitation(null)} />
+      )}
     </div>
   );
 }

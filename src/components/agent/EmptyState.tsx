@@ -1,84 +1,48 @@
 "use client";
 
 import React from "react";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface EmptyStateProps {
   onSelectPrompt: (prompt: string) => void;
+  bookTitle?: string;
 }
 
-const PROMPT_SUGGESTIONS = [
-  {
-    title: "Explain Scherzer defocus",
-    prompt: "Explain Scherzer defocus and how it optimizes the Contrast Transfer Function (CTF) in HRTEM.",
-    tag: "PHASE CONTRAST",
-    chapter: "Carter Ch. 28",
-  },
-  {
-    title: "Why does diffraction contrast occur?",
-    prompt: "Why does diffraction contrast occur in TEM, and how does the objective aperture control it?",
-    tag: "IMAGING OPTICS",
-    chapter: "Carter Ch. 22",
-  },
-  {
-    title: "Derive relativistic electron wavelength",
-    prompt: "Derive the relativistic electron wavelength equation at 200 kV and explain why electrons have picometer wavelengths.",
-    tag: "BEAM PHYSICS",
-    chapter: "Carter Ch. 1",
-  },
-  {
-    title: "Explain the TEM column structure",
-    prompt: "Explain the TEM column from electron gun to detector, detailing each lens and aperture system.",
-    tag: "INSTRUMENT ANATOMY",
-    chapter: "Carter Ch. 6 & 9",
-  },
+const EXAMPLES = [
+  "Why do electrons give better resolution than visible light?",
+  "What is the difference between bright-field and dark-field imaging?",
+  "How is the camera constant used to index a diffraction pattern?",
+  "What sets the Scherzer defocus in HRTEM?",
 ];
 
-export function EmptyState({ onSelectPrompt }: EmptyStateProps) {
+export function EmptyState({ onSelectPrompt, bookTitle }: EmptyStateProps) {
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8 select-none my-auto z-10 relative">
-      {/* Top Luxury Pill Badge */}
-      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#FF4500]/10 text-[#FF4500] border border-[#FF4500]/30 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase shadow-[0_0_20px_rgba(255,69,0,0.2)]">
-        <Sparkles className="w-3.5 h-3.5 fill-current animate-pulse text-[#FF4500]" />
-        <span>CARTER AGENT // ELECTRON OPTICS INTELLIGENCE</span>
-      </div>
+    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-4 py-12 sm:px-6">
+      <h1 className="font-serif text-[28px] font-semibold leading-tight text-foreground">
+        Transmission electron microscopy reference
+      </h1>
+      <p className="mt-3 text-[15px] leading-7 text-muted">
+        Ask a question and get an answer with numbered references. Select a reference to open the
+        {bookTitle ? " page of the textbook" : " source passage"} it comes from, with the supporting lines highlighted.
+      </p>
 
-      {/* Main Luxury Headline */}
-      <div className="space-y-3 max-w-xl">
-        <h1 className="text-3xl sm:text-5xl font-serif text-white leading-[1.1] tracking-tight">
-          Superintelligence for{" "}
-          <span className="italic font-normal text-white/90">Electron Microscopy.</span>
-        </h1>
-        <p className="font-sans text-xs sm:text-sm text-white/60 max-w-md mx-auto leading-relaxed">
-          Ask anything about electron optics, diffraction crystallography, phase contrast, Scherzer defocus, or troubleshoot your TEM column.
-        </p>
-        <p className="font-mono text-[10px] text-white/40 font-medium uppercase tracking-widest">
-          Grounded in David B. Williams &amp; C. Barry Carter, <span className="italic text-white/60">Transmission Electron Microscopy</span>.
-        </p>
-      </div>
-
-      {/* 4 Sleek Obsidian Suggestion Prompt Cards */}
-      <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-        {PROMPT_SUGGESTIONS.map((item, idx) => (
-          <button
-            key={idx}
-            type="button"
-            onClick={() => onSelectPrompt(item.prompt)}
-            className="group p-3 bg-[#111111]/90 hover:bg-[#18181b] border border-white/10 hover:border-[#FF4500]/60 rounded-xl transition-all flex flex-col justify-between text-left gap-2 shadow-lg hover:shadow-[0_0_20px_rgba(255,69,0,0.15)] cursor-pointer"
-          >
-            <div className="flex items-center justify-between w-full">
-              <span className="font-mono text-[9px] font-bold bg-[#FF4500]/15 text-[#FF4500] border border-[#FF4500]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                {item.tag}
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 text-white/40 group-hover:text-[#FF4500] group-hover:translate-x-0.5 transition-all" />
-            </div>
-            <span className="font-sans text-xs text-white/90 group-hover:text-white font-medium leading-snug">
-              {item.title}
-            </span>
-          </button>
-        ))}
+      <div className="mt-8">
+        <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-faint">Example questions</div>
+        <ul className="divide-y divide-line overflow-hidden rounded-md border border-line bg-surface">
+          {EXAMPLES.map((q) => (
+            <li key={q}>
+              <button
+                type="button"
+                onClick={() => onSelectPrompt(q)}
+                className="group flex w-full items-center justify-between gap-3 px-3.5 py-3 text-left text-sm text-foreground hover:bg-surface-2 transition-colors"
+              >
+                <span>{q}</span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-faint group-hover:text-foreground" />
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
-

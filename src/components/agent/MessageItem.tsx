@@ -1,240 +1,152 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Sparkles,
-  BookOpen,
-  Copy,
-  Check,
-  RotateCcw,
-  User,
-  GraduationCap,
-  Award,
-  Wrench,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Check, Copy, RotateCcw } from "lucide-react";
 import { Message } from "./types";
-import { CitationCard } from "./CitationCard";
 import { ToolLauncher } from "./ToolLauncher";
 import { MarkdownRenderer } from "./MarkdownRenderer";
-import { parseGroundedResponse } from "@/lib/ai/chat-parser";
+import { sourceLocator, sourceTitle } from "./SourceViewer";
+
+const MODE_LABEL: Record<string, string> = {
+  ASK: "Ask",
+  TUTOR: "Tutor",
+  EXAM: "Exam",
+  EXPERIMENT: "Laboratory",
+};
 
 interface MessageItemProps {
   message: Message;
+  /** Index of the citation of this message that is open in the viewer, if any. */
+  activeCitation: number | null;
+  onOpenCitation: (messageId: string, index: number) => void;
   onSelectPrompt?: (prompt: string) => void;
   onRegenerate?: (messageId: string) => void;
 }
 
-export function MessageItem({ message, onSelectPrompt, onRegenerate }: MessageItemProps) {
+export function MessageItem({
+  message,
+  activeCitation,
+  onOpenCitation,
+  onSelectPrompt,
+  onRegenerate,
+}: MessageItemProps) {
   const [copied, setCopied] = useState(false);
-  const [showAllCitations, setShowAllCitations] = useState(false);
 
-  const isAssistant = message.role === "assistant";
-
-  // Assistant Message: dynamically split if old or unsplit response in localStorage
-  const parsed = isAssistant && (!message.fromCarter && !message.additionalExplanation && message.content)
-    ? parseGroundedResponse(message.content)
-    : { fromCarter: message.fromCarter || "", additionalExplanation: message.additionalExplanation || "" };
-
-  const carterText = parsed.fromCarter || message.fromCarter;
-  const additionalText = parsed.additionalExplanation || message.additionalExplanation;
-  const hasDedicatedCarter = Boolean(carterText && carterText.trim().length > 0);
-  const hasAdditional = Boolean(additionalText && additionalText.trim().length > 0);
-  const hasSplitContent = hasDedicatedCarter || hasAdditional;
-  const primarySource = message.citations?.[0];
-
-  const handleCopy = () => {
-    const fullText = [
-      message.content,
-      carterText ? `\n\n--- FROM CARTER ---\n${carterText}` : "",
-      additionalText ? `\n\n--- SCIENTIFIC EXPLANATION ---\n${additionalText}` : "",
-    ].join("");
-
-    navigator.clipboard.writeText(fullText.trim());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // User Message
-  if (!isAssistant) {
+  if (message.role === "user") {
     return (
-      <div className="flex justify-end select-text py-2">
-        <div className="max-w-[85%] sm:max-w-[75%] space-y-1.5">
-          <div className="flex items-center justify-end gap-2 text-[10px] font-mono text-white/40 font-bold uppercase">
-            <span>{message.timestamp}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1 text-[#FF4500]">
-              <User className="w-3 h-3" />
-              <span>OPERATOR</span>
-            </span>
-          </div>
-
-          <div className="p-4 bg-[#18181b]/95 text-white border border-white/15 rounded-2xl rounded-tr-none shadow-xl font-sans text-sm sm:text-[15px] leading-relaxed whitespace-pre-wrap break-words">
-            {message.content}
-          </div>
+      <div className="flex justify-end">
+        <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-surface-2 px-4 py-2.5 text-[15px] leading-7 text-foreground">
+          {message.content}
         </div>
       </div>
     );
   }
 
+  // Conversations saved by earlier versions stored the answer in two parts.
+  const text =
+    message.content ||
+    [message.fromCarter, message.additionalExplanation].filter(Boolean).join("\n\n");
+  const citations = message.citations || [];
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // clipboard unavailable; nothing to do
+    }
+  };
+
+  const action =
+    "inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground transition-colors";
+
   return (
-    <div className="flex justify-start select-text py-3">
-      <div className="w-full max-w-3xl space-y-3.5">
-        {/* Assistant Header Info */}
-        <div className="flex items-center justify-between text-[11px] font-mono">
-          <div className="flex items-center gap-2">
-            <span className="w-6 h-6 bg-gradient-to-br from-[#FF4500] to-[#b32b00] text-black font-serif font-black rounded-lg flex items-center justify-center text-xs shadow-[0_0_12px_rgba(255,69,0,0.4)]">
-              ★
-            </span>
-            <span className="font-serif font-bold text-xs uppercase text-white tracking-wider">
-              CARTER AGENT
-            </span>
-            <span className="text-white/30">•</span>
-            <span className="text-[10px] font-mono text-[#FF4500] bg-[#FF4500]/10 border border-[#FF4500]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
-              {message.mode} MODE
-            </span>
-          </div>
+    <article className="space-y-4">
+      <MarkdownRenderer
+        content={text}
+        citationCount={citations.length}
+        activeCitation={activeCitation}
+        onCite={(i) => onOpenCitation(message.id, i)}
+      />
 
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-white/40">{message.timestamp}</span>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="p-1.5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10 rounded-lg transition-all flex items-center gap-1 text-[10px] font-mono cursor-pointer"
-              title="Copy answer"
-            >
-              {copied ? <Check className="w-3 h-3 text-[#FF4500]" /> : <Copy className="w-3 h-3" />}
-              <span className="hidden sm:inline">{copied ? "Copied" : "Copy"}</span>
-            </button>
-            {onRegenerate && (
-              <button
-                type="button"
-                onClick={() => onRegenerate(message.id)}
-                className="p-1.5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10 rounded-lg transition-all flex items-center gap-1 text-[10px] font-mono cursor-pointer"
-                title="Regenerate response"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span className="hidden sm:inline">Retry</span>
-              </button>
-            )}
-          </div>
-        </div>
+      {citations.length > 0 && (
+        <section aria-label="Sources">
+          <h4 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-faint">Sources</h4>
+          <ol className="divide-y divide-line overflow-hidden rounded-md border border-line bg-surface">
+            {citations.map((src, i) => {
+              const active = activeCitation === i;
+              return (
+                <li key={src.chunkId || i}>
+                  <button
+                    type="button"
+                    onClick={() => onOpenCitation(message.id, i)}
+                    aria-pressed={active}
+                    className={`flex w-full items-start gap-3 px-3 py-2.5 text-left transition-colors ${
+                      active ? "bg-accent-soft" : "hover:bg-surface-2"
+                    }`}
+                  >
+                    <span className="cite mt-0.5 shrink-0" data-active={active} aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                        <span className="font-medium text-foreground">{sourceTitle(src)}</span>
+                        <span className="text-muted">{sourceLocator(src)}</span>
+                      </span>
+                      <span className="mt-0.5 line-clamp-2 block text-[13px] leading-5 text-muted">
+                        {src.excerpt}
+                      </span>
+                    </span>
+                    <span className="mt-0.5 hidden shrink-0 text-xs text-accent sm:block">
+                      {src.kind === "pdf" ? "Open page" : "View passage"}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      )}
 
-        {/* Section 1: Standard / Overview Answer (Fallback if no split sections) */}
-        {!hasSplitContent && message.content && (
-          <div className="p-4 sm:p-5 bg-[#111111]/90 backdrop-blur-md border border-white/15 rounded-2xl shadow-xl">
-            <MarkdownRenderer content={message.content} />
-          </div>
+      <ToolLauncher query={text} citations={citations} />
+
+      <div className="flex flex-wrap items-center gap-1 text-xs text-faint">
+        <button type="button" onClick={handleCopy} className={action}>
+          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? "Copied" : "Copy"}
+        </button>
+        {onRegenerate && (
+          <button type="button" onClick={() => onRegenerate(message.id)} className={action}>
+            <RotateCcw className="h-3.5 w-3.5" />
+            Regenerate
+          </button>
         )}
+        <span className="ml-auto">
+          {MODE_LABEL[message.mode] || message.mode}
+          {message.provider ? ` · ${message.provider}` : ""}
+          {message.timestamp ? ` · ${message.timestamp}` : ""}
+        </span>
+      </div>
 
-        {/* Section 2: Grounded "FROM CARTER" Textbook Card */}
-        {hasDedicatedCarter && (
-          <div className="bg-[#0d0d0e] border border-white/15 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="px-4 py-2.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-2 font-serif text-xs text-white uppercase tracking-wider font-semibold">
-                <BookOpen className="w-4 h-4 text-[#FF4500]" />
-                <span>FROM CARTER TEXTBOOK (GROUND TRUTH)</span>
-              </div>
-              {primarySource ? (
-                <span className="font-mono text-[10px] font-bold bg-[#FF4500]/20 text-[#FF4500] border border-[#FF4500]/40 px-2.5 py-0.5 rounded-full">
-                  Ch. {primarySource.chapterNumber} · p. {primarySource.page}
-                </span>
-              ) : (
-                <span className="font-mono text-[10px] font-bold bg-[#FF4500]/15 text-[#FF4500] border border-[#FF4500]/30 px-2 py-0.5 rounded-full">
-                  TEXTBOOK CORPUS
-                </span>
-              )}
-            </div>
-
-            <div className="p-4 sm:p-5 text-white">
-              <MarkdownRenderer content={carterText!} />
-            </div>
-          </div>
-        )}
-
-        {/* Section 3: Distinct Additional Scientific Explanation / Guidance */}
-        {hasAdditional && (
-          <div className="bg-[#141416]/90 border border-white/10 rounded-2xl shadow-xl overflow-hidden">
-            <div className="px-4 py-2.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-2 font-serif text-xs text-white uppercase tracking-wider font-semibold">
-                <Sparkles className="w-4 h-4 text-[#FF4500]" />
-                <span>
-                  {message.mode === "TUTOR"
-                    ? "SOCRATIC TUTOR GUIDANCE"
-                    : message.mode === "EXAM"
-                    ? "MODEL EXAMINATION ANSWER"
-                    : message.mode === "EXPERIMENT"
-                    ? "COLUMN DIAGNOSTIC PROCEDURE"
-                    : "SCIENTIFIC ANALYSIS & LAB PROTOCOL"}
-                </span>
-              </div>
-              <span className="font-mono text-[10px] text-white/50 font-medium uppercase tracking-wider">
-                {message.provider || "Williams & Carter Synthesis"}
-              </span>
-            </div>
-
-            <div className="p-4 sm:p-5 text-white/90">
-              <MarkdownRenderer content={additionalText!} />
-            </div>
-          </div>
-        )}
-
-        {/* Section 4: Verified Carter Citations */}
-        {message.citations && message.citations.length > 0 && (
-          <div className="space-y-2 pt-1">
-            <div className="flex items-center justify-between font-mono text-[11px] font-bold text-white/60 uppercase tracking-wider">
-              <span className="flex items-center gap-1.5">
-                <span>Verified Textbook Citations ({message.citations.length})</span>
-              </span>
-              {message.citations.length > 1 && (
+      {onSelectPrompt && message.suggestedQuestions && message.suggestedQuestions.length > 0 && (
+        <section aria-label="Related questions" className="border-t border-line pt-3">
+          <h4 className="mb-1 text-xs font-medium uppercase tracking-wide text-faint">Related questions</h4>
+          <ul>
+            {message.suggestedQuestions.map((q, i) => (
+              <li key={i}>
                 <button
-                  type="button"
-                  onClick={() => setShowAllCitations(!showAllCitations)}
-                  className="text-[10px] text-[#FF4500] hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                  {showAllCitations ? "Show less" : `Show all ${message.citations.length}`}
-                  {showAllCitations ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                </button>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              {(showAllCitations ? message.citations : message.citations.slice(0, 1)).map((cite, i) => (
-                <CitationCard key={cite.chunkId || i} source={cite} index={i} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Section 5: Contextual Tool Handoff */}
-        <ToolLauncher
-          query={message.content}
-          answer={message.additionalExplanation || message.content}
-          citations={message.citations}
-        />
-
-        {/* Section 6: Follow-up Enquiries */}
-        {message.suggestedQuestions && message.suggestedQuestions.length > 0 && onSelectPrompt && (
-          <div className="space-y-2 pt-2">
-            <span className="font-mono text-[10px] font-bold text-white/40 uppercase tracking-wider block">
-              Suggested Follow-up Enquiries:
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {message.suggestedQuestions.map((q, idx) => (
-                <button
-                  key={idx}
                   type="button"
                   onClick={() => onSelectPrompt(q)}
-                  className="px-3 py-1.5 bg-[#18181b] hover:bg-[#FF4500] text-white hover:text-black border border-white/15 hover:border-[#FF4500] rounded-xl font-sans text-xs transition-all text-left shadow-md cursor-pointer"
+                  className="w-full rounded px-2 py-1.5 text-left text-sm text-muted hover:bg-surface-2 hover:text-foreground transition-colors"
                 >
-                  → {q}
+                  {q}
                 </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </article>
   );
 }
