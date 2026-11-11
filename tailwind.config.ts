@@ -1,6 +1,10 @@
 import type { Config } from "tailwindcss";
 
+/** Colour tokens are CSS variables (see globals.css) so light and dark share one set of classes. */
+const token = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
+  darkMode: ["selector", '[data-theme="dark"]'],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,104 +13,78 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Acid Neo-Brutalist Palette
-        paper: "#F8F4E8",
-        ink: "#09090B",
-        acid: "#D2E823",
+        background: token("bg"),
+        foreground: token("fg"),
+        surface: token("surface"),
+        "surface-2": token("surface-2"),
+        line: token("line"),
+        "line-strong": token("line-strong"),
+        muted: token("muted"),
+        faint: token("faint"),
+        accent: token("accent"),
+        "accent-fg": token("accent-fg"),
+        "accent-soft": token("accent-soft"),
+        "accent-inv": token("accent-inv"),
+        "accent-strong": token("accent-strong"),
+        mark: token("mark"),
+        inverse: token("inverse"),
+        "inverse-fg": token("inverse-fg"),
+        positive: token("positive"),
+        warning: token("warning"),
+        danger: token("danger"),
 
-        // Existing TEM-AI tokens maintained for compatibility
-        background: "#F8F4E8",
-        foreground: "#09090B",
-        surface: "#FFFFFF",
-        "surface-warm": "#F4EFE6",
-        "surface-dark": "#09090B",
+        // Names used by the older tool pages, mapped onto the same tokens
+        border: token("line"),
+        "surface-warm": token("surface-2"),
+        "surface-dark": token("inverse"),
+        paper: token("bg"),
+        ink: token("fg"),
+        acid: token("accent-soft"),
+
+        // Instrument-display colours (diagrams and simulated detector screens)
         "surface-terminal": "#0B0E14",
-        border: "#09090B",
-        "beam-cyan": "#00D2FF",
+        "beam-cyan": "#38BDF8",
         "beam-blue": "#0284C7",
         "phosphor-green": "#10B981",
-        "hazard-amber": "#F59E0B",
-        "lab-orange": "#FF5722",
-        "accent-purple": "#8B5CF6",
+        "hazard-amber": "#D97706",
+        "lab-orange": "#C2410C",
+        "accent-purple": "#7C3AED",
       },
       boxShadow: {
-        // Strict Hard Shadows (0 blur)
-        "hard-xs": "1.5px 1.5px 0px 0px #09090B",
-        "hard-sm": "2px 2px 0px 0px #09090B",
-        hard: "4px 4px 0px 0px #09090B",
-        "hard-md": "6px 6px 0px 0px #09090B",
-        "hard-lg": "8px 8px 0px 0px #09090B",
-        "hard-acid": "4px 4px 0px 0px #D2E823",
-        "hard-acid-lg": "8px 8px 0px 0px #D2E823",
-
-        // Compatibility shadows
-        "neo-xs": "1.5px 1.5px 0px #09090B",
-        neo: "3px 3px 0px #09090B",
-        "neo-md": "4px 4px 0px #09090B",
-        "neo-lg": "6px 6px 0px #09090B",
-        "neo-xl": "8px 8px 0px #09090B",
-        "neo-amber": "4px 4px 0px #F59E0B",
-        "neo-cyan": "4px 4px 0px #0284C7",
-        "neo-green": "4px 4px 0px #10B981",
-        "neo-orange": "4px 4px 0px #FF5722",
-        "neo-inset": "inset 2px 2px 0px rgba(0,0,0,0.15)",
+        panel: "0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.06)",
+        // The older pages used hard offset shadows; they are flattened here.
+        "hard-xs": "none",
+        "hard-sm": "none",
+        hard: "none",
+        "hard-md": "none",
+        "hard-lg": "0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.06)",
+        "hard-acid": "none",
+        "hard-acid-lg": "none",
+        "neo-xs": "none",
+        neo: "none",
+        "neo-md": "none",
+        "neo-lg": "none",
+        "neo-xl": "none",
+        "neo-amber": "none",
+        "neo-cyan": "none",
+        "neo-green": "none",
+        "neo-orange": "none",
+        "neo-inset": "none",
       },
       fontFamily: {
-        display: [
-          "'Dela Gothic One'",
-          "Outfit",
-          "sans-serif",
-        ],
-        grotesk: [
-          "'Space Grotesk'",
-          "Inter",
-          "sans-serif",
-        ],
-        sans: [
-          "'Space Grotesk'",
-          "Outfit",
-          "Inter",
-          "-apple-system",
-          "sans-serif",
-        ],
-        mono: [
-          "JetBrains Mono",
-          "Space Mono",
-          "Menlo",
-          "monospace",
-        ],
-      },
-      borderWidth: {
-        2: "2px",
-        3: "3px",
-        4: "4px",
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        serif: ["'Source Serif 4'", "Georgia", "'Times New Roman'", "serif"],
+        mono: ["'JetBrains Mono'", "Menlo", "Consolas", "monospace"],
+        display: ["Inter", "-apple-system", "'Segoe UI'", "sans-serif"],
+        grotesk: ["Inter", "-apple-system", "'Segoe UI'", "sans-serif"],
       },
       keyframes: {
-        glitch: {
-          "0%": { transform: "translate(0, 0)" },
-          "20%": { transform: "translate(-2px, 2px)" },
-          "40%": { transform: "translate(-2px, -2px)" },
-          "60%": { transform: "translate(2px, 2px)" },
-          "80%": { transform: "translate(2px, -2px)" },
-          "100%": { transform: "translate(0, 0)" },
-        },
-        marquee: {
-          "0%": { transform: "translateX(0%)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        "float-card": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
         "beam-pulse": {
           "0%, 100%": { opacity: "0.4", transform: "scaleY(0.98)" },
           "50%": { opacity: "1", transform: "scaleY(1)" },
         },
       },
       animation: {
-        glitch: "glitch 0.3s infinite",
-        marquee: "marquee 20s linear infinite",
-        float: "float-card 3.5s ease-in-out infinite",
         "beam-pulse": "beam-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },

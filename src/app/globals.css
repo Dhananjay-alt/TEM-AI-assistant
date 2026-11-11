@@ -2,193 +2,206 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Colour tokens. Light is the default; dark is set with data-theme.
+   Values are RGB triplets so Tailwind opacity modifiers work.
+------------------------------------------------------------------- */
 @layer base {
   :root {
-    --background: 0 0% 2%; /* #050505 */
-    --foreground: 0 0% 100%; /* #FFFFFF */
-    --accent: 16 100% 50%; /* #FF4500 */
-    --card: 0 0% 7%; /* #111111 */
+    --bg: 250 250 248;
+    --surface: 255 255 255;
+    --surface-2: 243 243 240;
+    --line: 226 226 221;
+    --line-strong: 196 196 190;
+    --fg: 28 28 30;
+    --muted: 88 90 97;
+    --faint: 134 136 143;
+    --accent: 31 78 121;
+    --accent-fg: 255 255 255;
+    --accent-soft: 230 238 246;
+    --accent-inv: 170 203 240;
+    --mark: 255 226 130;
+    --inverse: 34 35 38;
+    --inverse-fg: 246 246 243;
+    --accent-strong: 31 78 121;
+    --positive: 21 128 61;
+    --warning: 161 98 7;
+    --danger: 185 28 28;
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --bg: 17 18 20;
+    --surface: 24 25 28;
+    --surface-2: 33 34 38;
+    --line: 46 48 53;
+    --line-strong: 74 76 83;
+    --fg: 232 232 229;
+    --muted: 163 165 171;
+    --faint: 118 120 127;
+    --accent: 140 182 232;
+    --accent-fg: 13 22 33;
+    --accent-soft: 30 43 60;
+    --accent-inv: 170 203 240;
+    --mark: 122 96 18;
+    --inverse: 38 40 46;
+    --inverse-fg: 246 246 243;
+    --accent-strong: 46 98 150;
+    --positive: 74 190 120;
+    --warning: 224 170 70;
+    --danger: 240 120 120;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: #050505;
-    color: #ffffff;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
-  /* Luxury subtle scrollbar */
+  ::selection {
+    background: rgb(var(--accent) / 0.22);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #050505;
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1c1c1f;
+    background: rgb(var(--line-strong));
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgb(var(--bg));
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #FF4500;
+    background: rgb(var(--faint));
   }
 }
 
-/* Global SVG Noise Overlay (3% opacity) */
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+/* ------------------------------------------------------------------
+   Citation markers and source highlights
+------------------------------------------------------------------- */
+.cite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35em;
+  height: 1.35em;
+  padding: 0 0.3em;
+  margin: 0 0.1em;
+  vertical-align: 0.12em;
+  font-family: Inter, sans-serif;
+  font-size: 0.72em;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(var(--accent));
+  background: rgb(var(--accent-soft));
+  border: 1px solid rgb(var(--accent) / 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+.cite:hover,
+.cite[data-active="true"] {
+  color: rgb(var(--accent-fg));
+  background: rgb(var(--accent));
 }
 
-/* Radial Dot Texture Pattern */
-.radial-dots {
-  background-image: radial-gradient(#09090B 1.2px, transparent 1.2px);
-  background-size: 20px 20px;
+.source-mark {
+  background: rgb(var(--mark) / 0.55);
+  border-radius: 2px;
+  padding: 0.05em 0;
+  color: inherit;
 }
 
-.radial-dots-acid {
-  background-image: radial-gradient(#D2E823 1.2px, transparent 1.2px);
-  background-size: 20px 20px;
+/* Highlights drawn over the rendered PDF page (always a white page) */
+.pdf-hl {
+  position: absolute;
+  background: rgb(255 214 64 / 0.28);
+  mix-blend-mode: multiply;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.pdf-hl[data-focus="true"] {
+  background: rgb(255 190 20 / 0.5);
+  box-shadow: 0 0 0 1px rgb(214 150 0 / 0.55);
 }
 
-/* Glitch display animation on hover */
-.glitch-hover:hover {
-  animation: glitch 0.3s infinite;
-}
-
-/* Acid Neo-Brutalist utility classes */
+/* ------------------------------------------------------------------
+   Class names used by the older tool pages, restyled to the same
+   restrained look (thin borders, no offset shadows, no motion).
+------------------------------------------------------------------- */
+.brutal-border,
 .acid-border {
-  border: 2px solid #09090B;
+  border: 1px solid rgb(var(--line));
+  border-radius: 8px;
 }
-
+.brutal-border-thick,
 .acid-border-thick {
-  border: 3.5px solid #09090B;
+  border: 1px solid rgb(var(--line-strong));
+  border-radius: 8px;
 }
-
-/* Strict Hard Shadows (Offset boxes with 0 blur) */
-.hard-shadow {
-  box-shadow: 4px 4px 0px 0px #09090B;
-}
-
-.hard-shadow-sm {
-  box-shadow: 2px 2px 0px 0px #09090B;
-}
-
-.hard-shadow-lg {
-  box-shadow: 8px 8px 0px 0px #09090B;
-}
-
-.hard-shadow-acid {
-  box-shadow: 4px 4px 0px 0px #D2E823;
-}
-
+.brutal-shadow,
+.brutal-shadow-sm,
+.brutal-shadow-lg,
+.brutal-shadow-cyan,
+.brutal-shadow-amber,
+.brutal-shadow-green,
+.brutal-shadow-orange,
+.hard-shadow,
+.hard-shadow-sm,
+.hard-shadow-lg,
+.hard-shadow-acid,
 .hard-shadow-acid-lg {
-  box-shadow: 8px 8px 0px 0px #D2E823;
+  box-shadow: none;
 }
-
-/* Physical tactile button press */
 .hard-btn {
-  border: 2px solid #09090B;
-  box-shadow: 4px 4px 0px 0px #09090B;
-  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background-color 0.15s ease;
+  border: 1px solid rgb(var(--line-strong));
+  border-radius: 6px;
+  transition: background-color 0.12s;
 }
 
-.hard-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px #09090B;
-}
-
-.hard-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0px 0px 0px 0px #09090B;
-}
-
-/* Backwards compatibility classes */
-.brutal-border {
-  border: 2px solid #09090B;
-}
-
-.brutal-border-thick {
-  border: 3.5px solid #09090B;
-}
-
-.brutal-shadow {
-  box-shadow: 4px 4px 0px 0px #09090B;
-}
-
-.brutal-shadow-sm {
-  box-shadow: 2px 2px 0px 0px #09090B;
-}
-
-.brutal-shadow-lg {
-  box-shadow: 6px 6px 0px 0px #09090B;
-}
-
-.brutal-shadow-cyan {
-  box-shadow: 4px 4px 0px 0px #0284C7;
-}
-
-.brutal-shadow-amber {
-  box-shadow: 4px 4px 0px 0px #F59E0B;
-}
-
-.brutal-shadow-green {
-  box-shadow: 4px 4px 0px 0px #10B981;
-}
-
-.brutal-shadow-orange {
-  box-shadow: 4px 4px 0px 0px #D2E823;
-}
-
-/* Grid background for instrument dashboard */
 .instrument-grid {
-  background-image: 
-    linear-gradient(to right, rgba(9, 9, 11, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(9, 9, 11, 0.06) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgb(var(--fg) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--fg) / 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
 }
-
 .dark-instrument-grid {
-  background-image: 
-    linear-gradient(to right, rgba(210, 232, 35, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(210, 232, 35, 0.08) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
   background-size: 20px 20px;
 }
-
-/* Superdesign Aesthetic Styles */
-.font-serif {
-  font-family: 'Playfair Display', Georgia, serif;
+.radial-dots,
+.radial-dots-acid,
+.bg-noise {
+  background-image: none;
 }
 
-@keyframes float-hand-left {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-20px) rotate(2deg); }
-}
-
-@keyframes float-hand-right {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(20px) rotate(-2deg); }
-}
-
-.animate-float-left {
-  animation: float-hand-left 12s ease-in-out infinite;
-}
-
-.animate-float-right {
-  animation: float-hand-right 14s ease-in-out infinite;
-}
-
-/* Reveal Animation Styles */
 .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal.active {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,27 +1,25 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
 export const metadata: Metadata = {
-  title: "TEM-AI — Transmission Electron Microscopy Intelligence",
+  title: "TEM-AI — Transmission electron microscopy reference assistant",
   description:
-    "An AI-powered educational and laboratory assistant grounded in David B. Williams & C. Barry Carter's TEM textbook. Featuring interactive diffraction simulations, particle analysis, and exam prep.",
+    "A study and reference assistant for transmission electron microscopy. Answers cite the textbook passage they come from, and each citation opens the source page.",
   keywords: [
     "Transmission Electron Microscopy",
     "TEM",
-    "Barry Carter",
     "Electron Diffraction",
     "SAED",
     "HRTEM",
     "Materials Science",
-    "Ewald Sphere",
-    "Bright Field",
-    "Dark Field",
   ],
 };
+
+// Applies the saved theme before first paint so the page does not flash.
+const themeScript = `(function(){var t='light';try{var s=localStorage.getItem('tem-theme');if(s==='dark'||s==='light')t=s;}catch(e){}document.documentElement.dataset.theme=t;})();`;
 
 export default function RootLayout({
   children,
@@ -29,24 +27,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#050505] text-white font-sans selection:bg-[#FF4500] selection:text-white relative antialiased">
-        {/* Global SVG Noise Overlay (subtle surrealist texture) */}
-        <div className="fixed inset-0 pointer-events-none bg-noise z-30 opacity-20" aria-hidden="true" />
-
-        {/* Interactive Custom Mix-Blend Cursor */}
-        <CustomCursor />
-
+      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
         <Navbar />
-        <main className="flex-1 relative z-10">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>
