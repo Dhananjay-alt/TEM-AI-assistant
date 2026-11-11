@@ -22,6 +22,18 @@ export interface RetrievedSource {
   pedagogicalKeyPoints: string[];
   formulas?: string[];
   figureRef?: string;
+  /** "pdf": a passage of the indexed textbook PDF. "excerpt": a stored summary (no real page). */
+  kind?: "pdf" | "excerpt";
+  /** 1-based page in the PDF file (pdf sources only). */
+  pdfPage?: number;
+  /** Page number as printed in the book, when the PDF provides it. */
+  pageLabel?: string;
+  /** The source split into lines (pdf) or sentences (excerpt). */
+  segments?: string[];
+  /** Position of each segment on the page: [x, y, w, h] as fractions (pdf only). */
+  rects?: number[][];
+  /** Indexes of the segments that best support the answer. */
+  focus?: number[];
 }
 
 export interface GroundedRAGResult {
