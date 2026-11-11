@@ -20,6 +20,20 @@
 
 ---
 
+## Textbook PDF and page citations
+
+Answers carry numbered references. Selecting one opens the source viewer on the page it came from, with the cited lines highlighted.
+
+To cite the real book, add your own copy of the PDF (it stays on your machine; `book/` is git-ignored):
+
+1. Copy the PDF into the `book/` folder (create it if needed).
+2. Run `npm run index-book` (or `npm run index-book -- "C:\path	oook.pdf"`).
+3. Reload the app. The top bar shows the indexed title and page count.
+
+The PDF must contain selectable text; a scanned copy needs OCR first. Without a PDF the assistant falls back to the short stored summaries in `src/data/carter-textbook-data.ts`, and the viewer labels them as summaries with approximate page ranges.
+
+---
+
 ## ⚡ Overview
 
 **TEM-AI** is an AI-powered educational laboratory workstation and intelligent assistant built for **Transmission Electron Microscopy (TEM)** and Materials Science.
