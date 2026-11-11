@@ -7,6 +7,7 @@ interface BrutalButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   icon?: React.ReactNode;
 }
 
+/** Standard button. (The name is historical; many pages import it.) */
 export function BrutalButton({
   children,
   className,
@@ -16,30 +17,29 @@ export function BrutalButton({
   disabled,
   ...props
 }: BrutalButtonProps) {
+  const solid = "border-accent bg-accent text-accent-fg hover:opacity-90";
+  const quiet = "border-line-strong bg-surface text-foreground hover:bg-surface-2";
   const variantStyles = {
-    primary: "bg-[#FF5722] text-white hover:bg-[#E64A19] active:bg-[#D84315]",
-    secondary: "bg-[#F59E0B] text-foreground hover:bg-[#D97706] active:bg-[#B45309]",
-    cyan: "bg-[#00D2FF] text-foreground hover:bg-[#00B4D8] active:bg-[#0096C7]",
-    green: "bg-[#10B981] text-white hover:bg-[#059669] active:bg-[#047857]",
-    dark: "bg-foreground text-background hover:bg-slate-800 active:bg-slate-900",
-    outline: "bg-white text-foreground hover:bg-[#F4EFE6] active:bg-[#EBE5D8]",
-    danger: "bg-[#EF4444] text-white hover:bg-[#DC2626] active:bg-[#B91C1C]",
+    primary: solid,
+    dark: solid,
+    green: solid,
+    secondary: quiet,
+    cyan: quiet,
+    outline: quiet,
+    danger: "border-danger/40 bg-surface text-danger hover:bg-danger/10",
   }[variant];
 
   const sizeStyles = {
-    sm: "px-2.5 py-1 text-xs font-mono",
-    md: "px-4 py-2 text-sm font-bold",
-    lg: "px-6 py-3 text-base font-bold tracking-wide",
+    sm: "px-2.5 py-1 text-xs",
+    md: "px-3.5 py-2 text-sm",
+    lg: "px-5 py-2.5 text-sm",
   }[size];
 
   return (
     <button
       className={cn(
-        "brutal-border brutal-shadow font-sans uppercase tracking-wider inline-flex items-center justify-center gap-2 select-none",
-        "transition-all duration-100 ease-out",
-        "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-neo-lg",
-        "active:translate-x-0.5 active:translate-y-0.5 active:shadow-neo-xs",
-        "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
+        "inline-flex select-none items-center justify-center gap-2 rounded-md border font-medium transition-colors",
+        "disabled:pointer-events-none disabled:opacity-50",
         variantStyles,
         sizeStyles,
         className

@@ -17,18 +17,18 @@ export function SourceCitation({ source, index }: SourceCitationProps) {
         className="w-full text-left p-2.5 flex items-center justify-between hover:bg-[#EBE4D5] transition-colors"
       >
         <div className="flex items-center gap-2 overflow-hidden">
-          <span className="bg-foreground text-background font-bold px-1.5 py-0.5 text-[10px] shrink-0">
+          <span className="bg-inverse text-inverse-fg font-bold px-1.5 py-0.5 text-[10px] shrink-0">
             [{String(index + 1).padStart(2, "0")}]
           </span>
-          <span className="font-bold truncate text-slate-900">
+          <span className="font-bold truncate text-foreground">
             Carter Ch. {source.chapterNumber}: {source.chapterTitle}
           </span>
-          <span className="text-slate-500 hidden sm:inline text-[11px]">
+          <span className="text-muted hidden sm:inline text-[11px]">
             §{source.sectionNumber} (p. {source.page}-{source.pageEnd})
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[10px] bg-white border border-border px-1 py-0.5 text-slate-700">
+          <span className="text-[10px] bg-surface border border-border px-1 py-0.5 text-foreground">
             {(source.relevanceScore * 100).toFixed(0)}% MATCH
           </span>
           {isOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -36,18 +36,18 @@ export function SourceCitation({ source, index }: SourceCitationProps) {
       </button>
 
       {isOpen && (
-        <div className="p-3 border-t-2 border-border bg-white space-y-2">
-          <div className="text-[11px] font-sans font-semibold text-slate-700">
+        <div className="p-3 border-t border-border bg-surface space-y-2">
+          <div className="text-[11px] font-sans font-semibold text-foreground">
             {source.sectionTitle}
           </div>
-          <div className="p-2.5 bg-surface-warm border border-slate-300 text-slate-800 text-[11px] leading-relaxed italic">
+          <div className="p-2.5 bg-surface-warm border border-line text-foreground text-[11px] leading-relaxed italic">
             "{source.excerpt}"
           </div>
           <div className="space-y-1 pt-1">
-            <span className="text-[10px] uppercase font-bold text-slate-600 block">
+            <span className="text-[10px] font-bold text-muted block">
               Core Principles (Williams & Carter):
             </span>
-            <ul className="list-disc list-inside space-y-0.5 text-[11px] text-slate-700 font-sans">
+            <ul className="list-disc list-inside space-y-0.5 text-[11px] text-foreground font-sans">
               {source.pedagogicalKeyPoints.map((pt, i) => (
                 <li key={i}>{pt}</li>
               ))}

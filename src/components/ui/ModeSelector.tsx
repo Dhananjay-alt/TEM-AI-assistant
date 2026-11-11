@@ -23,7 +23,7 @@ export function ModeSelector({
   }[] = [
     {
       id: "ASK",
-      label: "ASK CARTER",
+      label: "Ask Carter",
       description: "Direct grounded textbook answers",
       icon: <MessageSquare className="w-3.5 h-3.5" />,
       badgeColor: "bg-[#00D2FF]",
@@ -37,17 +37,17 @@ export function ModeSelector({
     },
     {
       id: "EXAM",
-      label: "EXAM MODE",
+      label: "Exam mode",
       description: "2, 5, 10 mark & Viva rubrics",
       icon: <Award className="w-3.5 h-3.5" />,
       badgeColor: "bg-[#F59E0B]",
     },
     {
       id: "EXPERIMENT",
-      label: "LAB EXPERIMENT",
+      label: "Lab experiment",
       description: "Practical microscopy diagnostics",
       icon: <Wrench className="w-3.5 h-3.5" />,
-      badgeColor: "bg-[#FF5722]",
+      badgeColor: "bg-accent-strong",
     },
   ];
 
@@ -68,8 +68,8 @@ export function ModeSelector({
             className={cn(
               "brutal-border p-2.5 text-left transition-all relative flex flex-col justify-between",
               isActive
-                ? "bg-foreground text-background shadow-neo-md -translate-x-0.5 -translate-y-0.5"
-                : "bg-surface hover:bg-surface-warm text-foreground shadow-neo-xs hover:-translate-x-0.5 hover:-translate-y-0.5"
+                ? "bg-inverse text-inverse-fg shadow-neo-md"
+                : "bg-surface hover:bg-surface-warm text-foreground shadow-neo-xs"
             )}
           >
             <div className="flex items-center justify-between mb-1">
@@ -87,7 +87,7 @@ export function ModeSelector({
             <span
               className={cn(
                 "text-[10px] leading-tight block truncate",
-                isActive ? "text-slate-300" : "text-slate-500"
+                isActive ? "text-slate-300" : "text-muted"
               )}
             >
               {m.description}

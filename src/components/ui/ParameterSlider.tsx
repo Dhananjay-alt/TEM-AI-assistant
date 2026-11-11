@@ -31,17 +31,17 @@ export function ParameterSlider({
   return (
     <div className={cn("space-y-2 select-none", className)}>
       <div className="flex items-center justify-between text-xs font-mono">
-        <span className="font-bold text-foreground flex items-center gap-1.5 uppercase">
+        <span className="font-bold text-foreground flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 bg-hazard-amber"></span>
           {label}
         </span>
         <div className="flex items-center gap-2">
           {badgeText && (
-            <span className="bg-surface-warm border border-border px-1.5 py-0.2 text-[10px] font-bold text-slate-700">
+            <span className="bg-surface-warm border border-border px-1.5 py-0.2 text-[10px] font-bold text-foreground">
               {badgeText}
             </span>
           )}
-          <span className="bg-foreground text-background px-2 py-0.5 font-bold font-mono text-xs">
+          <span className="bg-inverse text-inverse-fg px-2 py-0.5 font-bold font-mono text-xs">
             {value} {unit}
           </span>
         </div>
@@ -55,9 +55,9 @@ export function ParameterSlider({
           step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="w-full h-3 bg-surface-warm border-2 border-border appearance-none cursor-pointer accent-[#FF5722] focus:outline-none"
+          className="w-full h-3 bg-surface-warm border border-border appearance-none cursor-pointer accent-accent focus:outline-none"
         />
-        <div className="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+        <div className="flex justify-between text-[10px] font-mono text-muted mt-1">
           <span>{min} {unit}</span>
           <span>{Math.round((min + max) / 2)} {unit}</span>
           <span>{max} {unit}</span>
@@ -65,7 +65,7 @@ export function ParameterSlider({
       </div>
 
       {helperText && (
-        <p className="text-[11px] font-mono text-slate-600 leading-tight">
+        <p className="text-[11px] font-mono text-muted leading-tight">
           {helperText}
         </p>
       )}

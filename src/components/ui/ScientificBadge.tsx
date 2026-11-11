@@ -7,6 +7,7 @@ interface ScientificBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   hasDot?: boolean;
 }
 
+/** Small status label. */
 export function ScientificBadge({
   children,
   className,
@@ -14,38 +15,24 @@ export function ScientificBadge({
   hasDot = false,
   ...props
 }: ScientificBadgeProps) {
-  const styles = {
-    default: "bg-surface-warm text-foreground border-border",
-    cyan: "bg-[#E0F7FE] text-[#0369A1] border-[#0284C7]",
-    green: "bg-[#ECFDF5] text-[#047857] border-[#10B981]",
-    amber: "bg-[#FEF3C7] text-[#B45309] border-[#F59E0B]",
-    dark: "bg-foreground text-background border-foreground",
-    red: "bg-[#FEE2E2] text-[#B91C1C] border-[#EF4444]",
-  }[variant];
-
-  const dotColors = {
-    default: "bg-foreground",
-    cyan: "bg-[#00D2FF]",
-    green: "bg-[#10B981]",
-    amber: "bg-[#F59E0B]",
-    dark: "bg-[#10B981]",
-    red: "bg-[#EF4444]",
+  const dot = {
+    default: "bg-faint",
+    cyan: "bg-accent",
+    green: "bg-positive",
+    amber: "bg-warning",
+    dark: "bg-faint",
+    red: "bg-danger",
   }[variant];
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-wider border-2",
-        styles,
+        "inline-flex items-center gap-1.5 rounded border border-line bg-surface px-2 py-0.5 text-[11px] font-medium text-muted",
         className
       )}
       {...props}
     >
-      {hasDot && (
-        <span
-          className={cn("w-1.5 h-1.5 rounded-full animate-pulse", dotColors)}
-        />
-      )}
+      {hasDot && <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />}
       {children}
     </span>
   );
