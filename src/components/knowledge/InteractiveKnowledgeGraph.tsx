@@ -34,31 +34,31 @@ export function InteractiveKnowledgeGraph() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-black font-sans uppercase">
-            07 / INTERACTIVE TEM CONCEPT & KNOWLEDGE MAP
+          <h2 className="text-xl font-semibold font-sans">
+            Interactive TEM concept & knowledge map
           </h2>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Explore the structural connections between reciprocal space, electron optics, contrast & spectrometry
           </p>
         </div>
         <ScientificBadge variant="cyan" hasDot>
-          CARTER CONCEPT GRAPH
+          Carter concept graph
         </ScientificBadge>
       </div>
 
       {/* Category Filter Chips */}
       <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-        <span className="font-bold text-slate-800 uppercase">Filter Category:</span>
+        <span className="font-bold text-foreground">Filter Category:</span>
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             className={`px-2.5 py-1 border text-[11px] font-bold transition-all ${
               selectedCategory === cat
-                ? "bg-foreground text-background border-border shadow-neo-xs"
-                : "bg-white text-slate-700 hover:bg-surface-warm border-slate-300"
+                ? "bg-inverse text-inverse-fg border-border shadow-neo-xs"
+                : "bg-surface text-foreground hover:bg-surface-warm border-line"
             }`}
           >
             {cat}
@@ -72,12 +72,12 @@ export function InteractiveKnowledgeGraph() {
           <BrutalCard
             variant="default"
             shadowSize="md"
-            titleBar="TEM CONCEPT NETWORK NODES"
+            titleBar="TEM concept network nodes"
             titleBarBadge={`${filteredConcepts.length} CONCEPTS`}
-            className="bg-white"
+            className="bg-surface"
           >
             <div className="space-y-3 font-mono text-xs">
-              <span className="font-bold text-slate-700 uppercase block text-[11px]">
+              <span className="font-bold text-foreground block text-[11px]">
                 Click Any Node to Inspect Relationships & Physics:
               </span>
 
@@ -85,28 +85,28 @@ export function InteractiveKnowledgeGraph() {
                 {filteredConcepts.map((concept) => {
                   const isSelected = selectedConceptId === concept.id;
                   const catColors = {
-                    Optics: "border-l-4 border-l-[#00D2FF]",
-                    Diffraction: "border-l-4 border-l-[#10B981]",
-                    Imaging: "border-l-4 border-l-[#FF5722]",
-                    Spectrometry: "border-l-4 border-l-[#8B5CF6]",
-                    Crystallography: "border-l-4 border-l-[#F59E0B]",
+                    Optics: "border-l-2 border-l-[#00D2FF]",
+                    Diffraction: "border-l-2 border-l-[#10B981]",
+                    Imaging: "border-l-2 border-l-accent",
+                    Spectrometry: "border-l-2 border-l-[#8B5CF6]",
+                    Crystallography: "border-l-2 border-l-[#F59E0B]",
                   }[concept.category];
 
                   return (
                     <button
                       key={concept.id}
                       onClick={() => setSelectedConceptId(concept.id)}
-                      className={`p-3 border-2 text-left transition-all relative ${catColors} ${
+                      className={`p-3 border text-left transition-all relative ${catColors} ${
                         isSelected
-                          ? "bg-foreground text-background border-border shadow-neo-sm -translate-x-0.5 -translate-y-0.5 font-bold"
-                          : "bg-surface hover:bg-surface-warm border-slate-300 text-slate-900"
+                          ? "bg-inverse text-inverse-fg border-border shadow-neo-sm font-bold"
+                          : "bg-surface hover:bg-surface-warm border-line text-foreground"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] text-slate-400 uppercase font-mono">
+                        <span className="text-[10px] text-faint font-mono">
                           {concept.category}
                         </span>
-                        <span className="text-[9px] bg-slate-200/50 px-1 py-0.2 border border-slate-300 text-slate-700">
+                        <span className="text-[9px] bg-line/50 px-1 py-0.2 border border-line text-foreground">
                           Ch. {concept.carterChapter}
                         </span>
                       </div>
@@ -128,25 +128,25 @@ export function InteractiveKnowledgeGraph() {
             shadowSize="lg"
             titleBar={`INSPECTING: ${activeConcept.label.toUpperCase()}`}
             titleBarBadge={activeConcept.category}
-            className="bg-[#F4EFE6]"
+            className="bg-surface-2"
           >
             <div className="space-y-4 font-mono text-xs">
               {/* Concept Title & Carter Location */}
-              <div className="border-b-2 border-border pb-3 space-y-1">
-                <div className="text-[10px] text-[#FF5722] font-bold uppercase">
+              <div className="border-b border-border pb-3 space-y-1">
+                <div className="text-[10px] text-accent font-bold">
                   Williams & Carter: Chapter {activeConcept.carterChapter} ({activeConcept.carterSection})
                 </div>
-                <h3 className="text-lg font-bold font-sans text-slate-900">
+                <h3 className="text-lg font-bold font-sans text-foreground">
                   {activeConcept.label}
                 </h3>
               </div>
 
               {/* Physical Definition */}
               <div className="space-y-1">
-                <span className="font-bold text-slate-800 uppercase text-[11px] block">
+                <span className="font-bold text-foreground text-[11px] block">
                   Physical Mechanism:
                 </span>
-                <p className="text-[11px] font-sans text-slate-800 leading-relaxed bg-white p-3 brutal-border">
+                <p className="text-[11px] font-sans text-foreground leading-relaxed bg-surface p-3 brutal-border">
                   {activeConcept.shortDefinition}
                 </p>
               </div>
@@ -154,18 +154,18 @@ export function InteractiveKnowledgeGraph() {
               {/* Core Equation if present */}
               {activeConcept.keyEquation && (
                 <div className="space-y-1">
-                  <span className="font-bold text-slate-800 uppercase text-[11px] block">
+                  <span className="font-bold text-foreground text-[11px] block">
                     Core Mathematical Equation:
                   </span>
-                  <div className="bg-foreground text-background p-2.5 font-mono text-center font-bold text-xs tracking-wider">
+                  <div className="bg-inverse text-inverse-fg p-2.5 font-mono text-center font-bold text-xs tracking-wide">
                     {activeConcept.keyEquation}
                   </div>
                 </div>
               )}
 
               {/* Connected Relationships */}
-              <div className="space-y-1.5 pt-2 border-t-2 border-border">
-                <span className="font-bold text-slate-800 uppercase text-[11px] block">
+              <div className="space-y-1.5 pt-2 border-t border-border">
+                <span className="font-bold text-foreground text-[11px] block">
                   Connected Concepts in Carter:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -176,7 +176,7 @@ export function InteractiveKnowledgeGraph() {
                       <button
                         key={connId}
                         onClick={() => setSelectedConceptId(connId)}
-                        className="px-2 py-1 bg-white hover:bg-slate-100 border border-border text-[11px] font-mono text-slate-800 flex items-center gap-1"
+                        className="px-2 py-1 bg-surface hover:bg-surface-2 border border-border text-[11px] font-mono text-foreground flex items-center gap-1"
                       >
                         → {conn.label}
                       </button>
@@ -186,11 +186,11 @@ export function InteractiveKnowledgeGraph() {
               </div>
 
               {/* Direct Simulator or Ask Actions */}
-              <div className="pt-3 border-t border-slate-300 flex flex-col gap-2">
+              <div className="pt-3 border-t border-line flex flex-col gap-2">
                 {activeConcept.simulatorLink && (
                   <Link href={activeConcept.simulatorLink}>
                     <BrutalButton variant="cyan" size="sm" className="w-full">
-                      OPEN RELEVANT SIMULATOR
+                      Open relevant simulator
                     </BrutalButton>
                   </Link>
                 )}
@@ -198,7 +198,7 @@ export function InteractiveKnowledgeGraph() {
                   href={`/ask?prompt=${encodeURIComponent(activeConcept.suggestedPrompt)}`}
                 >
                   <BrutalButton variant="primary" size="sm" className="w-full">
-                    ASK CARTER ABOUT THIS
+                    Ask the assistant about this
                   </BrutalButton>
                 </Link>
               </div>

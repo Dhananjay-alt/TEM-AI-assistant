@@ -122,7 +122,7 @@ export function TEMAnatomyScene() {
   };
 
   return (
-    <div ref={containerRef} className="relative bg-[#FBF9F5] text-[#0F172A] instrument-grid pb-24">
+    <div ref={containerRef} className="relative bg-[#FBF9F5] text-foreground instrument-grid pb-24">
       {/* Component Detail Inspection Modal */}
       <ComponentDetailModal
         componentId={inspectedComponentId}
@@ -132,40 +132,40 @@ export function TEMAnatomyScene() {
       {/* ========================================================
           HERO SECTION — COMPLETE TEM
       ======================================================== */}
-      <section className="relative pt-12 pb-16 px-4 sm:px-6 max-w-7xl mx-auto border-b-3 border-[#0F172A]">
+      <section className="relative pt-12 pb-16 px-4 sm:px-6 max-w-7xl mx-auto border-b border-line">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Hero Left: Large Brutalist Typography */}
           <div className="lg:col-span-7 space-y-6">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="bg-[#0F172A] text-white px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest border border-border">
-                INTERACTIVE SCROLL DISSECTION
+              <span className="bg-inverse text-white px-2 py-0.5 font-mono text-xs font-bold tracking-wide border border-border">
+                Interactive scroll dissection
               </span>
               <ScientificBadge variant="cyan" hasDot>
-                OPTICAL COLUMN VIRTUAL BENCH
+                Optical column virtual bench
               </ScientificBadge>
-              <span className="text-slate-500 font-mono text-xs">
+              <span className="text-muted font-mono text-xs">
                 GROUNDED IN CARTER &amp; WILLIAMS
               </span>
             </div>
 
             <div>
-              <h1 className="text-4xl sm:text-6xl font-black font-sans uppercase tracking-tight text-foreground leading-[1.05]">
-                INSIDE THE TEM
+              <h1 className="text-4xl sm:text-6xl font-semibold font-sans tracking-tight text-foreground leading-[1.05]">
+                Inside the TEM
               </h1>
-              <p className="mt-3 text-lg sm:text-xl font-bold font-mono text-[#FF5722] uppercase tracking-wide">
+              <p className="mt-3 text-lg sm:text-xl font-bold font-mono text-accent tracking-wide">
                 Dissect the instrument. Understand the electron path.
               </p>
             </div>
 
-            <p className="text-sm sm:text-base font-sans text-slate-700 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base font-sans text-foreground max-w-2xl leading-relaxed">
               A Transmission Electron Microscope is not a conventional light microscope made of glass.
               It is an ultra-high vacuum particle accelerator and a sequence of electromagnetic lenses
               focusing relativistic electrons down a 2.5-meter column.
             </p>
 
             {/* Visual Pathway Summary */}
-            <div className="p-3 bg-surface-warm border-2 border-border font-mono text-xs flex flex-wrap items-center gap-2 text-slate-800">
-              <span className="font-bold text-[#FF5722]">ELECTRON PATHWAY:</span>
+            <div className="p-3 bg-surface-warm border border-border font-mono text-xs flex flex-wrap items-center gap-2 text-foreground">
+              <span className="font-bold text-accent">Electron pathway:</span>
               <span className="font-bold">SOURCE</span>
               <span>→</span>
               <span className="font-bold">BEAM</span>
@@ -181,13 +181,13 @@ export function TEMAnatomyScene() {
             <div className="pt-2 flex items-center gap-4">
               <button
                 onClick={() => handleSelectChapter(0)}
-                className="inline-flex items-center gap-2 bg-[#FF5722] text-white font-mono text-xs font-bold uppercase px-4 py-2.5 brutal-border brutal-shadow hover:bg-[#E64A19] transition-all"
+                className="inline-flex items-center gap-2 bg-accent-strong text-white font-mono text-xs font-bold px-4 py-2.5 brutal-border brutal-shadow hover:bg-accent-strong transition-all"
               >
-                <span>BEGIN DISSECTION</span>
-                <ArrowDown className="w-4 h-4 animate-bounce" />
+                <span>Begin dissection</span>
+                <ArrowDown className="w-4 h-4" />
               </button>
-              <span className="font-mono text-xs text-slate-600 font-bold">
-                SCROLL ↓ TO SEPARATE THE COLUMN
+              <span className="font-mono text-xs text-muted font-bold">
+                Scroll ↓ to separate the column
               </span>
             </div>
           </div>
@@ -197,18 +197,18 @@ export function TEMAnatomyScene() {
             <BrutalCard
               variant="default"
               shadowSize="md"
-              titleBar="ANATOMY CONSOLE CONTROLS"
-              titleBarBadge="MANUAL OVERRIDE"
-              className="bg-white border-[#0F172A]"
+              titleBar="Anatomy console controls"
+              titleBarBadge="Manual override"
+              className="bg-surface border-line"
             >
               <div className="space-y-4 font-mono text-xs">
                 <div>
                   <div className="flex items-center justify-between mb-1.5 font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-900">
-                      <Sliders className="w-3.5 h-3.5 text-[#FF5722]" />
-                      EXPLOSION DISTANCE
+                    <span className="flex items-center gap-1.5 text-foreground">
+                      <Sliders className="w-3.5 h-3.5 text-accent" />
+                      Explosion distance
                     </span>
-                    <span className="text-[#FF5722] font-black">{Math.round(explodedOffset * 100)}%</span>
+                    <span className="text-accent font-semibold">{Math.round(explodedOffset * 100)}%</span>
                   </div>
                   <input
                     type="range"
@@ -220,26 +220,26 @@ export function TEMAnatomyScene() {
                       setIsManualExplode(true);
                       setExplodedOffset(parseFloat(e.target.value));
                     }}
-                    className="w-full accent-[#FF5722] cursor-pointer"
+                    className="w-full accent-accent cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                  <div className="flex justify-between text-[10px] text-muted mt-1">
                     <span>0% Assembled</span>
                     <span>100% Exploded Blueprint</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-slate-200">
-                  <span className="text-slate-600">Scroll Auto-Sync:</span>
+                <div className="flex items-center justify-between pt-2 border-t border-line">
+                  <span className="text-muted">Scroll Auto-Sync:</span>
                   <button
                     onClick={() => setIsManualExplode(false)}
-                    className="text-[11px] underline font-bold text-slate-900 hover:text-[#FF5722]"
+                    className="text-[11px] underline font-bold text-foreground hover:text-accent"
                   >
                     {isManualExplode ? "Re-enable Scroll Sync" : "Sync Active ●"}
                   </button>
                 </div>
 
-                <div className="p-2.5 bg-surface-warm border border-slate-300 text-[11px] text-slate-700 leading-normal">
-                  <span className="font-bold text-slate-900">Tip:</span> Hover over or tap any microscope component in the diagram below to inspect its operational role and Barry Carter textbook citations.
+                <div className="p-2.5 bg-surface-warm border border-line text-[11px] text-foreground leading-normal">
+                  <span className="font-bold text-foreground">Tip:</span> Hover over or tap any microscope component in the diagram below to inspect its operational role and Barry Carter textbook citations.
                 </div>
               </div>
             </BrutalCard>
@@ -262,21 +262,21 @@ export function TEMAnatomyScene() {
             <BrutalCard
               variant="default"
               shadowSize="lg"
-              titleBar="TRANSMISSION ELECTRON MICROSCOPE // OPTICAL COLUMN"
+              titleBar="Transmission electron microscope // optical column"
               titleBarBadge={currentChapter.id.toUpperCase()}
-              className="bg-white border-[#0F172A] relative overflow-hidden"
+              className="bg-surface border-line relative overflow-hidden"
             >
               {/* Subtle hover tooltip header indicator */}
-              <div className="mb-2 p-2 bg-surface-warm border border-slate-300 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-600">CURRENT TARGET:</span>
-                <span className="font-bold uppercase text-[#FF5722]">
+              <div className="mb-2 p-2 bg-surface-warm border border-line flex items-center justify-between text-xs font-mono">
+                <span className="text-muted">Current target:</span>
+                <span className="font-bold text-accent">
                   {hoveredComponentId || currentChapter.title}
                 </span>
                 <button
                   onClick={() => setInspectedComponentId(hoveredComponentId || currentChapter.componentId)}
-                  className="text-[10px] bg-[#0F172A] text-white px-2 py-0.5 hover:bg-[#FF5722] font-bold"
+                  className="text-[10px] bg-inverse text-white px-2 py-0.5 hover:bg-accent-strong font-bold"
                 >
-                  DEEP INSPECT
+                  Deep inspect
                 </button>
               </div>
 
@@ -345,22 +345,22 @@ export function TEMAnatomyScene() {
         <BrutalCard
           variant="default"
           shadowSize="lg"
-          titleBar="DISSECTION CONCLUSION // BARRY CARTER PRINCIPLES"
-          titleBarBadge="SECTION 08"
-          className="bg-white border-[#0F172A] p-6 sm:p-10 space-y-8 text-center"
+          titleBar="Dissection conclusion // barry Carter principles"
+          titleBarBadge="Section 08"
+          className="bg-surface border-line p-6 sm:p-10 space-y-8 text-center"
         >
           <div className="space-y-4 max-w-3xl mx-auto">
-            <div className="inline-block bg-[#0F172A] text-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest border border-border">
-              FOUNDATIONAL TAKEAWAY
+            <div className="inline-block bg-inverse text-white px-3 py-1 font-mono text-xs font-bold tracking-wide border border-border">
+              Foundational takeaway
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-black font-sans uppercase tracking-tight text-foreground leading-tight">
-              A TEM IS NOT ONE LENS.
+            <h2 className="text-3xl sm:text-5xl font-semibold font-sans tracking-tight text-foreground leading-tight">
+              A TEM is not one lens.
               <br />
-              <span className="text-[#FF5722]">IT IS A CHAIN OF ELECTRON OPTICS.</span>
+              <span className="text-accent">It is a chain of electron optics.</span>
             </h2>
 
-            <p className="text-sm sm:text-base font-sans text-slate-700 leading-relaxed">
+            <p className="text-sm sm:text-base font-sans text-foreground leading-relaxed">
               Every contrast variation, diffraction ring, and atomic column in a micrograph is the
               direct result of this continuous chain: from thermal emission at the gun filament to
               coherent scattering in your specimen, filtered by apertures, magnified by magnetic
@@ -369,29 +369,29 @@ export function TEMAnatomyScene() {
           </div>
 
           {/* Complete Optical Chain Block */}
-          <div className="p-4 bg-surface-warm border-2 border-border max-w-2xl mx-auto font-mono text-xs">
+          <div className="p-4 bg-surface-warm border border-border max-w-2xl mx-auto font-mono text-xs">
             <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 text-center font-bold">
-              <div className="p-2 bg-white border border-slate-300">
-                <div className="text-[9px] text-slate-500">STAGE 1</div>
+              <div className="p-2 bg-surface border border-line">
+                <div className="text-[9px] text-muted">STAGE 1</div>
                 SOURCE
               </div>
-              <div className="p-2 bg-white border border-slate-300">
-                <div className="text-[9px] text-slate-500">STAGE 2</div>
+              <div className="p-2 bg-surface border border-line">
+                <div className="text-[9px] text-muted">STAGE 2</div>
                 BEAM
               </div>
-              <div className="p-2 bg-white border border-slate-300">
-                <div className="text-[9px] text-slate-500">STAGE 3</div>
+              <div className="p-2 bg-surface border border-line">
+                <div className="text-[9px] text-muted">STAGE 3</div>
                 SPECIMEN
               </div>
-              <div className="p-2 bg-white border border-slate-300">
-                <div className="text-[9px] text-slate-500">STAGE 4</div>
+              <div className="p-2 bg-surface border border-line">
+                <div className="text-[9px] text-muted">STAGE 4</div>
                 SCATTERING
               </div>
-              <div className="p-2 bg-white border border-slate-300">
-                <div className="text-[9px] text-slate-500">STAGE 5</div>
+              <div className="p-2 bg-surface border border-line">
+                <div className="text-[9px] text-muted">STAGE 5</div>
                 OPTICS
               </div>
-              <div className="p-2 bg-[#FF5722] text-white border border-border">
+              <div className="p-2 bg-accent-strong text-white border border-border">
                 <div className="text-[9px] text-white/80">STAGE 6</div>
                 DETECTION
               </div>
@@ -399,24 +399,24 @@ export function TEMAnatomyScene() {
           </div>
 
           <div className="pt-4 space-y-3">
-            <p className="font-mono text-xs font-bold text-slate-600 uppercase">
+            <p className="font-mono text-xs font-bold text-muted">
               You&apos;ve reached the end of the instrument. Now explore what the electrons are telling you.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <Link href="/simulator">
                 <BrutalButton variant="primary" size="lg" icon={<Atom className="w-5 h-5" />}>
-                  EXPLORE DIFFRACTION
+                  Explore diffraction
                 </BrutalButton>
               </Link>
               <Link href="/ask">
                 <BrutalButton variant="dark" size="lg" icon={<Zap className="w-5 h-5" />}>
-                  ASK TEM-AI TUTOR
+                  Ask TEM-AI tutor
                 </BrutalButton>
               </Link>
               <Link href="/exam">
                 <BrutalButton variant="outline" size="lg" icon={<BookOpen className="w-5 h-5" />}>
-                  TEST YOUR ANATOMY KNOWLEDGE
+                  Test your anatomy knowledge
                 </BrutalButton>
               </Link>
             </div>

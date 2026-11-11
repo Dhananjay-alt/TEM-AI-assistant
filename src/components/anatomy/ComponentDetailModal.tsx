@@ -24,21 +24,21 @@ export function ComponentDetailModal({
       onClick={onClose}
     >
       <div
-        className="bg-surface border-3 border-border brutal-shadow-lg max-w-lg w-full overflow-hidden"
+        className="bg-surface border border-border brutal-shadow-lg max-w-lg w-full overflow-hidden"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         {/* Title Bar */}
-        <div className="bg-[#0F172A] text-white p-3 border-b-2 border-border flex items-center justify-between font-mono text-xs">
+        <div className="bg-inverse text-white p-3 border-b border-border flex items-center justify-between font-mono text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 bg-[#FF5722]" />
-            <span className="font-bold uppercase tracking-wider">{info.groupName}</span>
+            <span className="w-2.5 h-2.5 bg-accent-strong" />
+            <span className="font-bold tracking-wide">{info.groupName}</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-slate-800 text-slate-300 hover:text-white"
+            className="p-1 hover:bg-inverse text-slate-300 hover:text-white"
             aria-label="Close component detail"
           >
             <X className="w-4 h-4" />
@@ -48,42 +48,42 @@ export function ComponentDetailModal({
         {/* Content */}
         <div className="p-5 space-y-4 font-sans text-xs">
           <div>
-            <h3 id="modal-title" className="text-lg font-black uppercase text-foreground">
+            <h3 id="modal-title" className="text-lg font-semibold text-foreground">
               {info.name}
             </h3>
-            <div className="mt-1 flex items-center gap-2 font-mono text-[11px] text-slate-600">
-              <BookOpen className="w-3.5 h-3.5 text-[#FF5722]" />
+            <div className="mt-1 flex items-center gap-2 font-mono text-[11px] text-muted">
+              <BookOpen className="w-3.5 h-3.5 text-accent" />
               <span>{info.carterRef}</span>
             </div>
           </div>
 
-          <div className="p-3 bg-surface-warm border-2 border-border space-y-2">
-            <div className="font-mono text-[11px] font-bold uppercase text-slate-900">
+          <div className="p-3 bg-surface-warm border border-border space-y-2">
+            <div className="font-mono text-[11px] font-bold text-foreground">
               Function & Operational Principle
             </div>
-            <p className="text-slate-800 leading-relaxed">{info.functionDesc}</p>
+            <p className="text-foreground leading-relaxed">{info.functionDesc}</p>
           </div>
 
           <div className="space-y-1.5">
-            <div className="font-mono text-[11px] font-bold uppercase text-slate-900">
+            <div className="font-mono text-[11px] font-bold text-foreground">
               Electron-Optical Role
             </div>
-            <p className="text-slate-700 leading-relaxed">{info.opticsRole}</p>
+            <p className="text-foreground leading-relaxed">{info.opticsRole}</p>
           </div>
 
           {/* Typical Engineering Parameters */}
           <div className="space-y-2">
-            <div className="font-mono text-[11px] font-bold uppercase text-slate-900">
+            <div className="font-mono text-[11px] font-bold text-foreground">
               Typical Laboratory Specifications
             </div>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-[11px]">
               {info.typicalParams.map((param, idx) => (
                 <li
                   key={idx}
-                  className="p-2 bg-white border border-slate-300 flex items-start gap-1.5"
+                  className="p-2 bg-surface border border-line flex items-start gap-1.5"
                 >
                   <CheckCircle className="w-3.5 h-3.5 text-phosphor-green shrink-0 mt-0.5" />
-                  <span className="text-slate-800">{param}</span>
+                  <span className="text-foreground">{param}</span>
                 </li>
               ))}
             </ul>
@@ -91,7 +91,7 @@ export function ComponentDetailModal({
 
           <div className="pt-2 flex justify-end">
             <BrutalButton variant="dark" size="sm" onClick={onClose}>
-              CLOSE INSPECTION
+              Close inspection
             </BrutalButton>
           </div>
         </div>

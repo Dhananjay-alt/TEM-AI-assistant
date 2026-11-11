@@ -21,11 +21,11 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
         variant="default"
         shadowSize="md"
         titleBar="FUNDAMENTAL TEM DUALITY: REAL SPACE vs RECIPROCAL SPACE"
-        titleBarBadge="CARTER CHAPTER 6 & 13"
-        className="bg-white border-[#0F172A]"
+        titleBarBadge="Carter chapter 6 & 13"
+        className="bg-surface border-line"
       >
         <div className="space-y-6">
-          <p className="text-sm font-sans text-slate-800 leading-relaxed">
+          <p className="text-sm font-sans text-foreground leading-relaxed">
             Every electron emerging from the specimen contains two complementary forms of information simultaneously.
             The objective lens automatically separates them into two distinct optical conjugate planes:
           </p>
@@ -35,17 +35,17 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
             <button
               onClick={() => setSelectedBranch("image")}
               className={cn(
-                "p-3.5 border-2 text-left transition-all select-none font-mono",
+                "p-3.5 border text-left transition-all select-none font-mono",
                 selectedBranch === "image"
-                  ? "bg-[#0F172A] text-white border-[#0F172A] shadow-neo-xs translate-x-0.5"
-                  : "bg-surface-warm border-border hover:bg-white text-slate-900"
+                  ? "bg-inverse text-white border-line shadow-neo-xs"
+                  : "bg-surface-warm border-border hover:bg-surface text-foreground"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
                 <Eye className="w-4 h-4 text-[#00D2FF]" />
-                <span className="font-bold text-xs uppercase">1. IMAGE PLANE</span>
+                <span className="font-bold text-xs">1. Image plane</span>
               </div>
-              <div className="text-[11px] text-slate-300">REAL SPACE</div>
+              <div className="text-[11px] text-slate-300">Real space</div>
               <div className="mt-2 text-xs font-sans font-bold">
                 &ldquo;Where is the material?&rdquo;
               </div>
@@ -54,17 +54,17 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
             <button
               onClick={() => setSelectedBranch("diffraction")}
               className={cn(
-                "p-3.5 border-2 text-left transition-all select-none font-mono",
+                "p-3.5 border text-left transition-all select-none font-mono",
                 selectedBranch === "diffraction"
-                  ? "bg-[#0F172A] text-white border-[#0F172A] shadow-neo-xs translate-x-0.5"
-                  : "bg-surface-warm border-border hover:bg-white text-slate-900"
+                  ? "bg-inverse text-white border-line shadow-neo-xs"
+                  : "bg-surface-warm border-border hover:bg-surface text-foreground"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <Atom className="w-4 h-4 text-[#FF5722]" />
-                <span className="font-bold text-xs uppercase">2. BACK FOCAL PLANE</span>
+                <Atom className="w-4 h-4 text-accent" />
+                <span className="font-bold text-xs">2. Back focal plane</span>
               </div>
-              <div className="text-[11px] text-slate-300">RECIPROCAL SPACE</div>
+              <div className="text-[11px] text-slate-300">Reciprocal space</div>
               <div className="mt-2 text-xs font-sans font-bold">
                 &ldquo;How is the material arranged?&rdquo;
               </div>
@@ -72,16 +72,16 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
           </div>
 
           {/* Active Branch Explanation & Graphic */}
-          <div className="p-4 bg-[#0B0E14] text-white border-2 border-border font-mono text-xs">
+          <div className="p-4 bg-[#0B0E14] text-white border border-border font-mono text-xs">
             {selectedBranch === "image" ? (
               <div className="space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-700 pb-2">
                   <span className="text-beam-cyan font-bold flex items-center gap-1.5">
                     <Eye className="w-3.5 h-3.5" />
-                    REAL SPACE — SPECIMEN MORPHOLOGY
+                    Real space — Specimen morphology
                   </span>
-                  <span className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5">
-                    MAGNIFICATION MODE
+                  <span className="text-[10px] bg-inverse text-slate-300 px-1.5 py-0.5">
+                    Magnification mode
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -89,18 +89,18 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
                     <p>
                       Electrons that originated from the same point on the specimen converge to a conjugate point in the <strong>First Image Plane</strong>.
                     </p>
-                    <p className="text-[11px] font-mono text-slate-400">
+                    <p className="text-[11px] font-mono text-faint">
                       • Reveals grain boundaries, dislocations, precipitates, and nanoparticle sizes.<br />
                       • Contrast generated by mass-thickness and diffraction filtering.
                     </p>
                   </div>
                   {/* Schematic Real-Space Micrograph Box */}
-                  <div className="h-32 bg-slate-950 border border-slate-700 flex flex-col items-center justify-center p-3 relative overflow-hidden">
-                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-beam-cyan/60 flex items-center justify-center">
+                  <div className="h-32 bg-inverse border border-slate-700 flex flex-col items-center justify-center p-3 relative overflow-hidden">
+                    <div className="w-16 h-16 rounded-full border border-dashed border-beam-cyan/60 flex items-center justify-center">
                       <div className="w-8 h-8 bg-beam-cyan/30 border border-beam-cyan" />
                     </div>
-                    <span className="text-[9px] font-mono text-slate-400 mt-2">
-                      [ REAL SPACE: NANOPARTICLE MORPHOLOGY ]
+                    <span className="text-[9px] font-mono text-faint mt-2">
+                      [ Real space: Nanoparticle morphology ]
                     </span>
                   </div>
                 </div>
@@ -108,12 +108,12 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-700 pb-2">
-                  <span className="text-[#FF5722] font-bold flex items-center gap-1.5">
+                  <span className="text-accent font-bold flex items-center gap-1.5">
                     <Atom className="w-3.5 h-3.5" />
-                    RECIPROCAL SPACE — BRAGG DIFFRACTION
+                    Reciprocal space — Bragg diffraction
                   </span>
-                  <span className="text-[10px] bg-[#FF5722]/20 text-[#FF5722] px-1.5 py-0.5 font-bold border border-[#FF5722]/40">
-                    SAED DIFFRACTION MODE
+                  <span className="text-[10px] bg-accent-strong/20 text-accent px-1.5 py-0.5 font-bold border border-accent/40">
+                    SAED diffraction mode
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -121,13 +121,13 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
                     <p>
                       Electrons scattered at the same angle ($2\theta_B$) converge at the exact same spot in the <strong>Objective Back Focal Plane</strong>, producing an electron diffraction pattern.
                     </p>
-                    <p className="text-[11px] font-mono text-slate-400">
+                    <p className="text-[11px] font-mono text-faint">
                       • Spot positions yield crystal lattice parameters and $d$-spacing ($r = \lambda L / d$).<br />
                       • Symmetry reveals crystal zone axis, space group, and Bravais lattice.
                     </p>
                   </div>
                   {/* Interactive Animated Diffraction Spot Pattern */}
-                  <div className="h-32 bg-slate-950 border border-slate-700 flex flex-col items-center justify-center p-2 relative">
+                  <div className="h-32 bg-inverse border border-slate-700 flex flex-col items-center justify-center p-2 relative">
                     <svg viewBox="0 0 160 100" className="w-full h-24">
                       {/* Central Transmitted Spot */}
                       <circle cx="80" cy="50" r="4.5" fill="#FFFFFF" />
@@ -148,8 +148,8 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
                       {/* Scale ring */}
                       <circle cx="80" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.15)" strokeDasharray="2 2" />
                     </svg>
-                    <span className="text-[9px] font-mono text-slate-400">
-                      [ RECIPROCAL LATTICE SPOTS: (200), (020), (220) ]
+                    <span className="text-[9px] font-mono text-faint">
+                      [ Reciprocal lattice spots: (200), (020), (220) ]
                     </span>
                   </div>
                 </div>
@@ -158,13 +158,13 @@ export function DiffractionBranch({ className }: DiffractionBranchProps) {
           </div>
 
           {/* Direct link to Diffraction Simulator */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t-2 border-border">
-            <div className="text-xs font-mono text-slate-700">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border">
+            <div className="text-xs font-mono text-foreground">
               Ready to calculate camera length, Ewald sphere cuts, and crystal spot indexing?
             </div>
             <Link href="/simulator">
               <BrutalButton variant="primary" size="md" icon={<ArrowRight className="w-4 h-4" />}>
-                EXPLORE DIFFRACTION →
+                Explore diffraction →
               </BrutalButton>
             </Link>
           </div>

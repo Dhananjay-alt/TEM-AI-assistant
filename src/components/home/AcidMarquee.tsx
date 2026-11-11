@@ -10,8 +10,8 @@ export function AcidMarquee({
   className?: string;
 }) {
   return (
-    <div className={`w-full overflow-hidden border-y-2 border-[#09090B] bg-[#D2E823] py-2 select-none ${className}`}>
-      <div className="flex w-max animate-marquee font-display font-black text-xs sm:text-sm tracking-tight text-[#09090B] uppercase">
+    <div className={`w-full overflow-hidden border-y border-line bg-accent-soft py-2 select-none ${className}`}>
+      <div className="flex w-max font-semibold text-xs sm:text-sm tracking-tight text-foreground">
         <span className="mx-4">{text}</span>
         <span className="mx-4">{text}</span>
         <span className="mx-4">{text}</span>

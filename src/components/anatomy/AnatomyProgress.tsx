@@ -20,25 +20,25 @@ export function AnatomyProgress({
   return (
     <div
       className={cn(
-        "bg-surface border-2 border-border brutal-shadow-sm p-3 font-mono text-xs select-none",
+        "bg-surface border border-border brutal-shadow-sm p-3 font-mono text-xs select-none",
         className
       )}
       aria-label="Dissection Scroll Progress"
     >
-      <div className="flex items-center justify-between text-[11px] font-bold pb-1.5 border-b-2 border-border mb-2">
-        <span className="uppercase text-slate-900 tracking-wider">DISSECTION PROGRESS</span>
-        <span className="text-[#FF5722] font-black">{Math.round(progress)}%</span>
+      <div className="flex items-center justify-between text-[11px] font-bold pb-1.5 border-b border-border mb-2">
+        <span className="uppercase text-foreground tracking-wide">Dissection progress</span>
+        <span className="text-accent font-semibold">{Math.round(progress)}%</span>
       </div>
 
       {/* Brutalist Progress Bar */}
-      <div className="h-3 w-full bg-[#E2E8F0] border-2 border-border relative overflow-hidden mb-2">
+      <div className="h-3 w-full bg-[#E2E8F0] border border-border relative overflow-hidden mb-2">
         <div
-          className="h-full bg-[#FF5722] transition-all duration-150 ease-out"
+          className="h-full bg-accent-strong transition-all duration-150 ease-out"
           style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
         />
       </div>
 
-      <div className="flex items-center justify-between text-[10px] text-slate-600">
+      <div className="flex items-center justify-between text-[10px] text-muted">
         <span className="font-bold text-foreground">
           SECTION {currentChapter.number} / 07
         </span>
@@ -56,10 +56,10 @@ export function AnatomyProgress({
             className={cn(
               "h-1.5 flex-1 transition-colors border border-border",
               idx < activeChapterIndex
-                ? "bg-[#0F172A]"
+                ? "bg-inverse"
                 : idx === activeChapterIndex
-                ? "bg-[#FF5722]"
-                : "bg-slate-200"
+                ? "bg-accent-strong"
+                : "bg-line"
             )}
           />
         ))}

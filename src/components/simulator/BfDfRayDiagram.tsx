@@ -50,7 +50,7 @@ export function BfDfRayDiagram() {
     ctx.fillStyle = "#00D2FF";
     ctx.font = "bold 9px monospace";
     ctx.textAlign = "center";
-    ctx.fillText("INCIDENT ELECTRON BEAM", centerX, 12);
+    ctx.fillText("Incident electron beam", centerX, 12);
 
     // 2. Specimen Stage (y = 65 to 75)
     ctx.fillStyle = "#E2E8F0";
@@ -77,7 +77,7 @@ export function BfDfRayDiagram() {
 
     ctx.fillStyle = "#94A3B8";
     ctx.font = "bold 8px monospace";
-    ctx.fillText("OBJECTIVE LENS", centerX + 115, 113);
+    ctx.fillText("Objective lens", centerX + 115, 113);
 
     // 4. Back Focal Plane (y = 160) - Where the Objective Aperture Lives!
     ctx.strokeStyle = "rgba(234, 179, 8, 0.4)";
@@ -90,7 +90,7 @@ export function BfDfRayDiagram() {
 
     ctx.fillStyle = "#FACC15";
     ctx.font = "bold 8px monospace";
-    ctx.fillText("BACK FOCAL PLANE (DIFFRACTION)", centerX + 120, 163);
+    ctx.fillText("Back focal plane (diffraction)", centerX + 120, 163);
 
     // Diffracted beam angle
     const diffractedAngleX = centerX + 45;
@@ -152,7 +152,7 @@ export function BfDfRayDiagram() {
     } else {
       // HRTEM: Wide open aperture, both beams pass!
       ctx.fillStyle = "#10B981";
-      ctx.fillText("APERTURE WIDE OPEN (BOTH BEAMS PASS)", centerX, 153);
+      ctx.fillText("Aperture wide open (both beams pass)", centerX, 153);
     }
 
     // 6. Image Plane (y = 260)
@@ -164,7 +164,7 @@ export function BfDfRayDiagram() {
 
     ctx.fillStyle = "#38BDF8";
     ctx.font = "bold 8px monospace";
-    ctx.fillText("IMAGE PLANE (MICROGRAPH)", centerX, 264);
+    ctx.fillText("Image plane (micrograph)", centerX, 264);
 
     // 7. Simulated Micrograph Thumbnail Box (Bottom right of canvas)
     const thumbX = width - 110;
@@ -191,7 +191,7 @@ export function BfDfRayDiagram() {
 
       ctx.fillStyle = "#000000";
       ctx.font = "bold 8px monospace";
-      ctx.fillText("BF: DARK GRAIN", thumbX + thumbW / 2, thumbY + 12);
+      ctx.fillText("BF: Dark grain", thumbX + thumbW / 2, thumbY + 12);
     } else if (selectedMode === "dark-field") {
       // Dark background, bright glowing nanoparticle
       ctx.fillStyle = "#0B0E14";
@@ -216,7 +216,7 @@ export function BfDfRayDiagram() {
 
       ctx.fillStyle = "#FFFFFF";
       ctx.font = "bold 8px monospace";
-      ctx.fillText("DF: GLOWING GRAIN", thumbX + thumbW / 2, thumbY + 12);
+      ctx.fillText("DF: Glowing grain", thumbX + thumbW / 2, thumbY + 12);
     } else {
       // HRTEM: Interference lattice fringes
       ctx.fillStyle = "#94A3B8";
@@ -233,24 +233,24 @@ export function BfDfRayDiagram() {
 
       ctx.fillStyle = "#000000";
       ctx.font = "bold 8px monospace";
-      ctx.fillText("HRTEM: LATTICE", thumbX + thumbW / 2, thumbY + 12);
+      ctx.fillText("HRTEM: Lattice", thumbX + thumbW / 2, thumbY + 12);
     }
   }, [selectedMode]);
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-xl font-black font-sans uppercase">
-            03 / BRIGHT-FIELD VS DARK-FIELD OPTICAL SCHEMATIC
+          <h3 className="text-xl font-semibold font-sans">
+            Bright-field vs dark-field optical schematic
           </h3>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Aperture Selection in the Back Focal Plane & Contrast Inversion
           </p>
         </div>
         <ScientificBadge variant="amber" hasDot>
-          OBJECTIVE APERTURE MECHANICS
+          Objective aperture mechanics
         </ScientificBadge>
       </div>
 
@@ -260,12 +260,12 @@ export function BfDfRayDiagram() {
           <BrutalCard
             variant="default"
             shadowSize="md"
-            titleBar="APERTURE SELECTOR"
+            titleBar="Aperture selector"
             titleBarBadge="BFP"
-            className="bg-white"
+            className="bg-surface"
           >
             <div className="space-y-4 font-mono text-xs">
-              <span className="font-bold text-slate-900 uppercase block">
+              <span className="font-bold text-foreground block">
                 Select Contrast Mechanism:
               </span>
 
@@ -295,21 +295,21 @@ export function BfDfRayDiagram() {
                   <button
                     key={m.id}
                     onClick={() => setSelectedMode(m.id)}
-                    className={`w-full text-left p-3 border-2 transition-all flex flex-col gap-1 ${
+                    className={`w-full text-left p-3 border transition-all flex flex-col gap-1 ${
                       selectedMode === m.id
-                        ? "bg-foreground text-background border-border font-bold shadow-neo-sm -translate-x-0.5 -translate-y-0.5"
-                        : "bg-surface hover:bg-surface-warm border-slate-300 text-foreground"
+                        ? "bg-inverse text-inverse-fg border-border font-bold shadow-neo-sm"
+                        : "bg-surface hover:bg-surface-warm border-line text-foreground"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold font-sans uppercase">
+                      <span className="text-sm font-bold font-sans">
                         {m.label}
                       </span>
                       <span
                         className={`text-[9px] px-1.5 py-0.2 border ${
                           selectedMode === m.id
                             ? "bg-hazard-amber text-foreground font-bold"
-                            : "bg-surface-warm text-slate-600"
+                            : "bg-surface-warm text-muted"
                         }`}
                       >
                         {m.badge}
@@ -317,7 +317,7 @@ export function BfDfRayDiagram() {
                     </div>
                     <span
                       className={`text-[11px] leading-tight ${
-                        selectedMode === m.id ? "text-slate-300" : "text-slate-500"
+                        selectedMode === m.id ? "text-slate-300" : "text-muted"
                       }`}
                     >
                       {m.desc}
@@ -329,16 +329,16 @@ export function BfDfRayDiagram() {
           </BrutalCard>
 
           {/* Carter Grounded Notes */}
-          <BrutalCard variant="warm" shadowSize="sm" className="bg-[#F4EFE6]">
+          <BrutalCard variant="warm" shadowSize="sm" className="bg-surface-2">
             <div className="space-y-2 font-mono text-xs">
-              <div className="font-bold text-slate-900 uppercase flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-[#FF5722]" />
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-accent" />
                 Carter Textbook Reference:
               </div>
-              <div className="text-[11px] text-slate-700 italic">
+              <div className="text-[11px] text-foreground italic">
                 {modeInfo.carterReference}
               </div>
-              <p className="text-[11px] text-slate-800 font-sans leading-relaxed pt-1">
+              <p className="text-[11px] text-foreground font-sans leading-relaxed pt-1">
                 {modeInfo.scientificExplanation}
               </p>
             </div>
@@ -350,7 +350,7 @@ export function BfDfRayDiagram() {
           <BrutalCard
             variant="dark"
             shadowSize="lg"
-            titleBar="ELECTRON OPTICAL RAY PATH & APERTURE INTERCEPTION"
+            titleBar="Electron optical ray path & aperture interception"
             titleBarBadge={modeInfo.name}
             className="bg-[#0B0E14] text-white"
           >
@@ -366,14 +366,14 @@ export function BfDfRayDiagram() {
 
               {/* Status footer pill */}
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="bg-slate-900 border border-slate-800 p-2">
-                  <div className="text-[10px] text-slate-400">BEAM SELECTED</div>
+                <div className="bg-inverse border border-slate-800 p-2">
+                  <div className="text-[10px] text-faint">Beam selected</div>
                   <div className="font-bold text-beam-cyan truncate">
                     {modeInfo.beamSelected}
                   </div>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-2">
-                  <div className="text-[10px] text-slate-400">CONTRAST TYPE</div>
+                <div className="bg-inverse border border-slate-800 p-2">
+                  <div className="text-[10px] text-faint">Contrast type</div>
                   <div className="font-bold text-phosphor-green truncate">
                     {modeInfo.contrastType}
                   </div>
@@ -383,15 +383,15 @@ export function BfDfRayDiagram() {
           </BrutalCard>
 
           {/* Typical Laboratory Use Cases */}
-          <div className="brutal-border bg-white p-4 font-mono text-xs space-y-2">
-            <span className="font-bold uppercase text-slate-900 flex items-center gap-1.5">
+          <div className="brutal-border bg-surface p-4 font-mono text-xs space-y-2">
+            <span className="font-bold text-foreground flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               Typical Experimental Use Cases:
             </span>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] font-sans text-slate-700">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] font-sans text-foreground">
               {modeInfo.typicalUseCases.map((uc, i) => (
                 <li key={i} className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722] shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-strong shrink-0" />
                   {uc}
                 </li>
               ))}

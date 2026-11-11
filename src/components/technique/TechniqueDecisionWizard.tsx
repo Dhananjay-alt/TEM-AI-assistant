@@ -57,17 +57,17 @@ export function TechniqueDecisionWizard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-black font-sans uppercase">
-            05 / MATERIALS PROBLEM TECHNIQUE RECOMMENDER
+          <h2 className="text-xl font-semibold font-sans">
+            Materials problem technique recommender
           </h2>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Interactive Decision Matrix: Choose the optimal TEM method for your materials problem
           </p>
         </div>
         <ScientificBadge variant="cyan" hasDot>
-          EDUCATIONAL GUIDANCE
+          Educational guidance
         </ScientificBadge>
       </div>
 
@@ -77,11 +77,11 @@ export function TechniqueDecisionWizard() {
         <BrutalCard
           variant="default"
           shadowSize="sm"
-          titleBar="STEP 1: INVESTIGATION TARGET"
-          className="bg-white"
+          titleBar="Step 1: Investigation target"
+          className="bg-surface"
         >
           <div className="space-y-2 font-mono text-xs">
-            <span className="font-bold text-slate-800 uppercase block text-[11px]">
+            <span className="font-bold text-foreground block text-[11px]">
               What do you need to determine?
             </span>
             <div className="space-y-1.5">
@@ -91,8 +91,8 @@ export function TechniqueDecisionWizard() {
                   onClick={() => setTargetGoal(g.id)}
                   className={`w-full text-left p-2 border font-mono text-xs transition-all ${
                     targetGoal === g.id
-                      ? "bg-foreground text-background font-bold border-border shadow-neo-xs"
-                      : "bg-surface hover:bg-surface-warm border-slate-300 text-slate-800"
+                      ? "bg-inverse text-inverse-fg font-bold border-border shadow-neo-xs"
+                      : "bg-surface hover:bg-surface-warm border-line text-foreground"
                   }`}
                 >
                   {g.label}
@@ -106,11 +106,11 @@ export function TechniqueDecisionWizard() {
         <BrutalCard
           variant="default"
           shadowSize="sm"
-          titleBar="STEP 2: FEATURE SCALE"
-          className="bg-white"
+          titleBar="Step 2: Feature scale"
+          className="bg-surface"
         >
           <div className="space-y-2 font-mono text-xs">
-            <span className="font-bold text-slate-800 uppercase block text-[11px]">
+            <span className="font-bold text-foreground block text-[11px]">
               What is the size of the feature?
             </span>
             <div className="space-y-1.5">
@@ -127,11 +127,11 @@ export function TechniqueDecisionWizard() {
                   className={`w-full text-left p-2 border font-mono text-xs transition-all ${
                     scale === s.id
                       ? "bg-[#00D2FF] text-foreground font-bold border-border shadow-neo-xs"
-                      : "bg-surface hover:bg-surface-warm border-slate-300 text-slate-800"
+                      : "bg-surface hover:bg-surface-warm border-line text-foreground"
                   }`}
                 >
                   <div className="font-bold">{s.label}</div>
-                  <div className="text-[10px] text-slate-500">{s.desc}</div>
+                  <div className="text-[10px] text-muted">{s.desc}</div>
                 </button>
               ))}
             </div>
@@ -142,11 +142,11 @@ export function TechniqueDecisionWizard() {
         <BrutalCard
           variant="default"
           shadowSize="sm"
-          titleBar="STEP 3: SPECIMEN ORDER"
-          className="bg-white"
+          titleBar="Step 3: Specimen order"
+          className="bg-surface"
         >
           <div className="space-y-2 font-mono text-xs">
-            <span className="font-bold text-slate-800 uppercase block text-[11px]">
+            <span className="font-bold text-foreground block text-[11px]">
               Crystallographic state:
             </span>
             <div className="space-y-1.5">
@@ -163,11 +163,11 @@ export function TechniqueDecisionWizard() {
                   className={`w-full text-left p-2 border font-mono text-xs transition-all ${
                     crystallinity === c.id
                       ? "bg-[#F59E0B] text-foreground font-bold border-border shadow-neo-xs"
-                      : "bg-surface hover:bg-surface-warm border-slate-300 text-slate-800"
+                      : "bg-surface hover:bg-surface-warm border-line text-foreground"
                   }`}
                 >
                   <div className="font-bold">{c.label}</div>
-                  <div className="text-[10px] text-slate-500">{c.desc}</div>
+                  <div className="text-[10px] text-muted">{c.desc}</div>
                 </button>
               ))}
             </div>
@@ -177,11 +177,11 @@ export function TechniqueDecisionWizard() {
 
       {/* Ranked Recommendations Output */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between border-b-2 border-border pb-2">
-          <span className="font-mono text-xs font-bold uppercase text-slate-900">
+        <div className="flex items-center justify-between border-b border-border pb-2">
+          <span className="font-mono text-xs font-bold text-foreground">
             Recommended TEM Techniques (Ranked by Suitability):
           </span>
-          <span className="text-[10px] font-mono text-slate-500">
+          <span className="text-[10px] font-mono text-muted">
             Grounded in Carter's Characterization Strategies
           </span>
         </div>
@@ -193,17 +193,17 @@ export function TechniqueDecisionWizard() {
               variant={index === 0 ? "cyan" : "default"}
               shadowSize="md"
               titleBar={`RANK ${index + 1} / ${tech.abbreviation} (${tech.category})`}
-              titleBarBadge={index === 0 ? "TOP RECOMMENDATION" : `${matchScore}% SUITABLE`}
-              className={index === 0 ? "bg-[#E0F7FE]" : "bg-white"}
+              titleBarBadge={index === 0 ? "Top recommendation" : `${matchScore}% SUITABLE`}
+              className={index === 0 ? "bg-surface-2" : "bg-surface"}
             >
               <div className="space-y-3 font-mono text-xs">
                 {/* Title & Stars */}
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-base font-bold font-sans text-slate-900">
+                    <h3 className="text-base font-bold font-sans text-foreground">
                       {tech.name}
                     </h3>
-                    <div className="text-[11px] text-slate-600 font-bold">
+                    <div className="text-[11px] text-muted font-bold">
                       {tech.primaryUse}
                     </div>
                   </div>
@@ -215,17 +215,17 @@ export function TechniqueDecisionWizard() {
                 </div>
 
                 {/* Detailed Rationale */}
-                <p className="text-[11px] font-sans text-slate-800 leading-relaxed bg-white/70 p-2.5 brutal-border">
+                <p className="text-[11px] font-sans text-foreground leading-relaxed bg-surface/70 p-2.5 brutal-border">
                   {tech.detailedRationale}
                 </p>
 
                 {/* Pros and Cons */}
                 <div className="grid grid-cols-2 gap-2 text-[10px] font-sans">
                   <div className="space-y-1">
-                    <span className="font-bold text-emerald-800 uppercase block font-mono">
+                    <span className="font-bold text-emerald-800 block font-mono">
                       ✓ Advantages:
                     </span>
-                    <ul className="list-disc list-inside space-y-0.5 text-slate-700">
+                    <ul className="list-disc list-inside space-y-0.5 text-foreground">
                       {tech.pros.map((p, i) => (
                         <li key={i}>{p}</li>
                       ))}
@@ -233,10 +233,10 @@ export function TechniqueDecisionWizard() {
                   </div>
 
                   <div className="space-y-1">
-                    <span className="font-bold text-red-800 uppercase block font-mono">
+                    <span className="font-bold text-red-800 block font-mono">
                       ✗ Limitations:
                     </span>
-                    <ul className="list-disc list-inside space-y-0.5 text-slate-700">
+                    <ul className="list-disc list-inside space-y-0.5 text-foreground">
                       {tech.cons.map((c, i) => (
                         <li key={i}>{c}</li>
                       ))}
@@ -245,7 +245,7 @@ export function TechniqueDecisionWizard() {
                 </div>
 
                 {/* Specimen Requirements & Carter Citation */}
-                <div className="pt-2 border-t border-slate-300 text-[10px] text-slate-600 flex flex-col gap-0.5">
+                <div className="pt-2 border-t border-line text-[10px] text-muted flex flex-col gap-0.5">
                   <div>
                     <strong>Specimen Condition:</strong> {tech.specimenRequirements}
                   </div>

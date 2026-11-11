@@ -207,35 +207,35 @@ export function ElectronBeamHero() {
   }, [voltageKV, physics.velocityFractionC]);
 
   return (
-    <section className="pt-6 pb-12 sm:pt-10 sm:pb-16 instrument-grid border-b-[3px] border-[#0F172A]">
+    <section className="pt-6 pb-12 sm:pt-10 sm:pb-16 instrument-grid border-b border-line">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Bold Neo-Brutalist Value Proposition */}
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2">
-              <span className="bg-foreground text-background font-mono text-xs font-bold px-2 py-0.5 uppercase tracking-widest brutal-shadow-sm">
-                INSTRUMENT ASSISTANT
+              <span className="bg-inverse text-inverse-fg font-mono text-xs font-bold px-2 py-0.5 tracking-wide brutal-shadow-sm">
+                Instrument assistant
               </span>
               <ScientificBadge variant="green" hasDot>
-                GROUNDED IN BARRY CARTER
+                Grounded in barry Carter
               </ScientificBadge>
             </div>
 
             <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-sans tracking-tight text-foreground leading-[1.08] uppercase">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold font-sans tracking-tight text-foreground leading-[1.08]">
                 TRANSMISSION <br />
-                <span className="bg-[#FF5722] text-white px-2 py-0.5 inline-block brutal-shadow-sm mr-2">
+                <span className="bg-accent-strong text-white px-2 py-0.5 inline-block brutal-shadow-sm mr-2">
                   ELECTRON
                 </span>
                 MICROSCOPY <br />
                 <span className="text-[#0284C7]">INTELLIGENCE</span>
               </h1>
-              <p className="text-lg sm:text-xl font-mono text-slate-800 font-semibold max-w-xl leading-snug">
+              <p className="text-lg sm:text-xl font-mono text-foreground font-semibold max-w-xl leading-snug">
                 "Turn the TEM textbook into an interactive laboratory."
               </p>
             </div>
 
-            <p className="text-sm font-sans text-slate-700 max-w-xl leading-relaxed">
+            <p className="text-sm font-sans text-foreground max-w-xl leading-relaxed">
               TEM-AI unites rigorous materials-science physics from Williams &
               Carter with interactive beam simulations, computer-vision
               micrograph analysis, and exam preparation. Not a generic chatbot—a
@@ -246,54 +246,54 @@ export function ElectronBeamHero() {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link href="/ask">
                 <BrutalButton variant="primary" size="lg" icon={<Zap className="w-4 h-4" />}>
-                  ASK CARTER AI
+                  Ask Carter AI
                 </BrutalButton>
               </Link>
               <Link href="/simulator">
                 <BrutalButton variant="cyan" size="lg" icon={<Play className="w-4 h-4" />}>
-                  OPEN TEM SIMULATOR
+                  Open TEM simulator
                 </BrutalButton>
               </Link>
               <Link href="/image-analysis">
                 <BrutalButton variant="outline" size="lg">
-                  ANALYZE MICROGRAPH
+                  Analyze micrograph
                 </BrutalButton>
               </Link>
             </div>
 
             {/* Live Instrument Telemetry Readouts */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4">
-              <div className="brutal-border bg-white p-2.5 font-mono">
-                <div className="text-[10px] text-slate-500 uppercase">Wavelength (λ)</div>
+              <div className="brutal-border bg-surface p-2.5 font-mono">
+                <div className="text-[10px] text-muted">Wavelength (λ)</div>
                 <div className="text-sm font-bold text-foreground">
                   {physics.wavelengthNm.toFixed(5)} nm
                 </div>
-                <div className="text-[9px] text-slate-500">
+                <div className="text-[9px] text-muted">
                   {physics.wavelengthPm.toFixed(2)} pm
                 </div>
               </div>
-              <div className="brutal-border bg-white p-2.5 font-mono">
-                <div className="text-[10px] text-slate-500 uppercase">Electron Velocity (v)</div>
+              <div className="brutal-border bg-surface p-2.5 font-mono">
+                <div className="text-[10px] text-muted">Electron Velocity (v)</div>
                 <div className="text-sm font-bold text-[#0284C7]">
                   {(physics.velocityFractionC * 100).toFixed(1)}% c
                 </div>
-                <div className="text-[9px] text-slate-500">
+                <div className="text-[9px] text-muted">
                   {(physics.velocityMs / 1e8).toFixed(2)} × 10⁸ m/s
                 </div>
               </div>
-              <div className="brutal-border bg-white p-2.5 font-mono">
-                <div className="text-[10px] text-slate-500 uppercase">Lorentz (γ)</div>
-                <div className="text-sm font-bold text-[#FF5722]">
+              <div className="brutal-border bg-surface p-2.5 font-mono">
+                <div className="text-[10px] text-muted">Lorentz (γ)</div>
+                <div className="text-sm font-bold text-accent">
                   {physics.gamma.toFixed(3)}
                 </div>
-                <div className="text-[9px] text-slate-500">Relativistic Factor</div>
+                <div className="text-[9px] text-muted">Relativistic Factor</div>
               </div>
-              <div className="brutal-border bg-white p-2.5 font-mono">
-                <div className="text-[10px] text-slate-500 uppercase">Carter Chunks</div>
+              <div className="brutal-border bg-surface p-2.5 font-mono">
+                <div className="text-[10px] text-muted">Carter Chunks</div>
                 <div className="text-sm font-bold text-phosphor-green">
                   100% CITED
                 </div>
-                <div className="text-[9px] text-slate-500">Zero Fake Pages</div>
+                <div className="text-[9px] text-muted">Zero Fake Pages</div>
               </div>
             </div>
           </div>
@@ -303,13 +303,13 @@ export function ElectronBeamHero() {
             <BrutalCard
               variant="default"
               shadowSize="lg"
-              titleBar="TEM COLUMN / ELECTRON BEAM TRAJECTORY"
-              titleBarBadge="LIVE SIMULATION"
-              className="bg-white"
+              titleBar="TEM column / electron beam trajectory"
+              titleBarBadge="Live simulation"
+              className="bg-surface"
             >
               <div className="space-y-4">
                 {/* HTML5 Canvas Beam Schematic */}
-                <div className="relative border-2 border-border overflow-hidden bg-[#0B0E14]">
+                <div className="relative border border-border overflow-hidden bg-[#0B0E14]">
                   <canvas
                     ref={canvasRef}
                     width={380}
@@ -318,19 +318,19 @@ export function ElectronBeamHero() {
                   />
                   {/* Overlay telemetry badges */}
                   <div className="absolute top-2 right-2 bg-black/80 border border-slate-700 px-2 py-1 font-mono text-[10px] text-beam-cyan flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-beam-cyan animate-pulse"></span>
-                    BRAGG REFLECTION EXCITED
+                    <span className="w-1.5 h-1.5 rounded-full bg-beam-cyan"></span>
+                    Bragg reflection excited
                   </div>
                 </div>
 
                 {/* Live Voltage Control Interactive Slider */}
-                <div className="bg-surface-warm p-3 border-2 border-border space-y-2">
+                <div className="bg-surface-warm p-3 border border-border space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
                     <span className="font-bold flex items-center gap-1.5">
-                      <Sliders className="w-3.5 h-3.5 text-[#FF5722]" />
-                      ACCELERATING VOLTAGE (HT)
+                      <Sliders className="w-3.5 h-3.5 text-accent" />
+                      Accelerating voltage (ht)
                     </span>
-                    <span className="bg-foreground text-background px-2 py-0.5 font-bold">
+                    <span className="bg-inverse text-inverse-fg px-2 py-0.5 font-bold">
                       {voltageKV} kV
                     </span>
                   </div>
@@ -342,38 +342,38 @@ export function ElectronBeamHero() {
                     step={10}
                     value={voltageKV}
                     onChange={(e) => setVoltageKV(parseInt(e.target.value, 10))}
-                    className="w-full h-3 bg-white border-2 border-border appearance-none cursor-pointer accent-[#FF5722]"
+                    className="w-full h-3 bg-surface border border-border appearance-none cursor-pointer accent-accent"
                   />
 
-                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-600">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-muted">
                     <button
                       onClick={() => setVoltageKV(80)}
-                      className={`px-1.5 py-0.5 border ${voltageKV === 80 ? "bg-foreground text-white" : "bg-white"}`}
+                      className={`px-1.5 py-0.5 border ${voltageKV === 80 ? "bg-inverse text-white" : "bg-surface"}`}
                     >
                       80 kV (Cryo)
                     </button>
                     <button
                       onClick={() => setVoltageKV(120)}
-                      className={`px-1.5 py-0.5 border ${voltageKV === 120 ? "bg-foreground text-white" : "bg-white"}`}
+                      className={`px-1.5 py-0.5 border ${voltageKV === 120 ? "bg-inverse text-white" : "bg-surface"}`}
                     >
                       120 kV
                     </button>
                     <button
                       onClick={() => setVoltageKV(200)}
-                      className={`px-1.5 py-0.5 border ${voltageKV === 200 ? "bg-foreground text-white" : "bg-white"}`}
+                      className={`px-1.5 py-0.5 border ${voltageKV === 200 ? "bg-inverse text-white" : "bg-surface"}`}
                     >
                       200 kV (Standard)
                     </button>
                     <button
                       onClick={() => setVoltageKV(300)}
-                      className={`px-1.5 py-0.5 border ${voltageKV === 300 ? "bg-foreground text-white" : "bg-white"}`}
+                      className={`px-1.5 py-0.5 border ${voltageKV === 300 ? "bg-inverse text-white" : "bg-surface"}`}
                     >
                       300 kV (HRTEM)
                     </button>
                   </div>
                 </div>
 
-                <div className="text-[11px] font-mono text-slate-600 bg-slate-50 p-2 border border-slate-200 flex items-center justify-between">
+                <div className="text-[11px] font-mono text-muted bg-surface-2 p-2 border border-line flex items-center justify-between">
                   <span>Notice: Higher kV → Shorter λ → Spots move closer</span>
                   <Link
                     href="/simulator"

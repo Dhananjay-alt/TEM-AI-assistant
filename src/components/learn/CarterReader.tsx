@@ -32,34 +32,34 @@ export function CarterReader() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-black font-sans uppercase">
-            08 / CARTER TEXTBOOK BROWSER & SOURCE VIEWER
+          <h2 className="text-xl font-semibold font-sans">
+            Reader: stored chapter summaries
           </h2>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             David B. Williams & C. Barry Carter: "Transmission Electron Microscopy: A Textbook for Materials Science"
           </p>
         </div>
         <ScientificBadge variant="green" hasDot>
-          ORIGINAL CITATIONS & FORMULAS
+          Summaries, not the original text
         </ScientificBadge>
       </div>
 
       {/* Search Input */}
-      <div className="brutal-border bg-white p-2.5 flex items-center gap-2">
-        <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
+      <div className="brutal-border bg-surface p-2.5 flex items-center gap-2">
+        <Search className="w-4 h-4 text-faint shrink-0 ml-1" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Carter chapters by keyword (e.g. diffraction contrast, Ewald sphere, Scherzer, EDS, EELS)..."
+          placeholder="Search the summaries by keyword (e.g. diffraction contrast, Ewald sphere, Scherzer, EDS, EELS)..."
           className="w-full font-mono text-xs bg-transparent focus:outline-none"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}
-            className="text-[10px] font-mono text-slate-500 hover:text-foreground px-2"
+            className="text-[10px] font-mono text-muted hover:text-foreground px-2"
           >
             Clear
           </button>
@@ -77,14 +77,14 @@ export function CarterReader() {
                 onClick={() => setSelectedChunkId(chunk.chunkId)}
                 className={`w-full text-left p-3.5 brutal-border transition-all flex flex-col gap-1.5 ${
                   isSelected
-                    ? "bg-foreground text-background shadow-neo-sm -translate-x-0.5 -translate-y-0.5"
-                    : "bg-white hover:bg-surface-warm text-slate-900 shadow-neo-xs"
+                    ? "bg-inverse text-inverse-fg shadow-neo-sm"
+                    : "bg-surface hover:bg-surface-warm text-foreground shadow-neo-xs"
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-mono">
                   <span
                     className={
-                      isSelected ? "text-hazard-amber font-bold" : "text-[#FF5722] font-bold"
+                      isSelected ? "text-hazard-amber font-bold" : "text-accent font-bold"
                     }
                   >
                     PART {chunk.part}: {chunk.partTitle.toUpperCase()}
@@ -92,8 +92,8 @@ export function CarterReader() {
                   <span
                     className={
                       isSelected
-                        ? "bg-slate-800 text-slate-200 px-1 py-0.2 border border-slate-700"
-                        : "bg-surface-warm text-slate-600 px-1 py-0.2 border"
+                        ? "bg-inverse text-slate-200 px-1 py-0.2 border border-slate-700"
+                        : "bg-surface-warm text-muted px-1 py-0.2 border"
                     }
                   >
                     pp. {chunk.page}–{chunk.pageEnd}
@@ -106,7 +106,7 @@ export function CarterReader() {
 
                 <div
                   className={`text-[11px] font-mono truncate ${
-                    isSelected ? "text-slate-300" : "text-slate-600"
+                    isSelected ? "text-slate-300" : "text-muted"
                   }`}
                 >
                   §{chunk.sectionNumber} {chunk.sectionTitle}
@@ -123,27 +123,27 @@ export function CarterReader() {
             shadowSize="lg"
             titleBar={`CARTER CHAPTER ${activeChunk.chapterNumber} • SECTION ${activeChunk.sectionNumber}`}
             titleBarBadge={`PAGES ${activeChunk.page}–${activeChunk.pageEnd}`}
-            className="bg-white"
+            className="bg-surface"
           >
             <div className="space-y-5">
               {/* Chapter & Section Header */}
-              <div className="border-b-2 border-border pb-3 space-y-1">
-                <div className="text-xs font-mono font-bold text-[#FF5722] uppercase">
+              <div className="border-b border-border pb-3 space-y-1">
+                <div className="text-xs font-mono font-bold text-accent">
                   Part {activeChunk.part}: {activeChunk.partTitle}
                 </div>
-                <h3 className="text-xl font-bold font-sans text-slate-900">
+                <h3 className="text-xl font-bold font-sans text-foreground">
                   {activeChunk.sectionTitle}
                 </h3>
-                <div className="text-xs font-mono text-slate-500">
+                <div className="text-xs font-mono text-muted">
                   Book: Transmission Electron Microscopy (Williams & Carter, Springer)
                 </div>
               </div>
 
               {/* Executive Pedagogical Summary */}
-              <div className="p-3 bg-[#FEF3C7] brutal-border border-amber-900/30 font-mono text-xs text-amber-950 space-y-1">
-                <div className="font-bold text-[10px] uppercase text-amber-800 flex items-center gap-1">
+              <div className="p-3 bg-surface-2 brutal-border border-amber-900/30 font-mono text-xs text-amber-950 space-y-1">
+                <div className="font-bold text-[10px] text-amber-800 flex items-center gap-1">
                   <Bookmark className="w-3 h-3 text-amber-600" />
-                  CORE TAKEAWAY:
+                  Core takeaway:
                 </div>
                 <p className="text-[11px] leading-relaxed font-sans font-medium">
                   {activeChunk.summary}
@@ -152,10 +152,10 @@ export function CarterReader() {
 
               {/* Authentic Textbook Excerpt */}
               <div className="space-y-1.5 font-mono text-xs">
-                <span className="font-bold text-slate-800 uppercase text-[11px] block">
-                  Ground Truth Textbook Excerpt:
+                <span className="font-bold text-foreground text-[11px] block">
+                  Stored summary (page range approximate):
                 </span>
-                <div className="p-4 bg-surface-warm brutal-border text-slate-900 text-xs font-serif leading-relaxed italic whitespace-pre-line">
+                <div className="p-4 bg-surface-warm brutal-border text-foreground text-xs font-serif leading-relaxed italic whitespace-pre-line">
                   "{activeChunk.excerpt}"
                 </div>
               </div>
@@ -163,10 +163,10 @@ export function CarterReader() {
               {/* Formulas if present */}
               {activeChunk.formulas && activeChunk.formulas.length > 0 && (
                 <div className="space-y-1.5 font-mono text-xs">
-                  <span className="font-bold text-slate-800 uppercase text-[11px] block">
+                  <span className="font-bold text-foreground text-[11px] block">
                     Mathematical Formulation:
                   </span>
-                  <div className="bg-foreground text-background p-3 font-mono space-y-1.5">
+                  <div className="bg-inverse text-inverse-fg p-3 font-mono space-y-1.5">
                     {activeChunk.formulas.map((form, i) => (
                       <div key={i} className="text-xs font-bold tracking-wide">
                         {form}
@@ -177,11 +177,11 @@ export function CarterReader() {
               )}
 
               {/* Pedagogical Key Points */}
-              <div className="space-y-2 pt-2 border-t-2 border-slate-200 font-mono text-xs">
-                <span className="font-bold text-slate-900 uppercase text-[11px] block">
+              <div className="space-y-2 pt-2 border-t border-line font-mono text-xs">
+                <span className="font-bold text-foreground text-[11px] block">
                   Key Principles (Williams & Carter):
                 </span>
-                <ul className="list-disc list-inside space-y-1 text-slate-700 font-sans text-xs">
+                <ul className="list-disc list-inside space-y-1 text-foreground font-sans text-xs">
                   {activeChunk.pedagogicalKeyPoints.map((pt, i) => (
                     <li key={i}>{pt}</li>
                   ))}
@@ -196,16 +196,16 @@ export function CarterReader() {
               )}
 
               {/* CTA: Query Ask Carter on this chapter */}
-              <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="pt-3 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3">
                 <Link
                   href={`/ask?prompt=${encodeURIComponent(`Explain Carter Chapter ${activeChunk.chapterNumber} on ${activeChunk.sectionTitle} in detail.`)}`}
                   className="w-full sm:w-auto"
                 >
                   <BrutalButton variant="primary" size="sm" icon={<Sparkles className="w-3.5 h-3.5" />}>
-                    ASK CARTER AI ABOUT THIS SECTION
+                    Ask Carter AI about this section
                   </BrutalButton>
                 </Link>
-                <div className="text-[10px] font-mono text-slate-500">
+                <div className="text-[10px] font-mono text-muted">
                   Citation Key: {activeChunk.chunkId}
                 </div>
               </div>

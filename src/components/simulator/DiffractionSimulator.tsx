@@ -167,12 +167,12 @@ export function DiffractionSimulator() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-xl font-black font-sans uppercase">
-            02 / SAED ELECTRON DIFFRACTION SIMULATOR
+          <h3 className="text-xl font-semibold font-sans">
+            SAED electron diffraction simulator
           </h3>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Selected-Area Electron Diffraction (SAED) & Reciprocal Space Geometry
           </p>
         </div>
@@ -189,15 +189,15 @@ export function DiffractionSimulator() {
           <BrutalCard
             variant="default"
             shadowSize="md"
-            titleBar="DIFFRACTION CONTROLS"
-            titleBarBadge="TEM COLUMN"
-            className="bg-white"
+            titleBar="Diffraction controls"
+            titleBarBadge="TEM column"
+            className="bg-surface"
           >
             <div className="space-y-4">
               {/* Material Selector */}
               <div className="space-y-1.5 font-mono text-xs">
-                <label className="font-bold uppercase text-slate-800 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-[#FF5722]"></span>
+                <label className="font-bold text-foreground flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-accent-strong"></span>
                   Target Specimen Crystal:
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -210,12 +210,12 @@ export function DiffractionSimulator() {
                       }}
                       className={`p-2 border text-left font-mono text-xs transition-all ${
                         selectedCrystal === c.id
-                          ? "bg-foreground text-background font-bold border-border shadow-neo-xs"
-                          : "bg-surface hover:bg-surface-warm border-slate-300"
+                          ? "bg-inverse text-inverse-fg font-bold border-border shadow-neo-xs"
+                          : "bg-surface hover:bg-surface-warm border-line"
                       }`}
                     >
                       <div className="font-bold">{c.name}</div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-faint">
                         {c.structure} (a={c.latticeConstantA} nm)
                       </div>
                     </button>
@@ -225,7 +225,7 @@ export function DiffractionSimulator() {
 
               {/* Pattern Mode Toggle */}
               <div className="space-y-1.5 font-mono text-xs">
-                <label className="font-bold uppercase text-slate-800 flex items-center gap-1.5">
+                <label className="font-bold text-foreground flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-[#00D2FF]"></span>
                   Pattern Geometry:
                 </label>
@@ -235,7 +235,7 @@ export function DiffractionSimulator() {
                     className={`p-2 border text-center font-mono text-xs font-bold transition-all ${
                       mode === "single-crystal"
                         ? "bg-[#00D2FF] text-foreground border-border shadow-neo-xs"
-                        : "bg-surface hover:bg-surface-warm border-slate-300"
+                        : "bg-surface hover:bg-surface-warm border-line"
                     }`}
                   >
                     Single-Crystal Spots
@@ -245,7 +245,7 @@ export function DiffractionSimulator() {
                     className={`p-2 border text-center font-mono text-xs font-bold transition-all ${
                       mode === "polycrystalline-rings"
                         ? "bg-[#10B981] text-white border-border shadow-neo-xs"
-                        : "bg-surface hover:bg-surface-warm border-slate-300"
+                        : "bg-surface hover:bg-surface-warm border-line"
                     }`}
                   >
                     Polycrystalline Rings
@@ -256,7 +256,7 @@ export function DiffractionSimulator() {
               {/* Zone Axis Selection (if single crystal) */}
               {mode === "single-crystal" && (
                 <div className="space-y-1.5 font-mono text-xs">
-                  <label className="font-bold uppercase text-slate-800 flex items-center gap-1.5">
+                  <label className="font-bold text-foreground flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 bg-[#F59E0B]"></span>
                     Zone Axis [uvw]:
                   </label>
@@ -267,8 +267,8 @@ export function DiffractionSimulator() {
                         onClick={() => setZoneAxis(za)}
                         className={`flex-1 py-1.5 border font-mono text-xs font-bold ${
                           zoneAxis === za
-                            ? "bg-foreground text-background border-border shadow-neo-xs"
-                            : "bg-surface hover:bg-surface-warm border-slate-300"
+                            ? "bg-inverse text-inverse-fg border-border shadow-neo-xs"
+                            : "bg-surface hover:bg-surface-warm border-line"
                         }`}
                       >
                         {za}
@@ -308,7 +308,7 @@ export function DiffractionSimulator() {
                     type="checkbox"
                     checked={showLabels}
                     onChange={(e) => setShowLabels(e.target.checked)}
-                    className="w-4 h-4 accent-[#FF5722]"
+                    className="w-4 h-4 accent-accent"
                   />
                   <span>Show Miller Indices (hkl)</span>
                 </label>
@@ -322,8 +322,8 @@ export function DiffractionSimulator() {
           <BrutalCard
             variant="dark"
             shadowSize="lg"
-            titleBar="TEM PHOSPHOR VIEWING SCREEN / DIFFRACTION PATTERN"
-            titleBarBadge="DETECTOR PLANE"
+            titleBar="TEM phosphor viewing screen / diffraction pattern"
+            titleBarBadge="Detector plane"
             className="bg-[#0B0E14] text-white"
           >
             <div className="space-y-3">
@@ -343,18 +343,18 @@ export function DiffractionSimulator() {
 
               {/* Instrument Readout Bar */}
               <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                <div className="bg-slate-900 border border-slate-800 p-2">
-                  <div className="text-[10px] text-slate-400">λ (WAVELENGTH)</div>
+                <div className="bg-inverse border border-slate-800 p-2">
+                  <div className="text-[10px] text-faint">λ (Wavelength)</div>
                   <div className="font-bold text-beam-cyan">
                     {(patternData.wavelengthNm * 1000).toFixed(2)} pm
                   </div>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-2">
-                  <div className="text-[10px] text-slate-400">CAMERA LENGTH (L)</div>
+                <div className="bg-inverse border border-slate-800 p-2">
+                  <div className="text-[10px] text-faint">Camera length (l)</div>
                   <div className="font-bold text-amber-400">{cameraLengthMm} mm</div>
                 </div>
-                <div className="bg-slate-900 border border-slate-800 p-2">
-                  <div className="text-[10px] text-slate-400">CAMERA CONSTANT (λL)</div>
+                <div className="bg-inverse border border-slate-800 p-2">
+                  <div className="text-[10px] text-faint">Camera constant (λl)</div>
                   <div className="font-bold text-phosphor-green">
                     {(patternData.cameraConstantMmNm).toFixed(3)} mm·nm
                   </div>
@@ -364,18 +364,18 @@ export function DiffractionSimulator() {
           </BrutalCard>
 
           {/* WHAT CHANGED? Scientific Explanation Box */}
-          <BrutalCard variant="warm" shadowSize="sm" className="bg-[#F4EFE6]">
+          <BrutalCard variant="warm" shadowSize="sm" className="bg-surface-2">
             <div className="space-y-2 font-mono text-xs">
-              <div className="font-bold text-slate-900 uppercase flex items-center gap-1.5">
-                <Info className="w-4 h-4 text-[#FF5722]" />
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-accent" />
                 WHAT CHANGED? (Williams & Carter Reciprocal Relationships)
               </div>
-              <ul className="space-y-1.5 text-[11px] text-slate-800 font-sans leading-relaxed">
+              <ul className="space-y-1.5 text-[11px] text-foreground font-sans leading-relaxed">
                 <li className="flex items-start gap-1.5">
-                  <span className="font-bold text-[#FF5722] font-mono">→</span>
+                  <span className="font-bold text-accent font-mono">→</span>
                   <span>
                     <strong>Camera Constant equation:</strong>{" "}
-                    <code className="font-mono bg-white px-1 border">R · d = λ · L</code>.
+                    <code className="font-mono bg-surface px-1 border">R · d = λ · L</code>.
                     The physical radius R of any diffraction spot on the detector is inversely proportional to lattice spacing d and directly proportional to camera length L.
                   </span>
                 </li>

@@ -2,7 +2,7 @@ import React from "react";
 import { CarterReader } from "@/components/learn/CarterReader";
 
 export const metadata = {
-  title: "Carter Textbook Reader & Citations — TEM-AI",
+  title: "Reader — TEM-AI",
   description:
     "Browse indexed chapters, authentic excerpts, ray diagrams, and mathematical formulations from Barry Carter's TEM textbook.",
 };

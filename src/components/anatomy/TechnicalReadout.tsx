@@ -23,18 +23,18 @@ export function TechnicalReadout({
   return (
     <div
       className={cn(
-        "bg-[#0B0E14] text-white border-2 border-[#0F172A] brutal-shadow-sm p-3 font-mono text-xs w-full max-w-xs select-none",
+        "bg-[#0B0E14] text-white border border-line brutal-shadow-sm p-3 font-mono text-xs w-full max-w-xs select-none",
         className
       )}
       role="region"
       aria-label="Instrument Telemetry Status"
     >
       <div className="flex items-center justify-between border-b border-slate-700 pb-1.5 mb-2">
-        <span className="flex items-center gap-1.5 text-[11px] font-bold text-amber-400 uppercase tracking-wider">
+        <span className="flex items-center gap-1.5 text-[11px] font-bold text-amber-400 tracking-wide">
           <Activity className="w-3.5 h-3.5" />
-          SYSTEM TELEMETRY
+          System telemetry
         </span>
-        <span className="bg-slate-800 text-[10px] px-1.5 py-0.2 border border-slate-700 font-bold text-phosphor-green">
+        <span className="bg-inverse text-[10px] px-1.5 py-0.2 border border-slate-700 font-bold text-phosphor-green">
           ONLINE
         </span>
       </div>
@@ -42,34 +42,34 @@ export function TechnicalReadout({
       <div className="space-y-1.5 text-[11px]">
         {/* Beam Status */}
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">BEAM STATE</span>
+          <span className="text-faint">Beam state</span>
           <span className="flex items-center gap-1 font-bold text-phosphor-green">
-            <span className="w-1.5 h-1.5 rounded-full bg-phosphor-green animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-phosphor-green" />
             {chapter.systemStatus.beam}
           </span>
         </div>
 
         {/* Accelerating Voltage */}
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">VOLTAGE (HT)</span>
+          <span className="text-faint">Voltage (ht)</span>
           <span className="font-bold text-beam-cyan">{voltageKV} kV</span>
         </div>
 
         {/* de Broglie Wavelength */}
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">WAVELENGTH (λ)</span>
+          <span className="text-faint">Wavelength (λ)</span>
           <span className="font-bold text-slate-200">{physics.wavelengthPm.toFixed(2)} pm</span>
         </div>
 
         {/* Relativistic Velocity */}
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">VELOCITY (v/c)</span>
+          <span className="text-faint">VELOCITY (v/c)</span>
           <span className="font-bold text-slate-200">{(physics.velocityFractionC * 100).toFixed(1)}% c</span>
         </div>
 
         {/* Optical Mode */}
         <div className="flex items-center justify-between border-t border-slate-800 pt-1.5">
-          <span className="text-slate-400">ACTIVE MODE</span>
+          <span className="text-faint">Active mode</span>
           <span className="font-bold text-amber-300 truncate max-w-[150px] text-right">
             {chapter.systemStatus.mode}
           </span>
@@ -78,7 +78,7 @@ export function TechnicalReadout({
         {/* Subsystem Location */}
         {chapter.systemStatus.stageInfo && (
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">SUBSYSTEM</span>
+            <span className="text-faint">SUBSYSTEM</span>
             <span className="text-[10px] text-slate-300 truncate max-w-[150px] text-right">
               {chapter.systemStatus.stageInfo}
             </span>

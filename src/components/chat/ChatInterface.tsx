@@ -151,17 +151,17 @@ export function ChatInterface() {
     <div className="space-y-6">
       {/* Mode Selector Top Bar */}
       <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-border pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-2">
           <div>
-            <h2 className="text-xl font-black font-sans uppercase">
-              ASK CARTER — GROUNDED AI ASSISTANT
+            <h2 className="text-xl font-semibold font-sans">
+              Ask Carter — Grounded AI assistant
             </h2>
-            <p className="text-xs font-mono text-slate-600">
+            <p className="text-xs font-mono text-muted">
               Select an instrument mode to configure pedagogical guidance:
             </p>
           </div>
           <ScientificBadge variant="cyan" hasDot>
-            GROUND TRUTH: CARTER TEXTBOOK
+            Ground truth: Carter textbook
           </ScientificBadge>
         </div>
 
@@ -169,8 +169,8 @@ export function ChatInterface() {
 
         {/* If EXAM mode, show exam marks selector */}
         {mode === "EXAM" && (
-          <div className="brutal-border bg-[#FEF3C7] p-2.5 flex items-center justify-between text-xs font-mono">
-            <span className="font-bold text-slate-800 uppercase flex items-center gap-1.5">
+          <div className="brutal-border bg-surface-2 p-2.5 flex items-center justify-between text-xs font-mono">
+            <span className="font-bold text-foreground flex items-center gap-1.5">
               <Award className="w-4 h-4 text-amber-700" />
               Target Examination Grading Rubric:
             </span>
@@ -188,8 +188,8 @@ export function ChatInterface() {
                   onClick={() => setExamSubtype(et.id)}
                   className={`px-2 py-0.5 border text-[11px] font-bold ${
                     examSubtype === et.id
-                      ? "bg-foreground text-background border-border"
-                      : "bg-white text-slate-700 hover:bg-slate-100"
+                      ? "bg-inverse text-inverse-fg border-border"
+                      : "bg-surface text-foreground hover:bg-surface-2"
                   }`}
                 >
                   {et.label}
@@ -204,9 +204,9 @@ export function ChatInterface() {
       <BrutalCard
         variant="default"
         shadowSize="lg"
-        titleBar="CONVERSATION LOG / CARTER GROUNDED INFERENCE"
+        titleBar="Conversation log / Carter grounded inference"
         titleBarBadge={mode}
-        className="bg-white min-h-[480px] flex flex-col justify-between"
+        className="bg-surface min-h-[480px] flex flex-col justify-between"
       >
         <div className="space-y-6 max-h-[560px] overflow-y-auto pr-2">
           {messages.map((msg) => (
@@ -223,35 +223,35 @@ export function ChatInterface() {
                 }`}
               >
                 {msg.role === "assistant" && (
-                  <span className="font-bold flex items-center gap-1 text-slate-900 uppercase">
-                    <span className="w-2 h-2 bg-[#FF5722]"></span>
-                    TEM-AI ASSISTANT
-                    <span className="text-slate-400">({msg.provider || "Carter RAG"})</span>
+                  <span className="font-bold flex items-center gap-1 text-foreground">
+                    <span className="w-2 h-2 bg-accent-strong"></span>
+                    TEM-AI assistant
+                    <span className="text-faint">({msg.provider || "Carter RAG"})</span>
                   </span>
                 )}
-                <span className="text-slate-400">{msg.timestamp}</span>
+                <span className="text-faint">{msg.timestamp}</span>
               </div>
 
               {/* Message Bubble */}
               {msg.role === "user" ? (
-                <div className="brutal-border bg-[#0F172A] text-white p-3 font-mono text-xs shadow-neo-sm">
+                <div className="brutal-border bg-inverse text-white p-3 font-mono text-xs shadow-neo-sm">
                   {msg.content}
                 </div>
               ) : (
                 <div className="brutal-border bg-surface-warm p-4 font-sans text-xs space-y-4 shadow-neo-sm">
                   {/* Distinct Section 1: FROM CARTER */}
                   {msg.fromCarter && (
-                    <div className="brutal-border bg-white p-3 space-y-1.5 border-amber-900/30">
-                      <div className="flex items-center justify-between font-mono text-[10px] font-bold text-amber-800 uppercase tracking-wider border-b pb-1">
+                    <div className="brutal-border bg-surface p-3 space-y-1.5 border-amber-900/30">
+                      <div className="flex items-center justify-between font-mono text-[10px] font-bold text-amber-800 tracking-wide border-b pb-1">
                         <span className="flex items-center gap-1.5">
                           <BookOpen className="w-3.5 h-3.5 text-amber-600" />
-                          FROM CARTER (RETRIEVED TEXTBOOK CONTENT)
+                          From Carter (retrieved textbook content)
                         </span>
                         <span className="bg-amber-100 px-1 py-0.2 text-[9px] text-amber-900 border border-amber-300">
-                          GROUND TRUTH
+                          Ground truth
                         </span>
                       </div>
-                      <div className="text-slate-800 text-[11px] leading-relaxed whitespace-pre-line font-serif italic">
+                      <div className="text-foreground text-[11px] leading-relaxed whitespace-pre-line font-serif italic">
                         {msg.fromCarter}
                       </div>
                     </div>
@@ -260,10 +260,10 @@ export function ChatInterface() {
                   {/* Distinct Section 2: ADDITIONAL SCIENTIFIC EXPLANATION */}
                   {msg.additionalExplanation && (
                     <div className="space-y-1 pt-1">
-                      <div className="font-mono text-[10px] font-bold text-[#0284C7] uppercase tracking-wider">
-                        ADDITIONAL SCIENTIFIC EXPLANATION:
+                      <div className="font-mono text-[10px] font-bold text-[#0284C7] tracking-wide">
+                        Additional scientific explanation:
                       </div>
-                      <div className="text-slate-900 text-xs leading-relaxed whitespace-pre-line font-sans">
+                      <div className="text-foreground text-xs leading-relaxed whitespace-pre-line font-sans">
                         {msg.additionalExplanation}
                       </div>
                     </div>
@@ -271,17 +271,17 @@ export function ChatInterface() {
 
                   {/* Fallback if raw content without split */}
                   {!msg.fromCarter && (
-                    <div className="text-slate-900 text-xs leading-relaxed whitespace-pre-line font-sans">
+                    <div className="text-foreground text-xs leading-relaxed whitespace-pre-line font-sans">
                       {msg.content}
                     </div>
                   )}
 
                   {/* Citations Drawer */}
                   {msg.citations && msg.citations.length > 0 && (
-                    <div className="space-y-2 pt-2 border-t border-slate-300">
-                      <div className="font-mono text-[10px] font-bold text-slate-600 uppercase flex items-center justify-between">
+                    <div className="space-y-2 pt-2 border-t border-line">
+                      <div className="font-mono text-[10px] font-bold text-muted flex items-center justify-between">
                         <span>Textbook Citations ({msg.citations.length}):</span>
-                        <span className="text-[9px] text-slate-500">
+                        <span className="text-[9px] text-muted">
                           Click to inspect Carter excerpt
                         </span>
                       </div>
@@ -295,8 +295,8 @@ export function ChatInterface() {
 
                   {/* Suggested Follow-up Questions */}
                   {msg.suggestedQuestions && msg.suggestedQuestions.length > 0 && (
-                    <div className="space-y-1.5 pt-2 border-t border-slate-300">
-                      <span className="font-mono text-[10px] font-bold text-slate-500 uppercase block">
+                    <div className="space-y-1.5 pt-2 border-t border-line">
+                      <span className="font-mono text-[10px] font-bold text-muted block">
                         Suggested Follow-Up Enquiries:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
@@ -304,7 +304,7 @@ export function ChatInterface() {
                           <button
                             key={i}
                             onClick={() => handleSend(sq)}
-                            className="text-[11px] font-mono bg-white hover:bg-slate-100 border border-border px-2 py-1 text-slate-800 transition-colors text-left"
+                            className="text-[11px] font-mono bg-surface hover:bg-surface-2 border border-border px-2 py-1 text-foreground transition-colors text-left"
                           >
                             → {sq}
                           </button>
@@ -314,10 +314,10 @@ export function ChatInterface() {
                   )}
 
                   {/* Action Copy Toolbar */}
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-line">
                     <button
                       onClick={() => copyToClipboard(msg.content, msg.id)}
-                      className="text-[10px] font-mono text-slate-500 hover:text-slate-800 flex items-center gap-1"
+                      className="text-[10px] font-mono text-muted hover:text-foreground flex items-center gap-1"
                     >
                       {copiedId === msg.id ? (
                         <>
@@ -338,11 +338,11 @@ export function ChatInterface() {
           {/* Loading Indicator */}
           {isLoading && (
             <div className="mr-auto max-w-xl w-full brutal-border bg-surface-warm p-4 font-mono text-xs space-y-2">
-              <div className="flex items-center gap-2 text-slate-700 font-bold">
-                <span className="w-2.5 h-2.5 bg-[#FF5722] animate-ping rounded-full"></span>
-                RETRIEVING CARTER CHUNKS & GENERATING GROUNDED EXPLANATION...
+              <div className="flex items-center gap-2 text-foreground font-bold">
+                <span className="w-2.5 h-2.5 bg-accent-strong rounded-full"></span>
+                Retrieving Carter chunks & generating grounded explanation...
               </div>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-muted">
                 Searching Carter textbook vector space • Checking citation fidelity • Applying {mode} rubric
               </p>
             </div>
@@ -352,7 +352,7 @@ export function ChatInterface() {
         </div>
 
         {/* Query Input Box */}
-        <div className="pt-4 border-t-2 border-border mt-4 space-y-2">
+        <div className="pt-4 border-t border-border mt-4 space-y-2">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -373,7 +373,7 @@ export function ChatInterface() {
                   ? "Describe your experimental TEM problem..."
                   : "Ask Carter anything about TEM (e.g., Why does diffraction contrast occur?)..."
               }
-              className="flex-1 brutal-border p-2.5 font-mono text-xs bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-[#FF5722]"
+              className="flex-1 brutal-border p-2.5 font-mono text-xs bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
               disabled={isLoading}
             />
             <BrutalButton
@@ -388,29 +388,29 @@ export function ChatInterface() {
           </form>
 
           {/* Quick preset chips */}
-          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-slate-600">
-            <span className="font-bold text-slate-800">Quick Prompts:</span>
+          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono text-muted">
+            <span className="font-bold text-foreground">Quick Prompts:</span>
             <button
               onClick={() => handleSend("Why does diffraction contrast occur in TEM?")}
-              className="bg-surface-warm border border-slate-300 px-1.5 py-0.5 hover:bg-slate-200"
+              className="bg-surface-warm border border-line px-1.5 py-0.5 hover:bg-line"
             >
               Diffraction Contrast
             </button>
             <button
               onClick={() => handleSend("Explain the g.b = 0 dislocation invisibility criterion.")}
-              className="bg-surface-warm border border-slate-300 px-1.5 py-0.5 hover:bg-slate-200"
+              className="bg-surface-warm border border-line px-1.5 py-0.5 hover:bg-line"
             >
               g·b=0 Dislocation
             </button>
             <button
               onClick={() => handleSend("What is Scherzer defocus and the Contrast Transfer Function?")}
-              className="bg-surface-warm border border-slate-300 px-1.5 py-0.5 hover:bg-slate-200"
+              className="bg-surface-warm border border-line px-1.5 py-0.5 hover:bg-line"
             >
               Scherzer Defocus
             </button>
             <button
               onClick={() => handleSend("I have poor contrast in my TEM image. What should I do?")}
-              className="bg-surface-warm border border-slate-300 px-1.5 py-0.5 hover:bg-slate-200"
+              className="bg-surface-warm border border-line px-1.5 py-0.5 hover:bg-line"
             >
               Poor Contrast Troubleshooting
             </button>

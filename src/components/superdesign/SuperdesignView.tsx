@@ -78,7 +78,7 @@ export function SuperdesignView() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#FF4500] selection:text-white font-sans overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-accent selection:text-white font-sans overflow-x-hidden relative">
       {/* Noise Texture Overlay */}
       <div
         className="fixed inset-0 z-50 pointer-events-none opacity-[0.04] mix-blend-overlay"
@@ -92,7 +92,7 @@ export function SuperdesignView() {
         id="main-nav"
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           navScrolled
-            ? "py-4 bg-[#050505]/85 backdrop-blur-md border-b border-white/5"
+            ? "py-4 bg-[#050505]/85 backdrop-blur-md border-b border-line/5"
             : "py-8 bg-transparent"
         }`}
       >
@@ -100,7 +100,7 @@ export function SuperdesignView() {
           <Link
             href="/"
             id="nav-logo-link"
-            className="text-2xl font-bold tracking-tighter font-serif text-white hover:text-[#FF4500] transition-colors"
+            className="text-2xl font-bold tracking-tighter font-serif text-white hover:text-accent transition-colors"
           >
             Superdesign.
           </Link>
@@ -109,23 +109,23 @@ export function SuperdesignView() {
             <a
               href="#expertise"
               id="nav-expertise-link"
-              className="text-sm text-gray-400 hover:text-white transition-colors duration-300"
+              className="text-sm text-faint hover:text-white transition-colors duration-300"
             >
               Expertise
             </a>
             <a
               href="#works"
               id="nav-works-link"
-              className="text-sm text-gray-400 hover:text-white transition-colors duration-300"
+              className="text-sm text-faint hover:text-white transition-colors duration-300"
             >
               Selected Works
             </a>
             <a
               href="#agent"
               id="nav-perspectives-link"
-              className="text-sm text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-1.5"
+              className="text-sm text-faint hover:text-white transition-colors duration-300 flex items-center gap-1.5"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#FF4500]" />
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
               <span>Carter Agent</span>
             </a>
           </div>
@@ -135,7 +135,7 @@ export function SuperdesignView() {
               type="button"
               onClick={() => setAgentModalOpen(true)}
               id="nav-cta-link"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-medium bg-white text-black hover:scale-105 hover:bg-[#FF4500] hover:text-white transition-all duration-300 font-sans shadow-lg cursor-pointer"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-medium bg-surface text-foreground hover:scale-105 hover:bg-accent hover:text-white transition-all duration-300 font-sans shadow-lg cursor-pointer"
             >
               Start Project
             </button>
@@ -158,7 +158,7 @@ export function SuperdesignView() {
         </div>
 
         {/* Floating Surrealist Hand Left */}
-        <div className="absolute -left-[10%] top-[-10%] md:left-[-5%] md:top-[-15%] w-[50vw] md:w-[40vw] max-w-[800px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-left">
+        <div className="absolute -left-[10%] top-[-10%] md:left-[-5%] md:top-[-15%] w-[50vw] md:w-[40vw] max-w-[800px] z-10 pointer-events-none mix-blend-hard-light opacity-80">
           <img
             src="https://framerusercontent.com/images/KNhiA5A2ykNYqNkj04Hk6BVg5A.png?width=1540&height=1320"
             alt="Hand Reaching"
@@ -167,7 +167,7 @@ export function SuperdesignView() {
         </div>
 
         {/* Floating Surrealist Hand Right */}
-        <div className="absolute -right-[10%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[45vw] md:w-[35vw] max-w-[700px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-right">
+        <div className="absolute -right-[10%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[45vw] md:w-[35vw] max-w-[700px] z-10 pointer-events-none mix-blend-hard-light opacity-80">
           <img
             src="https://framerusercontent.com/images/X89VFCABCEjjZ4oLGa3PjbOmsA.png?width=1542&height=1002"
             alt="Hand Receiving"
@@ -210,19 +210,19 @@ export function SuperdesignView() {
                 onClick={() => setAgentModalOpen(true)}
                 className="relative group cursor-pointer"
               >
-                <div className="absolute inset-0 bg-[#FF4500]/25 blur-xl rounded-full opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                <div className="relative border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-2.5 rounded-full flex items-center gap-3 text-xs md:text-sm text-white/90 uppercase tracking-widest hover:bg-white/10 hover:border-[#FF4500]/50 transition-all duration-300">
-                  <Sparkles className="w-3.5 h-3.5 text-[#FF4500]" />
+                <div className="absolute inset-0 bg-accent/25 blur-xl rounded-full opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+                <div className="relative border border-line/20 bg-surface/5 backdrop-blur-sm px-6 py-2.5 rounded-full flex items-center gap-3 text-xs md:text-sm text-white/90 tracking-wide hover:bg-surface/10 hover:border-accent/50 transition-all duration-300">
+                  <Sparkles className="w-3.5 h-3.5 text-accent" />
                   <span>Enter the Void</span>
                 </div>
               </button>
 
-              <div className="flex items-center gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-widest mt-8 font-mono">
+              <div className="flex items-center gap-4 text-[10px] md:text-xs text-white/40 tracking-wide mt-8 font-mono">
                 <span id="current-time">{currentTime}</span>
-                <span className="w-px h-3 bg-white/20" />
-                <span>NYC, USA</span>
-                <span className="w-px h-3 bg-white/20" />
-                <span className="text-[#FF4500]">CARTER AGENT LIVE</span>
+                <span className="w-px h-3 bg-surface/20" />
+                <span>Nyc, usa</span>
+                <span className="w-px h-3 bg-surface/20" />
+                <span className="text-accent">Carter agent live</span>
               </div>
             </div>
           </div>
@@ -236,21 +236,21 @@ export function SuperdesignView() {
             <h2 className="text-3xl md:text-5xl lg:text-6xl leading-tight text-white/90 mb-12 font-serif">
               We design the negative space where your brand truly lives.
             </h2>
-            <p className="text-xl md:text-2xl text-gray-500 leading-relaxed font-light font-sans">
+            <p className="text-xl md:text-2xl text-muted leading-relaxed font-light font-sans">
               Elegance is refusal. We remove the noise so your message resonates with absolute clarity.
             </p>
           </div>
 
           {/* Logo Grid */}
           <div className="mt-32 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-            <div className="reveal font-bold text-xl tracking-widest font-sans">VOGUE</div>
-            <div className="reveal font-bold text-xl tracking-widest font-sans" style={{ transitionDelay: "100ms" }}>
+            <div className="reveal font-bold text-xl tracking-wide font-sans">VOGUE</div>
+            <div className="reveal font-bold text-xl tracking-wide font-sans" style={{ transitionDelay: "100ms" }}>
               TESLA
             </div>
-            <div className="reveal font-bold text-xl tracking-widest font-sans" style={{ transitionDelay: "200ms" }}>
+            <div className="reveal font-bold text-xl tracking-wide font-sans" style={{ transitionDelay: "200ms" }}>
               MOOMA
             </div>
-            <div className="reveal font-bold text-xl tracking-widest font-sans" style={{ transitionDelay: "300ms" }}>
+            <div className="reveal font-bold text-xl tracking-wide font-sans" style={{ transitionDelay: "300ms" }}>
               AESOP
             </div>
           </div>
@@ -275,22 +275,22 @@ export function SuperdesignView() {
             >
               <div
                 onClick={() => setAgentModalOpen(true)}
-                className="reveal bg-[#FF4500] rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl hover:shadow-[0_20px_50px_rgba(255,69,0,0.35)] transition-all duration-500 group cursor-pointer"
+                className="reveal bg-accent rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl hover:shadow-[0_20px_50px_rgba(255,69,0,0.35)] transition-all duration-500 group cursor-pointer"
               >
                 <div className="flex justify-between items-start">
-                  <div className="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
-                    <Star className="text-black w-6 h-6 fill-current" />
+                  <div className="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center transition-transform duration-500">
+                    <Star className="text-foreground w-6 h-6 fill-current" />
                   </div>
-                  <span className="text-black font-medium text-sm border border-black/20 px-3 py-1 rounded-full font-mono">
+                  <span className="text-foreground font-medium text-sm border border-line-strong/20 px-3 py-1 rounded-full font-mono">
                     01
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-4xl md:text-5xl text-black mb-4 leading-none tracking-tight font-serif">
+                  <h3 className="text-4xl md:text-5xl text-foreground mb-4 leading-none tracking-tight font-serif">
                     Emerging <br />Talent
                   </h3>
-                  <p className="text-black/70 text-lg leading-snug font-sans">
+                  <p className="text-foreground/70 text-lg leading-snug font-sans">
                     You have the spark. We provide the atmosphere for it to ignite into a blazing reality.
                   </p>
                 </div>
@@ -306,14 +306,14 @@ export function SuperdesignView() {
             >
               <div
                 onClick={() => setAgentModalOpen(true)}
-                className="reveal bg-[#111111] border border-white/10 rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl group cursor-pointer hover:border-[#FF4500]/60 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-500"
+                className="reveal bg-[#111111] border border-line/10 rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl group cursor-pointer hover:border-accent/60 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-500"
                 style={{ transitionDelay: "150ms" }}
               >
                 <div className="flex justify-between items-start">
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                    <ArrowUpRight className="text-white w-6 h-6 group-hover:text-[#FF4500] transition-colors" />
+                  <div className="w-12 h-12 rounded-full bg-surface/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                    <ArrowUpRight className="text-white w-6 h-6 group-hover:text-accent transition-colors" />
                   </div>
-                  <span className="text-white/50 font-medium text-sm border border-white/10 px-3 py-1 rounded-full font-mono">
+                  <span className="text-white/50 font-medium text-sm border border-line/10 px-3 py-1 rounded-full font-mono">
                     02
                   </span>
                 </div>
@@ -322,12 +322,12 @@ export function SuperdesignView() {
                   <h3 className="text-4xl md:text-5xl text-white mb-4 leading-none tracking-tight font-serif">
                     Evolving <br />Legacy
                   </h3>
-                  <p className="text-gray-400 text-lg leading-snug font-sans">
+                  <p className="text-faint text-lg leading-snug font-sans">
                     You&apos;ve arrived. Now let&apos;s make sure you never leave their minds. Permanence is our craft.
                   </p>
                 </div>
 
-                <div className="w-full h-px bg-white/10 mt-8" />
+                <div className="w-full h-px bg-surface/10 mt-8" />
               </div>
             </div>
           </div>
@@ -335,7 +335,7 @@ export function SuperdesignView() {
 
         {/* Background Pattern */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none"
+          className="absolute top-1/2 left-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none"
           style={{
             backgroundImage: "radial-gradient(circle, #333 1px, transparent 1px)",
             backgroundSize: "40px 40px",
@@ -344,30 +344,30 @@ export function SuperdesignView() {
       </section>
 
       {/* Embedded Carter AI Agent Section */}
-      <section id="agent" className="py-24 border-t border-white/5 bg-[#080808] relative">
+      <section id="agent" className="py-24 border-t border-line/5 bg-[#080808] relative">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF4500]/10 border border-[#FF4500]/30 text-[#FF4500] text-xs font-mono uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-mono tracking-wide mb-4">
               <Bot className="w-3.5 h-3.5" />
-              <span>TEM-AI // CARTER GROUNDED INTELLIGENCE</span>
+              <span>TEM-AI // Carter grounded intelligence</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-serif text-white mb-4">
               Consult with the Agent.
             </h2>
-            <p className="text-gray-400 max-w-lg mx-auto text-sm md:text-base font-sans">
+            <p className="text-faint max-w-lg mx-auto text-sm md:text-base font-sans">
               Grounded in David B. Williams &amp; C. Barry Carter&apos;s <em>Transmission Electron Microscopy</em>.
             </p>
           </div>
 
           {/* Interactive Agent Frame */}
-          <div className="max-w-5xl mx-auto h-[680px] bg-[#050505] border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
+          <div className="max-w-5xl mx-auto h-[680px] bg-[#050505] border border-line/10 rounded-2xl overflow-hidden shadow-2xl relative">
             <ChatShell />
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-20 border-t border-white/5 bg-[#050505] relative overflow-hidden">
+      <footer className="py-20 border-t border-line/5 bg-[#050505] relative overflow-hidden">
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
             <div className="w-full md:w-auto">
@@ -377,18 +377,18 @@ export function SuperdesignView() {
             </div>
 
             <div className="flex flex-col gap-8 text-right font-sans">
-              <div className="flex flex-col gap-4 text-gray-400">
+              <div className="flex flex-col gap-4 text-faint">
                 <a href="#expertise" className="hover:text-white transition-colors">
                   Expertise
                 </a>
                 <a href="#works" className="hover:text-white transition-colors">
                   Selected Works
                 </a>
-                <a href="#agent" className="hover:text-[#FF4500] transition-colors">
+                <a href="#agent" className="hover:text-accent transition-colors">
                   Carter Agent
                 </a>
               </div>
-              <p className="text-sm text-gray-600">© 2024 Superdesign. All rights reserved.</p>
+              <p className="text-sm text-muted">© 2024 Superdesign. All rights reserved.</p>
             </div>
           </div>
         </div>
@@ -397,11 +397,11 @@ export function SuperdesignView() {
       {/* Full-Screen Agent Modal when "Enter the Void" or "Start Project" is clicked */}
       {agentModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex flex-col animate-in fade-in duration-300">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#050505] text-white">
+          <div className="p-4 border-b border-line/10 flex items-center justify-between bg-[#050505] text-white">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF4500] animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-accent" />
               <span className="font-serif text-lg tracking-tight">Superdesign // Carter Agent</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-white/10 text-gray-300">
+              <span className="text-xs font-mono px-2 py-0.5 rounded bg-surface/10 text-gray-300">
                 Grounded Knowledge Base
               </span>
             </div>
@@ -409,7 +409,7 @@ export function SuperdesignView() {
             <button
               type="button"
               onClick={() => setAgentModalOpen(false)}
-              className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+              className="p-2 rounded-full hover:bg-surface/10 text-faint hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

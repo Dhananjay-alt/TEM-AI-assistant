@@ -115,7 +115,7 @@ export function TEMMicroscopeSVG({
           />
           {/* Top Optical Axis Arrow */}
           <path d="M270,12 L266,20 L274,20 Z" fill="#0F172A" />
-          <text x="270" y="8" textAnchor="middle" className="text-[9px] font-mono font-bold fill-slate-700 tracking-wider">
+          <text x="270" y="8" textAnchor="middle" className="text-[9px] font-mono font-bold fill-slate-700 tracking-wide">
             OPTICAL AXIS (z)
           </text>
 
@@ -124,8 +124,8 @@ export function TEMMicroscopeSVG({
             <line x1="45" y1="50" x2="45" y2="950" stroke="#0F172A" strokeWidth="1" />
             <line x1="40" y1="50" x2="50" y2="50" stroke="#0F172A" strokeWidth="1.5" />
             <line x1="40" y1="950" x2="50" y2="950" stroke="#0F172A" strokeWidth="1.5" />
-            <text x="35" y="500" textAnchor="middle" transform="rotate(-90 35 500)" className="text-[9px] font-mono fill-slate-600 font-bold tracking-widest">
-              COLUMN HEIGHT ~ 2.4 METERS (ULTRA-HIGH VACUUM)
+            <text x="35" y="500" textAnchor="middle" transform="rotate(-90 35 500)" className="text-[9px] font-mono fill-slate-600 font-bold tracking-wide">
+              Column height ~ 2.4 meters (ultra-high vacuum)
             </text>
           </g>
         </g>
@@ -182,8 +182,8 @@ export function TEMMicroscopeSVG({
           {/* Label Card / Callout */}
           <g transform="translate(355, 68)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("electron-gun")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">01. ELECTRON GUN</text>
-            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">FEG CATHODE [-200 kV]</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">01. Electron gun</text>
+            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">FEG cathode [-200 kV]</text>
             <line x1="0" y1="17" x2="-15" y2="17" stroke={getStrokeColor("electron-gun")} strokeWidth="1.5" />
           </g>
         </g>
@@ -238,7 +238,7 @@ export function TEMMicroscopeSVG({
           <path d="M255,182 Q270,186 285,182" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeDasharray="2 2" />
           <path d="M255,190 Q270,194 285,190" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeDasharray="2 2" />
           {/* Label */}
-          <text x="180" y="188" textAnchor="end" className="text-[9px] font-mono font-bold fill-slate-800">C1 (SPOT SIZE)</text>
+          <text x="180" y="188" textAnchor="end" className="text-[9px] font-mono font-bold fill-slate-800">C1 (spot size)</text>
         </g>
 
         {/* ========================================================
@@ -263,13 +263,13 @@ export function TEMMicroscopeSVG({
           <rect x="292" y="230" width="46" height="30" fill="url(#copperCoil)" stroke="#0F172A" strokeWidth="1" />
           {/* Pole gap lines */}
           <path d="M255,242 Q270,246 285,242" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeDasharray="2 2" />
-          <text x="180" y="248" textAnchor="end" className="text-[9px] font-mono font-bold fill-slate-800">C2 (INTENSITY)</text>
+          <text x="180" y="248" textAnchor="end" className="text-[9px] font-mono font-bold fill-slate-800">C2 (intensity)</text>
 
           {/* Condenser System Label Card */}
           <g transform="translate(355, 218)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("condenser-2")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">02. CONDENSERS</text>
-            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">BEAM CONVERGENCE (α)</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">02. Condensers</text>
+            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">Beam convergence (α)</text>
             <line x1="0" y1="17" x2="-10" y2="17" stroke={getStrokeColor("condenser-2")} strokeWidth="1.5" />
           </g>
         </g>
@@ -295,7 +295,7 @@ export function TEMMicroscopeSVG({
           <circle cx="330" cy="287" r="6" fill="#0B0E14" />
           {/* Drive Knob */}
           <rect x="380" y="278" width="16" height="18" fill="#475569" stroke="#0F172A" strokeWidth="2" />
-          <text x="402" y="291" className="text-[8px] font-mono font-bold fill-slate-700">C2 APERTURE STRIP</text>
+          <text x="402" y="291" className="text-[8px] font-mono font-bold fill-slate-700">C2 aperture strip</text>
         </g>
 
         {/* ========================================================
@@ -341,7 +341,7 @@ export function TEMMicroscopeSVG({
           {/* Specimen Stage Label Card */}
           <g transform="translate(355, 312)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("specimen")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">03. SPECIMEN STAGE</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">03. Specimen stage</text>
             <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">THIN FOIL [&lt;100 nm]</text>
             <line x1="0" y1="17" x2="-70" y2="17" stroke={getStrokeColor("specimen")} strokeWidth="1.5" strokeDasharray="3 3" />
           </g>
@@ -379,7 +379,7 @@ export function TEMMicroscopeSVG({
           {/* Objective Lens Label Card */}
           <g transform="translate(355, 368)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("objective-lens")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">04. OBJECTIVE LENS</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">04. Objective lens</text>
             <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">Cs = 1.0 mm | BFP FOCUS</text>
             <line x1="0" y1="17" x2="-10" y2="17" stroke={getStrokeColor("objective-lens")} strokeWidth="1.5" />
           </g>
@@ -401,7 +401,7 @@ export function TEMMicroscopeSVG({
         >
           {/* Back Focal Plane dashed level */}
           <line x1="160" y1="432" x2="380" y2="432" stroke="#8B5CF6" strokeWidth="1" strokeDasharray="4 2" />
-          <text x="155" y="435" textAnchor="end" className="text-[8px] font-mono font-bold fill-accent-purple">BACK FOCAL PLANE</text>
+          <text x="155" y="435" textAnchor="end" className="text-[8px] font-mono font-bold fill-accent-purple">Back focal plane</text>
 
           {/* Aperture Blade Rod entering from left */}
           <rect x="180" y="428" width="87" height="8" fill="#475569" stroke={getStrokeColor("objective-aperture")} strokeWidth="1.5" />
@@ -414,8 +414,8 @@ export function TEMMicroscopeSVG({
           {/* Objective Aperture Label Card */}
           <g transform="translate(355, 420)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("objective-aperture")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">05. OBJ. APERTURE</text>
-            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">BRIGHT / DARK FIELD</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">05. Obj. Aperture</text>
+            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">Bright / dark field</text>
             <line x1="0" y1="17" x2="-20" y2="17" stroke={getStrokeColor("objective-aperture")} strokeWidth="1.5" />
           </g>
         </g>
@@ -436,7 +436,7 @@ export function TEMMicroscopeSVG({
         >
           {/* First Intermediate Image Plane marker */}
           <line x1="180" y1="480" x2="360" y2="480" stroke="#0284C7" strokeWidth="1" strokeDasharray="3 3" />
-          <text x="175" y="483" textAnchor="end" className="text-[8px] font-mono font-bold fill-beam-blue">1ST IMAGE PLANE</text>
+          <text x="175" y="483" textAnchor="end" className="text-[8px] font-mono font-bold fill-beam-blue">1St image plane</text>
 
           {/* Intermediate Lens Assembly */}
           <rect x="185" y="500" width="65" height="48" fill="url(#ironHatch)" stroke={getStrokeColor("intermediate-lens")} strokeWidth="2" />
@@ -472,7 +472,7 @@ export function TEMMicroscopeSVG({
           {/* Magnification System Label Card */}
           <g transform="translate(375, 595)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("projector-lens")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">06. MAGNIFICATION</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">06. Magnification</text>
             <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">UP TO 1,500,000×</text>
             <line x1="0" y1="17" x2="-10" y2="17" stroke={getStrokeColor("projector-lens")} strokeWidth="1.5" />
           </g>
@@ -503,7 +503,7 @@ export function TEMMicroscopeSVG({
           {/* Lead Glass Viewing Window Port */}
           <ellipse cx="270" cy="715" rx="60" ry="20" fill="#E0F2FE" stroke="#0F172A" strokeWidth="2" />
           <ellipse cx="270" cy="715" rx="54" ry="16" fill="#BAE6FD" opacity="0.4" />
-          <text x="270" y="718" textAnchor="middle" className="text-[7.5px] font-mono font-bold fill-slate-700">LEAD GLASS PORT</text>
+          <text x="270" y="718" textAnchor="middle" className="text-[7.5px] font-mono font-bold fill-slate-700">Lead glass port</text>
 
           {/* Retractable Phosphor Viewing Screen (ZnS:Ag) */}
           <rect
@@ -516,8 +516,8 @@ export function TEMMicroscopeSVG({
             strokeWidth="2"
             style={{ filter: "drop-shadow(0 0 6px rgba(16,185,129,0.5))" }}
           />
-          <text x="270" y="750" textAnchor="middle" className="text-[8px] font-mono font-black fill-[#064E3B]">
-            PHOSPHOR SCREEN (P22)
+          <text x="270" y="750" textAnchor="middle" className="text-[8px] font-mono font-semibold fill-[#064E3B]">
+            Phosphor screen (p22)
           </text>
 
           {/* Bottom Direct Electron CMOS Camera Chamber */}
@@ -532,15 +532,15 @@ export function TEMMicroscopeSVG({
           />
           {/* Active Sensor Chip */}
           <rect x="230" y="805" width="80" height="20" fill="#00D2FF" stroke="#FFFFFF" strokeWidth="1.5" />
-          <text x="270" y="819" textAnchor="middle" className="text-[8.5px] font-mono font-black fill-[#0F172A]">
-            DIRECT CMOS (4K)
+          <text x="270" y="819" textAnchor="middle" className="text-[8.5px] font-mono font-semibold fill-foreground">
+            Direct CMOS (4k)
           </text>
 
           {/* Detector System Label Card */}
           <g transform="translate(375, 755)">
             <rect x="0" y="0" width="150" height="34" fill="#FFFFFF" stroke={getStrokeColor("detector")} strokeWidth="2" />
-            <text x="8" y="14" className="text-[10px] font-mono font-black fill-[#0F172A]">07. DETECTOR</text>
-            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">DIRECT ELECTRON CMOS</text>
+            <text x="8" y="14" className="text-[10px] font-mono font-semibold fill-foreground">07. Detector</text>
+            <text x="8" y="26" className="text-[8.5px] font-mono fill-slate-600">Direct electron CMOS</text>
             <line x1="0" y1="17" x2="-10" y2="17" stroke={getStrokeColor("detector")} strokeWidth="1.5" />
           </g>
         </g>
@@ -633,7 +633,7 @@ export function TEMMicroscopeSVG({
                 <circle cx="302" cy="432" r="5" fill="none" stroke="#EF4444" strokeWidth="1.5" />
                 <line x1="299" y1="429" x2="305" y2="435" stroke="#EF4444" strokeWidth="1.5" />
                 <text x="270" y="452" textAnchor="middle" className="text-[7.5px] font-mono font-bold fill-red-600">
-                  DIFFRACTED RAYS BLOCKED BY APERTURE → BF CONTRAST
+                  Diffracted rays blocked by aperture → BF contrast
                 </text>
               </g>
             )}

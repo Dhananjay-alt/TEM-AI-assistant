@@ -293,12 +293,12 @@ export function ParticleAnalyzer() {
   return (
     <div className="space-y-6">
       {/* Module Title */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-xl font-black font-sans uppercase">
-            03 / TEM IMAGE & PARTICLE SIZE WORKSTATION
+          <h3 className="text-xl font-semibold font-sans">
+            TEM image & particle size workstation
           </h3>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Computer Vision Blob Segmentation, Scale Bar Calibration & AI Micrograph Interpretation
           </p>
         </div>
@@ -311,8 +311,8 @@ export function ParticleAnalyzer() {
 
       {/* Preset Micrographs Bar */}
       <div className="brutal-border bg-surface-warm p-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
-        <span className="font-bold text-slate-800 uppercase flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-[#FF5722]" />
+        <span className="font-bold text-foreground flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-accent" />
           Load Benchmark Sample Micrograph:
         </span>
         <div className="flex flex-wrap gap-2">
@@ -326,14 +326,14 @@ export function ParticleAnalyzer() {
                 setUserVisionQuestion(sample.defaultPrompt);
                 setAiReport(null);
               }}
-              className="px-2.5 py-1 bg-white brutal-border hover:bg-slate-100 font-bold text-slate-800 text-[11px]"
+              className="px-2.5 py-1 bg-surface brutal-border hover:bg-surface-2 font-bold text-foreground text-[11px]"
             >
               {sample.title}
             </button>
           ))}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-2.5 py-1 bg-[#FF5722] text-white brutal-border hover:bg-[#E64A19] font-bold text-[11px] flex items-center gap-1"
+            className="px-2.5 py-1 bg-accent-strong text-white brutal-border hover:bg-accent-strong font-bold text-[11px] flex items-center gap-1"
           >
             <Upload className="w-3 h-3" />
             Upload Micrograph (PNG/JPG/TIFF)
@@ -354,7 +354,7 @@ export function ParticleAnalyzer() {
           <BrutalCard
             variant="dark"
             shadowSize="lg"
-            titleBar="TEM MICROGRAPH VIEWER / SEGMENTATION OVERLAY"
+            titleBar="TEM micrograph viewer / segmentation overlay"
             titleBarBadge={`${scaleBarNm} nm SCALE`}
             className="bg-[#0B0E14] text-white"
           >
@@ -371,16 +371,16 @@ export function ParticleAnalyzer() {
 
               {/* Filter Mode Buttons */}
               <div className="flex items-center justify-between text-xs font-mono pt-1">
-                <span className="text-slate-400">DISPLAY FILTER:</span>
+                <span className="text-faint">Display filter:</span>
                 <div className="flex gap-1.5">
                   {(["normal", "threshold", "invert"] as const).map((fm) => (
                     <button
                       key={fm}
                       onClick={() => setFilterMode(fm)}
-                      className={`px-2 py-0.5 border text-[11px] uppercase ${
+                      className={`px-2 py-0.5 border text-[11px] ${
                         filterMode === fm
-                          ? "bg-phosphor-green text-black font-bold border-phosphor-green"
-                          : "bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800"
+                          ? "bg-phosphor-green text-foreground font-bold border-phosphor-green"
+                          : "bg-inverse border-slate-700 text-slate-300 hover:bg-inverse"
                       }`}
                     >
                       {fm}
@@ -392,40 +392,40 @@ export function ParticleAnalyzer() {
           </BrutalCard>
 
           {/* Particle Size Histogram / Distribution Card */}
-          <BrutalCard variant="default" shadowSize="sm" className="bg-white">
+          <BrutalCard variant="default" shadowSize="sm" className="bg-surface">
             <div className="space-y-3 font-mono text-xs">
               <div className="flex items-center justify-between border-b pb-2">
-                <span className="font-bold text-slate-900 uppercase flex items-center gap-1.5">
-                  <BarChart2 className="w-4 h-4 text-[#FF5722]" />
+                <span className="font-bold text-foreground flex items-center gap-1.5">
+                  <BarChart2 className="w-4 h-4 text-accent" />
                   Particle Size Statistics (Calibrated)
                 </span>
                 <span className="text-[10px] bg-surface-warm px-1.5 py-0.5 border">
-                  APPROXIMATE ESTIMATE
+                  Approximate estimate
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                <div className="p-2 brutal-border bg-slate-50">
-                  <div className="text-[10px] text-slate-500 uppercase">Count</div>
+                <div className="p-2 brutal-border bg-surface-2">
+                  <div className="text-[10px] text-muted">Count</div>
                   <div className="text-xl font-bold text-foreground">{stats.count}</div>
-                  <div className="text-[9px] text-slate-400">particles</div>
+                  <div className="text-[9px] text-faint">particles</div>
                 </div>
                 <div className="p-2 brutal-border bg-blue-50">
-                  <div className="text-[10px] text-blue-600 uppercase">Mean Diameter</div>
+                  <div className="text-[10px] text-blue-600">Mean Diameter</div>
                   <div className="text-xl font-bold text-blue-900">
                     {stats.meanDiameterNm.toFixed(1)} <span className="text-xs">nm</span>
                   </div>
                   <div className="text-[9px] text-blue-600">± {stats.stdDevNm.toFixed(1)} nm</div>
                 </div>
                 <div className="p-2 brutal-border bg-emerald-50">
-                  <div className="text-[10px] text-emerald-600 uppercase">Median Diameter</div>
+                  <div className="text-[10px] text-emerald-600">Median Diameter</div>
                   <div className="text-xl font-bold text-emerald-900">
                     {stats.medianDiameterNm.toFixed(1)} <span className="text-xs">nm</span>
                   </div>
                   <div className="text-[9px] text-emerald-600">50th percentile</div>
                 </div>
                 <div className="p-2 brutal-border bg-amber-50">
-                  <div className="text-[10px] text-amber-600 uppercase">Range (Min-Max)</div>
+                  <div className="text-[10px] text-amber-600">Range (Min-Max)</div>
                   <div className="text-sm font-bold text-amber-900 pt-1">
                     {stats.minDiameterNm.toFixed(1)} – {stats.maxDiameterNm.toFixed(1)} nm
                   </div>
@@ -446,9 +446,9 @@ export function ParticleAnalyzer() {
           <BrutalCard
             variant="default"
             shadowSize="md"
-            titleBar="IMAGE PROCESSING CONTROLS"
+            titleBar="Image processing controls"
             titleBarBadge="CALIBRATION"
-            className="bg-white"
+            className="bg-surface"
           >
             <div className="space-y-4">
               <ParameterSlider
@@ -501,20 +501,20 @@ export function ParticleAnalyzer() {
           <BrutalCard
             variant="warm"
             shadowSize="md"
-            titleBar="AI MICROGRAPH INTERPRETATION"
-            titleBarBadge="CARTER SCIENTIFIC VISION"
-            className="bg-[#F4EFE6]"
+            titleBar="AI micrograph interpretation"
+            titleBarBadge="Carter scientific vision"
+            className="bg-surface-2"
           >
             <div className="space-y-3 font-mono text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-slate-800 uppercase block text-[11px]">
+                <label className="font-bold text-foreground block text-[11px]">
                   Ask AI About This Micrograph:
                 </label>
                 <textarea
                   value={userVisionQuestion}
                   onChange={(e) => setUserVisionQuestion(e.target.value)}
                   rows={2}
-                  className="w-full p-2 brutal-border bg-white text-xs font-mono resize-none focus:outline-none"
+                  className="w-full p-2 brutal-border bg-surface text-xs font-mono resize-none focus:outline-none"
                   placeholder="e.g., Explain contrast, morphology, and suggest follow-up techniques..."
                 />
               </div>
@@ -527,26 +527,26 @@ export function ParticleAnalyzer() {
                 disabled={isAiLoading}
                 icon={<Sparkles className="w-4 h-4" />}
               >
-                {isAiLoading ? "ANALYZING MICROGRAPH..." : "ANALYZE WITH AI VISION"}
+                {isAiLoading ? "Analyzing micrograph..." : "Analyze with AI vision"}
               </BrutalButton>
 
               {/* Structured AI Report with OBSERVED vs INTERPRETED vs UNCERTAIN */}
               {aiReport && (
-                <div className="space-y-2.5 pt-2 border-t-2 border-border">
-                  <div className="flex items-center justify-between text-[10px] text-slate-500">
-                    <span className="font-bold text-slate-700">REPORT GENERATED</span>
-                    <span className="bg-white px-1 border border-border">
+                <div className="space-y-2.5 pt-2 border-t border-border">
+                  <div className="flex items-center justify-between text-[10px] text-muted">
+                    <span className="font-bold text-foreground">Report generated</span>
+                    <span className="bg-surface px-1 border border-border">
                       {aiReport.provider}
                     </span>
                   </div>
 
                   {/* OBSERVED SECTION */}
-                  <div className="bg-white p-2.5 brutal-border border-blue-900 space-y-1">
-                    <div className="font-bold text-blue-900 uppercase text-[10px] flex items-center gap-1">
+                  <div className="bg-surface p-2.5 brutal-border border-blue-900 space-y-1">
+                    <div className="font-bold text-blue-900 text-[10px] flex items-center gap-1">
                       <span className="w-2 h-2 bg-blue-600"></span>
-                      1. OBSERVED (DIRECTLY VISIBLE)
+                      1. Observed (directly visible)
                     </div>
-                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-slate-800">
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-foreground">
                       {aiReport.observed.map((obs, i) => (
                         <li key={i}>{obs}</li>
                       ))}
@@ -554,12 +554,12 @@ export function ParticleAnalyzer() {
                   </div>
 
                   {/* INTERPRETED SECTION */}
-                  <div className="bg-white p-2.5 brutal-border border-amber-800 space-y-1">
-                    <div className="font-bold text-amber-800 uppercase text-[10px] flex items-center gap-1">
+                  <div className="bg-surface p-2.5 brutal-border border-amber-800 space-y-1">
+                    <div className="font-bold text-amber-800 text-[10px] flex items-center gap-1">
                       <span className="w-2 h-2 bg-amber-500"></span>
-                      2. INTERPRETED (PLAUSIBLE PHYSICS)
+                      2. Interpreted (plausible physics)
                     </div>
-                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-slate-800">
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-foreground">
                       {aiReport.interpreted.map((int, i) => (
                         <li key={i}>{int}</li>
                       ))}
@@ -567,12 +567,12 @@ export function ParticleAnalyzer() {
                   </div>
 
                   {/* UNCERTAIN SECTION */}
-                  <div className="bg-white p-2.5 brutal-border border-red-800 space-y-1">
-                    <div className="font-bold text-red-800 uppercase text-[10px] flex items-center gap-1">
+                  <div className="bg-surface p-2.5 brutal-border border-red-800 space-y-1">
+                    <div className="font-bold text-red-800 text-[10px] flex items-center gap-1">
                       <span className="w-2 h-2 bg-red-500"></span>
-                      3. UNCERTAIN (REQUIRES FOLLOW-UP)
+                      3. Uncertain (requires follow-up)
                     </div>
-                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-slate-800">
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] font-sans text-foreground">
                       {aiReport.uncertain.map((unc, i) => (
                         <li key={i}>{unc}</li>
                       ))}
@@ -581,7 +581,7 @@ export function ParticleAnalyzer() {
 
                   {/* RECOMMENDED FOLLOW-UP TECHNIQUES */}
                   <div className="bg-emerald-50 p-2 border border-emerald-300 text-[11px] font-sans text-emerald-950 space-y-1">
-                    <span className="font-bold font-mono text-[10px] uppercase text-emerald-800 block">
+                    <span className="font-bold font-mono text-[10px] text-emerald-800 block">
                       Recommended Follow-up Techniques:
                     </span>
                     <ul className="list-disc list-inside space-y-0.5">

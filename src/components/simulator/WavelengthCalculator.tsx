@@ -24,17 +24,17 @@ export function WavelengthCalculator() {
   return (
     <div className="space-y-6">
       {/* Intro Header */}
-      <div className="border-b-2 border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="border-b border-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-xl font-black font-sans uppercase">
-            01 / RELATIVISTIC ELECTRON WAVELENGTH CALCULATOR
+          <h3 className="text-xl font-semibold font-sans">
+            Relativistic electron wavelength calculator
           </h3>
-          <p className="text-xs font-mono text-slate-600">
+          <p className="text-xs font-mono text-muted">
             Grounded in Williams & Carter Chapter 1: "The Transmission Electron Microscope"
           </p>
         </div>
         <ScientificBadge variant="cyan" hasDot>
-          RELATIVISTIC DE BROGLIE
+          Relativistic de Broglie
         </ScientificBadge>
       </div>
 
@@ -44,9 +44,9 @@ export function WavelengthCalculator() {
           <BrutalCard
             variant="default"
             shadowSize="md"
-            titleBar="ACCELERATING VOLTAGE CONTROLLER"
+            titleBar="Accelerating voltage controller"
             titleBarBadge="HT"
-            className="bg-white"
+            className="bg-surface"
           >
             <div className="space-y-5">
               <ParameterSlider
@@ -61,8 +61,8 @@ export function WavelengthCalculator() {
               />
 
               {/* Typical Voltage Presets */}
-              <div className="space-y-2 pt-2 border-t border-slate-200">
-                <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">
+              <div className="space-y-2 pt-2 border-t border-line">
+                <span className="text-[10px] font-mono font-bold text-muted block">
                   Quick Laboratory Presets:
                 </span>
                 <div className="space-y-1.5">
@@ -72,8 +72,8 @@ export function WavelengthCalculator() {
                       onClick={() => setVoltageKV(tv.kv)}
                       className={`w-full text-left p-2 border font-mono text-xs transition-all flex items-center justify-between ${
                         voltageKV === tv.kv
-                          ? "bg-foreground text-background border-border font-bold shadow-neo-xs"
-                          : "bg-surface hover:bg-surface-warm border-slate-300"
+                          ? "bg-inverse text-inverse-fg border-border font-bold shadow-neo-xs"
+                          : "bg-surface hover:bg-surface-warm border-line"
                       }`}
                     >
                       <span>{tv.label}</span>
@@ -86,15 +86,15 @@ export function WavelengthCalculator() {
           </BrutalCard>
 
           {/* Equation Breakdown Box */}
-          <div className="brutal-border bg-[#F4EFE6] p-4 text-xs font-mono space-y-2">
-            <div className="font-bold text-slate-900 uppercase flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-[#FF5722]" />
+          <div className="brutal-border bg-surface-2 p-4 text-xs font-mono space-y-2">
+            <div className="font-bold text-foreground flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5 text-accent" />
               The Relativistic de Broglie Equation:
             </div>
-            <div className="bg-white p-2.5 brutal-border text-[11px] text-center font-bold text-slate-800">
+            <div className="bg-surface p-2.5 brutal-border text-[11px] text-center font-bold text-foreground">
               λ = h / √[ 2 m₀ e V ( 1 + e V / (2 m₀ c²) ) ]
             </div>
-            <p className="text-[11px] text-slate-700 leading-relaxed font-sans">
+            <p className="text-[11px] text-foreground leading-relaxed font-sans">
               As accelerating voltage V increases, electrons gain relativistic momentum p. Because λ = h / p, higher voltage yields a dramatically shorter wavelength.
             </p>
           </div>
@@ -107,17 +107,17 @@ export function WavelengthCalculator() {
             <BrutalCard
               variant="cyan"
               shadowSize="md"
-              titleBar="RELATIVISTIC WAVELENGTH (λ)"
-              className="bg-[#E0F7FE]"
+              titleBar="Relativistic wavelength (λ)"
+              className="bg-surface-2"
             >
               <div className="space-y-1">
-                <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-[#0369A1]">
+                <div className="text-3xl sm:text-4xl font-semibold font-mono tracking-tight text-[#0369A1]">
                   {physics.wavelengthNm.toFixed(5)} <span className="text-lg">nm</span>
                 </div>
-                <div className="text-sm font-mono font-bold text-slate-700">
+                <div className="text-sm font-mono font-bold text-foreground">
                   = {physics.wavelengthPm.toFixed(2)} picometers (pm)
                 </div>
-                <div className="text-xs font-mono text-slate-600">
+                <div className="text-xs font-mono text-muted">
                   = {physics.wavelengthAngstrom.toFixed(4)} Ångströms (Å)
                 </div>
               </div>
@@ -126,17 +126,17 @@ export function WavelengthCalculator() {
             <BrutalCard
               variant="amber"
               shadowSize="md"
-              titleBar="ELECTRON SPEED & KINEMATICS"
-              className="bg-[#FEF3C7]"
+              titleBar="Electron speed & kinematics"
+              className="bg-surface-2"
             >
               <div className="space-y-1">
-                <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-[#B45309]">
+                <div className="text-3xl sm:text-4xl font-semibold font-mono tracking-tight text-[#B45309]">
                   {(physics.velocityFractionC * 100).toFixed(1)}% <span className="text-lg">c</span>
                 </div>
-                <div className="text-sm font-mono font-bold text-slate-700">
+                <div className="text-sm font-mono font-bold text-foreground">
                   v = {(physics.velocityMs / 1e8).toFixed(2)} × 10⁸ m/s
                 </div>
-                <div className="text-xs font-mono text-slate-600">
+                <div className="text-xs font-mono text-muted">
                   Lorentz factor γ = {physics.gamma.toFixed(3)}
                 </div>
               </div>
@@ -144,10 +144,10 @@ export function WavelengthCalculator() {
           </div>
 
           {/* Relativistic vs Non-Relativistic Error Box */}
-          <BrutalCard variant="default" shadowSize="sm" className="bg-white">
+          <BrutalCard variant="default" shadowSize="sm" className="bg-surface">
             <div className="space-y-3 font-mono text-xs">
               <div className="flex items-center justify-between border-b pb-2">
-                <span className="font-bold text-slate-900 uppercase">
+                <span className="font-bold text-foreground">
                   Why Classical Physics Fails at {voltageKV} kV:
                 </span>
                 <span className="bg-[#EF4444] text-white px-1.5 py-0.5 text-[10px] font-bold">
@@ -156,12 +156,12 @@ export function WavelengthCalculator() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-[11px]">
-                <div className="p-2 bg-slate-50 border border-slate-200 space-y-0.5">
-                  <div className="text-slate-500">Non-Relativistic (Classical):</div>
-                  <div className="font-bold text-slate-800">
+                <div className="p-2 bg-surface-2 border border-line space-y-0.5">
+                  <div className="text-muted">Non-Relativistic (Classical):</div>
+                  <div className="font-bold text-foreground">
                     {physics.nonRelativisticWavelengthNm.toFixed(5)} nm
                   </div>
-                  <div className="text-[10px] text-slate-400">λ₀ = h / √(2 m₀ e V)</div>
+                  <div className="text-[10px] text-faint">λ₀ = h / √(2 m₀ e V)</div>
                 </div>
 
                 <div className="p-2 bg-emerald-50 border border-emerald-200 space-y-0.5">
@@ -173,36 +173,36 @@ export function WavelengthCalculator() {
                 </div>
               </div>
 
-              <p className="text-[11px] font-sans text-slate-600">
+              <p className="text-[11px] font-sans text-muted">
                 In Carter Chapter 1, it is noted that overlooking relativity at 200 kV introduces an error of nearly 8.5%, which would completely ruin lattice fringe indexing and camera constant calibrations!
               </p>
             </div>
           </BrutalCard>
 
           {/* Bragg Angle for Silicon (111) */}
-          <BrutalCard variant="warm" shadowSize="sm" className="bg-[#F4EFE6]">
+          <BrutalCard variant="warm" shadowSize="sm" className="bg-surface-2">
             <div className="space-y-2 font-mono text-xs">
-              <div className="font-bold text-slate-900 uppercase flex items-center justify-between">
+              <div className="font-bold text-foreground flex items-center justify-between">
                 <span>Bragg Angle for Silicon (111) [d = 0.3135 nm]:</span>
-                <span className="text-[10px] bg-white px-2 py-0.5 border border-border">
+                <span className="text-[10px] bg-surface px-2 py-0.5 border border-border">
                   2d sin(θ) = λ
                 </span>
               </div>
               <div className="grid grid-cols-3 gap-2 text-center pt-1">
-                <div className="bg-white p-2 border border-border">
-                  <div className="text-[10px] text-slate-500">θ_B (mrad)</div>
+                <div className="bg-surface p-2 border border-border">
+                  <div className="text-[10px] text-muted">θ_B (mrad)</div>
                   <div className="font-bold text-sm text-[#0284C7]">{thetaMrad.toFixed(2)} mrad</div>
                 </div>
-                <div className="bg-white p-2 border border-border">
-                  <div className="text-[10px] text-slate-500">θ_B (degrees)</div>
+                <div className="bg-surface p-2 border border-border">
+                  <div className="text-[10px] text-muted">θ_B (degrees)</div>
                   <div className="font-bold text-sm text-foreground">{thetaDeg.toFixed(3)}°</div>
                 </div>
-                <div className="bg-white p-2 border border-border">
-                  <div className="text-[10px] text-slate-500">Deflection 2θ</div>
-                  <div className="font-bold text-sm text-[#FF5722]">{(thetaDeg * 2).toFixed(3)}°</div>
+                <div className="bg-surface p-2 border border-border">
+                  <div className="text-[10px] text-muted">Deflection 2θ</div>
+                  <div className="font-bold text-sm text-accent">{(thetaDeg * 2).toFixed(3)}°</div>
                 </div>
               </div>
-              <p className="text-[10px] font-sans text-slate-600">
+              <p className="text-[10px] font-sans text-muted">
                 Because θ_B is tiny (&lt; 0.5°), the small-angle approximation sin(θ) ≈ θ holds with extraordinary precision in TEM.
               </p>
             </div>
