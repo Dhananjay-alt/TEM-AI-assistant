@@ -23,7 +23,7 @@ export function sourceLabel(s: RetrievedSource): string {
   const parts: string[] = [];
   if (s.chapterNumber) parts.push(`Chapter ${s.chapterNumber}${s.chapterTitle ? `: ${s.chapterTitle}` : ""}`);
   else if (s.chapterTitle) parts.push(s.chapterTitle);
-  if (s.kind === "pdf") parts.push(`p. ${s.pageLabel || s.pdfPage}`);
+  if (s.kind === "pdf" || s.kind === "ref") parts.push(`p. ${s.pageLabel || s.pdfPage || s.page}`);
   else parts.push(`Section ${s.sectionNumber}, approx. pp. ${s.page}-${s.pageEnd}`);
   return parts.join(", ");
 }
@@ -103,5 +103,61 @@ export function markSupportingLines(sources: RetrievedSource[], answer: string, 
       }
     }
     src.focus = bestScore > 0 ? Array.from({ length: span }, (_, k) => best + k) : [];
+  });
+}
+
+/** Longest quotation that is ever sent to a visitor of the public site. */
+const MAX_QUOTE_CHARS = 220;
+
+function shortQuote(src: RetrievedSource): string {
+  const segments = src.segments || [];
+  const picked = (src.focus && src.focus.length > 0 ? src.focus : [0, 1]).map((i) => segments[i]).filter(Boolean);
+  let text = "";
+  for (const line of picked) {
+    if (text.endsWith("-") && /^[a-z]/.test(line)) text = text.slice(0, -1) + line;
+    else text += (text ? " " : "") + line;
+  }
+  text = text.replace(/\s+/g, " ").trim();
+  if (text.length <= MAX_QUOTE_CHARS) return text;
+  const cut = text.slice(0, MAX_QUOTE_CHARS);
+  return cut.slice(0, Math.max(cut.lastIndexOf(" "), MAX_QUOTE_CHARS - 30)).trimEnd() + "…";
+}
+
+function describePosition(src: RetrievedSource): string | undefined {
+  const rects = src.rects || [];
+  const r = rects[src.focus && src.focus.length > 0 ? src.focus[0] : 0];
+  if (!r) return undefined;
+  const [x, y, w] = r;
+  const vertical = y < 0.36 ? "upper part of the page" : y < 0.64 ? "middle of the page" : "lower part of the page";
+  if (w > 0.6) return vertical;
+  return `${x + w / 2 < 0.5 ? "left" : "right"} column, ${vertical}`;
+}
+
+/**
+ * Reduces textbook sources to what the public site may show: where the
+ * passage is (chapter, section, printed page, position on the page) and one
+ * short quotation. The passage text, its line positions and the PDF page
+ * reference are dropped, so the book cannot be read or rebuilt from the site.
+ */
+export function toReferenceSources(sources: RetrievedSource[]): RetrievedSource[] {
+  return sources.map((s) => {
+    if (s.kind !== "pdf") return s;
+    return {
+      kind: "ref" as const,
+      book: s.book,
+      chapterNumber: s.chapterNumber,
+      chapterTitle: s.chapterTitle,
+      sectionNumber: s.sectionNumber,
+      sectionTitle: s.sectionTitle,
+      page: s.page,
+      pageEnd: s.pageEnd,
+      pageLabel: s.pageLabel,
+      chunkId: s.chunkId,
+      relevanceScore: s.relevanceScore,
+      excerpt: shortQuote(s),
+      summary: "",
+      pedagogicalKeyPoints: [],
+      position: describePosition(s),
+    };
   });
 }

@@ -22,8 +22,14 @@ export interface RetrievedSource {
   pedagogicalKeyPoints: string[];
   formulas?: string[];
   figureRef?: string;
-  /** "pdf": a passage of the indexed textbook PDF. "excerpt": a stored summary (no real page). */
-  kind?: "pdf" | "excerpt";
+  /**
+   * "pdf": a passage of the indexed textbook, shown on its page (local use only).
+   * "ref": a pointer into the textbook: chapter, section, page and a short quotation.
+   * "excerpt": a stored summary (no real page).
+   */
+  kind?: "pdf" | "ref" | "excerpt";
+  /** Where on the page the quoted lines sit, e.g. "left column, upper part of the page". */
+  position?: string;
   /** 1-based page in the PDF file (pdf sources only). */
   pdfPage?: number;
   /** Page number as printed in the book, when the PDF provides it. */

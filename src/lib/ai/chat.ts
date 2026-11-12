@@ -5,8 +5,8 @@
 import { getGenAIClient, IS_LIVE_AI_AVAILABLE, AI_CONFIG } from "./client";
 import { SYSTEM_PROMPTS } from "./prompts";
 import { retrieveCarterKnowledge, RetrievedSource } from "@/lib/rag/vector-search";
-import { retrieveSources, markSupportingLines, sourceLabel } from "@/lib/rag/retrieve";
-import { tokenize } from "@/lib/rag/book-index";
+import { retrieveSources, markSupportingLines, sourceLabel, toReferenceSources } from "@/lib/rag/retrieve";
+import { tokenize, ensureBook, bookView } from "@/lib/rag/book-index";
 
 export type ChatMode = "ASK" | "TUTOR" | "EXAM" | "EXPERIMENT";
 
@@ -39,8 +39,12 @@ export async function generateCarterChatResponse(
   const isFollowUp = Boolean(lastUserMsg && tokenize(query).length <= 2);
   const ragQuery = isFollowUp && lastUserMsg ? `${lastUserMsg.content} ${query}` : query;
 
+  // The index may live in private storage; make sure it is in memory first.
+  await ensureBook();
   const retrieval = retrieveSources(ragQuery, 4);
   const sources = retrieval.sources;
+  // Off the local machine, visitors get references to the book, never its pages.
+  const present = (list: RetrievedSource[]) => (bookView() === "reference" ? toReferenceSources(list) : list);
 
   // 2. Instructions for the selected mode
   let modeInstruction = SYSTEM_PROMPTS.ASK_MODE;
@@ -85,7 +89,7 @@ export async function generateCarterChatResponse(
           answer: text,
           fromCarter: "",
           additionalExplanation: "",
-          citations: sources,
+          citations: present(sources),
           mode,
           isLiveAi: true,
           provider: AI_CONFIG.provider,
@@ -101,14 +105,14 @@ export async function generateCarterChatResponse(
   if (retrieval.fromPdf) {
     // Without a model we do not paraphrase the book: we point to the passages.
     const answer =
-      "The language model is not available, so this is a list of the most relevant passages rather than a written answer. Select a reference to open the page.\n\n" +
+      "The language model is not available, so this is a list of the most relevant passages rather than a written answer. Select a reference to see where it is in the book.\n\n" +
       sources.map((s, i) => `- ${sourceLabel(s)} [${i + 1}]`).join("\n");
     markSupportingLines(sources, "", query);
     return {
       answer,
       fromCarter: "",
       additionalExplanation: "",
-      citations: sources,
+      citations: present(sources),
       mode,
       isLiveAi: false,
       provider: "Offline (passage search only)",
