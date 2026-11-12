@@ -99,7 +99,7 @@ export function MessageItem({
                       </span>
                     </span>
                     <span className="mt-0.5 hidden shrink-0 text-xs text-accent sm:block">
-                      {src.kind === "pdf" ? "Open page" : "View passage"}
+                      {src.kind === "pdf" ? "Open page" : src.kind === "ref" ? "View reference" : "View passage"}
                     </span>
                   </button>
                 </li>

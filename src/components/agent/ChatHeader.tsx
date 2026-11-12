@@ -8,6 +8,8 @@ export interface BookStatus {
   available: boolean;
   title?: string;
   numPages?: number;
+  /** "pages": references open the page itself. "reference": page number and a short quotation only. */
+  view?: "pages" | "reference";
 }
 
 interface ChatHeaderProps {
@@ -41,9 +43,11 @@ export function ChatHeader({ sidebarOpen, onToggleSidebar, onNewChat, title, boo
         <div
           className="hidden items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-xs text-muted sm:flex"
           title={
-            book.available
+            !book.available
+              ? "Put the textbook PDF in the book folder and run: npm run index-book"
+              : book.view === "pages"
               ? "References open the page of this PDF"
-              : "Put the textbook PDF in the book folder and run: npm run index-book"
+              : "References give the chapter, section and page of this book"
           }
         >
           <BookOpen className="h-3.5 w-3.5 shrink-0" />

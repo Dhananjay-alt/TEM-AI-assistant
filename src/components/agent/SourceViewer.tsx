@@ -53,7 +53,7 @@ export function sourceTitle(s: RetrievedSource): string {
 }
 
 export function sourceLocator(s: RetrievedSource): string {
-  if (s.kind === "pdf") return `p. ${s.pageLabel || s.pdfPage}`;
+  if (s.kind === "pdf" || s.kind === "ref") return `p. ${s.pageLabel || s.pdfPage || s.page}`;
   return `§${s.sectionNumber} · approx. pp. ${s.page}–${s.pageEnd}`;
 }
 
@@ -87,8 +87,60 @@ export function SourceViewer({ source, index, onClose }: SourceViewerProps) {
         </button>
       </header>
 
-      {isPdf ? <PdfPage source={source} /> : <ExcerptView source={source} />}
+      {isPdf ? (
+        <PdfPage source={source} />
+      ) : source.kind === "ref" ? (
+        <ReferenceView source={source} />
+      ) : (
+        <ExcerptView source={source} />
+      )}
     </aside>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+
+/** Public site: where the passage is in the book, and one short quotation. */
+function ReferenceView({ source }: { source: RetrievedSource }) {
+  const rows: Array<[string, string]> = [];
+  if (source.book) rows.push(["Book", source.book]);
+  if (source.chapterNumber || source.chapterTitle) {
+    rows.push(["Chapter", [source.chapterNumber || "", source.chapterTitle].filter(Boolean).join(" · ")]);
+  }
+  if (source.sectionTitle) rows.push(["Section", source.sectionTitle]);
+  rows.push(["Page", String(source.pageLabel || source.page)]);
+  if (source.position) rows.push(["On the page", source.position]);
+
+  return (
+    <div className="flex-1 overflow-y-auto px-5 py-5">
+      <dl className="overflow-hidden rounded-md border border-line">
+        {rows.map(([label, value]) => (
+          <div key={label} className="flex gap-4 border-b border-line px-3.5 py-2.5 last:border-b-0">
+            <dt className="w-24 shrink-0 text-xs font-medium uppercase tracking-wide text-faint">{label}</dt>
+            <dd className="min-w-0 flex-1 text-sm text-foreground">{value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      {source.excerpt && (
+        <figure className="mt-6">
+          <figcaption className="mb-1.5 text-xs font-medium uppercase tracking-wide text-faint">
+            The passage begins
+          </figcaption>
+          <blockquote className="border-l-2 border-accent pl-4 font-serif text-[16px] leading-8 text-foreground">
+            <span className="source-mark">{source.excerpt}</span>
+          </blockquote>
+        </figure>
+      )}
+
+      <div className="mt-6 flex gap-2.5 rounded-md border border-line bg-surface-2 p-3 text-xs leading-5 text-muted">
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        <p>
+          Open your own copy of the book at this page to read the passage in full. The pages of the book are not
+          shown on this site.
+        </p>
+      </div>
+    </div>
   );
 }
 

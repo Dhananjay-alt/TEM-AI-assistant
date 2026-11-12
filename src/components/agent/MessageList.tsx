@@ -9,6 +9,7 @@ interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
   bookTitle?: string;
+  showsPages?: boolean;
   activeCitation: { messageId: string; index: number } | null;
   onOpenCitation: (messageId: string, index: number) => void;
   onSelectPrompt: (prompt: string) => void;
@@ -19,6 +20,7 @@ export function MessageList({
   messages,
   isLoading,
   bookTitle,
+  showsPages,
   activeCitation,
   onOpenCitation,
   onSelectPrompt,
@@ -33,7 +35,7 @@ export function MessageList({
   if (messages.length === 0 && !isLoading) {
     return (
       <div className="flex-1 overflow-y-auto">
-        <EmptyState onSelectPrompt={onSelectPrompt} bookTitle={bookTitle} />
+        <EmptyState onSelectPrompt={onSelectPrompt} bookTitle={bookTitle} showsPages={showsPages} />
       </div>
     );
   }

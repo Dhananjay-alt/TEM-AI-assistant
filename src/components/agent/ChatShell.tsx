@@ -201,7 +201,11 @@ export function ChatShell() {
         }),
       });
 
-      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      if (!res.ok) {
+        // the server explains what went wrong (rate limit, question too long, ...)
+        const problem = await res.json().catch(() => null);
+        throw new Error(problem?.error || "");
+      }
 
       const data: ChatResponse = await res.json();
 
@@ -236,8 +240,7 @@ export function ChatShell() {
       const errorMessage: Message = {
         id: `asst-err-${Date.now()}`,
         role: "assistant",
-        content:
-          "The request could not be completed. Check that the server is running, then try again.",
+        content: err?.message || "The request could not be completed. Check your connection and try again.",
         mode: currentMode,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
@@ -306,6 +309,7 @@ export function ChatShell() {
           messages={messages}
           isLoading={isLoading}
           bookTitle={book?.available ? book.title : undefined}
+          showsPages={book?.view === "pages"}
           activeCitation={openCitation}
           onOpenCitation={handleOpenCitation}
           onSelectPrompt={(prompt) => handleSend(prompt)}
