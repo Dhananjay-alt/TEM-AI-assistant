@@ -40,7 +40,7 @@ export function retrieveSources(query: string, topK = 4): RetrievalResult {
       book: h.bookTitle,
       chapterNumber: h.chapterNumber,
       chapterTitle: h.chapterTitle,
-      sectionNumber: "",
+      sectionNumber: h.sectionNumber,
       sectionTitle: h.sectionTitle,
       page: h.passage.page,
       pageEnd: h.passage.page,

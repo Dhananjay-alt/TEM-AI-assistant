@@ -113,6 +113,15 @@ export function loadBook(): LoadedBook | null {
   }
 }
 
+/** The PDF's own title, or its first bookmark when the title is just the file name. */
+function displayTitle(book: LoadedBook): string {
+  const { title, file, outline } = book.data;
+  const first = outline[0];
+  const isFileName = title === file.replace(/\.pdf$/i, "");
+  if (isFileName && first && first.level === 0 && first.page <= 5 && first.title.length > 3) return first.title;
+  return title;
+}
+
 export interface BookStatus {
   available: boolean;
   title?: string;
@@ -126,7 +135,7 @@ export function getBookStatus(): BookStatus {
   if (!fs.existsSync(path.join(BOOK_DIR, book.data.file))) return { available: false };
   return {
     available: true,
-    title: book.data.title,
+    title: displayTitle(book),
     numPages: book.data.numPages,
     passages: book.data.passages.length,
   };
@@ -148,23 +157,67 @@ export interface BookHit {
   chapterNumber: number;
   chapterTitle: string;
   sectionTitle: string;
+  sectionNumber: string;
+}
+
+const ACRONYMS = "TEM STEM SEM HRTEM CBED SAD SAED EELS XEDS EDS WDS FEG CCD HOLZ ZOLZ FOLZ BF DF WBDF CTF DP DPs ADF HAADF EFTEM ELNES EXELFS AEM".split(" ");
+
+/** Bookmark titles written in capitals ("1.2 WHY USE ELECTRONS?") are shown in sentence case. */
+function tidyTitle(title: string): string {
+  if (/[a-z]/.test(title)) return title;
+  let seenWord = false;
+  return title
+    .split(/(\s+|-)/)
+    .map((word) => {
+      if (!/[A-Z]/.test(word)) return word;
+      const acronym = ACRONYMS.find((a) => a.toUpperCase() === word.replace(/[^A-Z]/gi, "").toUpperCase());
+      if (acronym) {
+        seenWord = true;
+        return word.replace(/[A-Za-z]+/, acronym);
+      }
+      const lower = word.toLowerCase();
+      if (seenWord) return lower;
+      seenWord = true;
+      return lower.replace(/[a-z]/, (c) => c.toUpperCase());
+    })
+    .join("");
 }
 
 function locate(book: LoadedBook, page: number) {
-  let chapter: OutlineEntry | null = null;
+  const outline = book.data.outline;
+  const isChapter = (e: OutlineEntry, i: number) =>
+    e.level === 0 && i > 0 && !/^(part\s+\d+|index|contents|preface|foreword)\b/i.test(e.title);
+
+  let chapterIdx = -1;
+  let chapterCount = 0;
+  let chapterNumber = 0;
   let section: OutlineEntry | null = null;
-  for (const entry of book.data.outline) {
+  for (let i = 0; i < outline.length; i++) {
+    const entry = outline[i];
     if (entry.page > page) break;
-    // chapters are the entries whose title starts with a number, else top-level ones
-    if (/^(chapter\s+)?\d+[\s.:]/i.test(entry.title) && entry.level <= 1) chapter = entry;
-    else if (entry.level === 0 && !chapter) chapter = entry;
-    section = entry;
+    if (entry.level === 0) {
+      section = null;
+      if (isChapter(entry, i)) {
+        chapterIdx = i;
+        chapterCount++;
+        // prefer the number printed in the chapter's own headings ("12.3 ...")
+        const own = entry.title.match(/^(?:chapter\s+)?(\d+)[\s.:]/i) || outline[i + 1]?.title.match(/^(\d+)\./);
+        chapterNumber = own && outline[i + 1]?.level !== 0 ? parseInt(own[1], 10) : chapterCount;
+      } else {
+        chapterIdx = -1;
+      }
+    } else {
+      section = entry;
+    }
   }
-  const m = chapter?.title.match(/^(?:chapter\s+)?(\d+)[\s.:]+(.*)$/i);
+
+  const chapter = chapterIdx >= 0 ? outline[chapterIdx] : null;
+  const sectionMatch = section?.title.match(/^(\d+(?:\.[\dA-Z]+)*)\s+(.*)$/);
   return {
-    chapterNumber: m ? parseInt(m[1], 10) : 0,
-    chapterTitle: m ? m[2].trim() : chapter?.title || "",
-    sectionTitle: section && section !== chapter ? section.title : "",
+    chapterNumber: chapter ? chapterNumber : 0,
+    chapterTitle: chapter ? chapter.title.replace(/^(?:chapter\s+)?\d+[\s.:]+/i, "").trim() : "",
+    sectionTitle: section ? tidyTitle(section.title) : "",
+    sectionNumber: sectionMatch ? sectionMatch[1] : "",
   };
 }
 
@@ -194,16 +247,21 @@ export function searchBook(query: string, topK = 4): BookHit[] {
 
   const ranked = Array.from(scores.entries()).sort((a, c) => c[1] - a[1]);
   const hits: BookHit[] = [];
-  for (const [idx, score] of ranked) {
+  const outside: BookHit[] = [];
+  for (const [idx, score] of ranked.slice(0, topK * 6)) {
     if (hits.length >= topK) break;
     const passage = book.data.passages[idx];
-    hits.push({
+    const hit: BookHit = {
       passage,
       score,
-      bookTitle: book.data.title,
+      bookTitle: displayTitle(book),
       pageLabel: pageLabelOf(book, passage.page),
       ...locate(book, passage.page),
-    });
+    };
+    // The table of contents and the index match almost every query but explain
+    // nothing, so passages outside a chapter are only used as a last resort.
+    if (hit.chapterTitle) hits.push(hit);
+    else outside.push(hit);
   }
-  return hits;
+  return hits.length > 0 ? hits : outside.slice(0, topK);
 }

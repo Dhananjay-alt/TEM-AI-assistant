@@ -6,6 +6,7 @@ import { getGenAIClient, IS_LIVE_AI_AVAILABLE, AI_CONFIG } from "./client";
 import { SYSTEM_PROMPTS } from "./prompts";
 import { retrieveCarterKnowledge, RetrievedSource } from "@/lib/rag/vector-search";
 import { retrieveSources, markSupportingLines, sourceLabel } from "@/lib/rag/retrieve";
+import { tokenize } from "@/lib/rag/book-index";
 
 export type ChatMode = "ASK" | "TUTOR" | "EXAM" | "EXPERIMENT";
 
@@ -33,10 +34,9 @@ export async function generateCarterChatResponse(
 ): Promise<ChatResponse> {
   // 1. Short follow-ups ("why?", "and for 300 kV?") are searched together with the previous question
   const lastUserMsg = history?.filter((h) => h.role === "user").slice(-1)[0];
-  const isFollowUp = Boolean(
-    lastUserMsg &&
-    (query.length < 45 || /^(summary|summarize|explain|what about|how about|why|compare|and|now|give me|tell me)\b/i.test(query.trim()))
-  );
+  // Only questions with almost no subject of their own lean on the previous one;
+  // a short but complete question ("How do Kikuchi lines form?") is searched alone.
+  const isFollowUp = Boolean(lastUserMsg && tokenize(query).length <= 2);
   const ragQuery = isFollowUp && lastUserMsg ? `${lastUserMsg.content} ${query}` : query;
 
   const retrieval = retrieveSources(ragQuery, 4);
