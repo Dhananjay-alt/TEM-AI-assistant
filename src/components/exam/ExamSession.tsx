@@ -150,7 +150,7 @@ export function ExamSession() {
                   setCurrentQuestionIndex(0);
                   setIsEvaluated(false);
                 }}
-                className={`px-2 py-0.5 border text-[11px] ${
+                className={`whitespace-nowrap rounded border border-line px-2.5 py-1 text-[11px] ${
                   selectedTopic === t
                     ? "bg-inverse text-inverse-fg font-bold border-border"
                     : "bg-surface text-foreground hover:bg-surface-2"
@@ -162,7 +162,7 @@ export function ExamSession() {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="font-bold text-foreground">Type:</span>
           {["All", "MCQ", "2 MARK", "5 MARK", "10 MARK", "VIVA"].map((typ) => (
             <button
@@ -172,7 +172,7 @@ export function ExamSession() {
                 setCurrentQuestionIndex(0);
                 setIsEvaluated(false);
               }}
-              className={`px-2 py-0.5 border text-[11px] ${
+              className={`whitespace-nowrap rounded border border-line px-2.5 py-1 text-[11px] ${
                 selectedType === typ
                   ? "bg-accent-strong text-white font-bold border-border"
                   : "bg-surface text-foreground hover:bg-surface-2"

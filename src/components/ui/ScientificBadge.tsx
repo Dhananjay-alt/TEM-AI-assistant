@@ -27,7 +27,7 @@ export function ScientificBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded border border-line bg-surface px-2 py-0.5 text-[11px] font-medium text-muted",
+        "inline-flex shrink-0 items-center gap-1.5 self-start rounded border sm:self-auto border-line bg-surface px-2 py-0.5 text-[11px] font-medium text-muted",
         className
       )}
       {...props}

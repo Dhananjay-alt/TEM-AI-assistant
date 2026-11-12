@@ -127,6 +127,13 @@
   color: inherit;
 }
 
+/* Long equations scroll inside their own line instead of widening the page */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
 /* Highlights drawn over the rendered PDF page (always a white page) */
 .pdf-hl {
   position: absolute;

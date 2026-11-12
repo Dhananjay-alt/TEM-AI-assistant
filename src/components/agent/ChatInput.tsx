@@ -55,7 +55,7 @@ export function ChatInput({
   const canSend = inputQuery.trim().length > 0 && !isLoading;
 
   return (
-    <div className="border-t border-line bg-background px-4 pb-3 pt-3 sm:px-6">
+    <div className="border-t border-line bg-background px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:px-6">
       <div className="mx-auto w-full max-w-3xl">
         <div className="rounded-xl border border-line-strong bg-surface focus-within:border-accent transition-colors">
           <label htmlFor="chat-input" className="sr-only">
@@ -74,7 +74,7 @@ export function ChatInput({
               }
             }}
             placeholder="Ask a question about transmission electron microscopy"
-            className="block w-full resize-none bg-transparent px-4 pt-3 text-[15px] leading-6 text-foreground placeholder:text-faint focus:outline-none"
+            className="block w-full resize-none bg-transparent px-4 pt-3 text-base leading-6 sm:text-[15px] text-foreground placeholder:text-faint focus:outline-none"
           />
 
           <div className="flex flex-wrap items-center gap-2 px-2.5 pb-2.5 pt-2">
@@ -130,7 +130,7 @@ export function ChatInput({
             </button>
           </div>
         </div>
-        <p className="mt-2 text-center text-[11px] text-faint">
+        <p className="mt-2 text-center text-[11px] leading-4 text-faint">
           Answers are generated from the indexed text and can be wrong. Check the cited passage before relying on one.
         </p>
       </div>

@@ -62,7 +62,7 @@ export function SourceViewer({ source, index, onClose }: SourceViewerProps) {
 
   return (
     <aside
-      className="fixed inset-0 z-50 flex flex-col bg-surface lg:static lg:z-auto lg:h-full lg:w-[46%] lg:min-w-[380px] lg:max-w-[760px] lg:shrink-0 lg:border-l lg:border-line"
+      className="fixed inset-x-0 top-0 z-50 flex h-[100dvh] flex-col bg-surface lg:static lg:z-auto lg:h-full lg:w-[46%] lg:min-w-[380px] lg:max-w-[760px] lg:shrink-0 lg:border-l lg:border-line"
       aria-label="Source viewer"
     >
       <header className="flex items-start gap-3 border-b border-line px-4 py-3">

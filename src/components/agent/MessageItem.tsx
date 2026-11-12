@@ -94,7 +94,7 @@ export function MessageItem({
                         <span className="font-medium text-foreground">{sourceTitle(src)}</span>
                         <span className="text-muted">{sourceLocator(src)}</span>
                       </span>
-                      <span className="mt-0.5 line-clamp-2 block text-[13px] leading-5 text-muted">
+                      <span className="mt-0.5 line-clamp-2 text-[13px] leading-5 text-muted">
                         {src.excerpt}
                       </span>
                     </span>

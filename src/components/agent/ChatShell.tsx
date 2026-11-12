@@ -282,7 +282,7 @@ export function ChatShell() {
   };
 
   return (
-    <div className="fixed inset-0 flex overflow-hidden bg-background text-foreground">
+    <div className="fixed inset-x-0 top-0 flex h-[100dvh] overflow-hidden bg-background text-foreground">
       <Sidebar
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
