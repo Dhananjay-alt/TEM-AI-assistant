@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "node scripts/copy-pdfjs.mjs",
-    "index-book": "node scripts/index-book.mjs"
+    "index-book": "node scripts/index-book.mjs",
+    "upload-book-index": "node scripts/upload-book-index.mjs"
   },
   "keywords": [],
   "author": "",

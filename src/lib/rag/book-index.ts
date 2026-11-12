@@ -1,13 +1,19 @@
 /**
- * Page-accurate retrieval over the locally indexed textbook PDF.
+ * Page-accurate retrieval over the indexed textbook.
  *
- * The index (book/index.json) is produced by `npm run index-book`. Each passage
- * keeps the lines it was built from together with their position on the page,
- * which is what lets the source viewer highlight the exact lines.
+ * The index is produced by `npm run index-book`. Each passage keeps the lines
+ * it was built from together with their position on the page.
+ *
+ * Where the index comes from:
+ *  - locally: book/index.json next to the PDF, which enables the page viewer;
+ *  - on a deployed site: a private object in storage, fetched by the server
+ *    and held in memory. Neither the PDF nor the index is ever sent to a
+ *    visitor, and neither belongs in the repository.
  */
 
 import fs from "node:fs";
 import path from "node:path";
+import zlib from "node:zlib";
 
 export interface BookLine {
   /** Text of the line. */
@@ -50,7 +56,10 @@ interface LoadedBook {
 export const BOOK_DIR = path.join(process.cwd(), "book");
 const INDEX_PATH = path.join(BOOK_DIR, "index.json");
 
-let cache: { mtimeMs: number; book: LoadedBook } | null = null;
+type Origin = "local" | "remote";
+let cache: { key: string; origin: Origin; book: LoadedBook } | null = null;
+let remoteLoad: Promise<LoadedBook | null> | null = null;
+let remoteFailedAt = 0;
 
 const STOPWORDS = new Set(
   "a an and are as at be been but by can could did do does for from had has have how if in into is it its may might more most must no nor not of on or our should so such than that the their them then there these they this those through to was we were what when where which while who why will with would you your about above after again against all also am any because before being below between both each few further here itself just me my off once only other out over own same some too under until up very".split(
@@ -71,46 +80,154 @@ export function tokenize(text: string): string[] {
   return out;
 }
 
-export function loadBook(): LoadedBook | null {
+function buildBook(data: BookIndexFile): LoadedBook | null {
+  if (!data || !Array.isArray(data.passages) || data.passages.length === 0) return null;
+  if (!Array.isArray(data.outline)) data.outline = [];
+
+  const postings = new Map<string, Array<[number, number]>>();
+  const docLen: number[] = [];
+  let total = 0;
+  data.passages.forEach((p, idx) => {
+    const tf = new Map<string, number>();
+    const tokens = tokenize(p.text);
+    for (const tok of tokens) tf.set(tok, (tf.get(tok) || 0) + 1);
+    docLen.push(tokens.length);
+    total += tokens.length;
+    tf.forEach((count, term) => {
+      let list = postings.get(term);
+      if (!list) {
+        list = [];
+        postings.set(term, list);
+      }
+      list.push([idx, count]);
+    });
+  });
+
+  return { data, postings, docLen, avgLen: total / Math.max(1, docLen.length) };
+}
+
+/** BOOK_SOURCE=remote ignores a local book folder (used to test the deployed set-up). */
+const localAllowed = () => process.env.BOOK_SOURCE !== "remote";
+
+function loadLocal(): LoadedBook | null {
+  if (!localAllowed()) return null;
   let stat: fs.Stats;
   try {
     stat = fs.statSync(INDEX_PATH);
   } catch {
-    cache = null;
+    if (cache?.origin === "local") cache = null;
     return null;
   }
-  if (cache && cache.mtimeMs === stat.mtimeMs) return cache.book;
+  const key = `local:${stat.mtimeMs}`;
+  if (cache && cache.key === key) return cache.book;
 
   try {
-    const data = JSON.parse(fs.readFileSync(INDEX_PATH, "utf8")) as BookIndexFile;
-    if (!Array.isArray(data.passages) || data.passages.length === 0) return null;
-
-    const postings = new Map<string, Array<[number, number]>>();
-    const docLen: number[] = [];
-    let total = 0;
-    data.passages.forEach((p, idx) => {
-      const tf = new Map<string, number>();
-      const tokens = tokenize(p.text);
-      for (const tok of tokens) tf.set(tok, (tf.get(tok) || 0) + 1);
-      docLen.push(tokens.length);
-      total += tokens.length;
-      tf.forEach((count, term) => {
-        let list = postings.get(term);
-        if (!list) {
-          list = [];
-          postings.set(term, list);
-        }
-        list.push([idx, count]);
-      });
-    });
-
-    const book: LoadedBook = { data, postings, docLen, avgLen: total / Math.max(1, docLen.length) };
-    cache = { mtimeMs: stat.mtimeMs, book };
+    const book = buildBook(JSON.parse(fs.readFileSync(INDEX_PATH, "utf8")) as BookIndexFile);
+    if (!book) return null;
+    cache = { key, origin: "local", book };
     return book;
   } catch (err) {
     console.warn("Could not read book/index.json:", err);
     return null;
   }
+}
+
+/**
+ * Where the private copy of the index lives, from the environment:
+ *  - BOOK_INDEX_URL (+ optional BOOK_INDEX_TOKEN sent as a Bearer token), or
+ *  - SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY: a private Supabase Storage bucket
+ *    (BOOK_INDEX_BUCKET, default "tem-book"; BOOK_INDEX_OBJECT, default "index.json.gz").
+ */
+export function remoteIndexConfig(): { url: string; headers: Record<string, string> } | null {
+  const url = (process.env.BOOK_INDEX_URL || "").trim();
+  if (url) {
+    const token = (process.env.BOOK_INDEX_TOKEN || "").trim();
+    return { url, headers: token ? { Authorization: `Bearer ${token}` } : {} };
+  }
+  const base = (process.env.SUPABASE_URL || "").trim().replace(/\/+$/, "");
+  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
+  if (base && key) {
+    const bucket = (process.env.BOOK_INDEX_BUCKET || "tem-book").trim();
+    const object = (process.env.BOOK_INDEX_OBJECT || "index.json.gz").trim();
+    return {
+      url: `${base}/storage/v1/object/${bucket}/${object}`,
+      headers: { Authorization: `Bearer ${key}`, apikey: key },
+    };
+  }
+  return null;
+}
+
+async function fetchRemote(cfg: { url: string; headers: Record<string, string> }): Promise<LoadedBook | null> {
+  const res = await fetch(cfg.url, {
+    headers: cfg.headers,
+    cache: "no-store",
+    signal: AbortSignal.timeout(25000),
+  });
+  if (!res.ok) throw new Error(`index download failed with HTTP ${res.status}`);
+  let buf: Buffer = Buffer.from(await res.arrayBuffer());
+  if (buf.length > 2 && buf[0] === 0x1f && buf[1] === 0x8b) buf = zlib.gunzipSync(buf);
+  const book = buildBook(JSON.parse(buf.toString("utf8")) as BookIndexFile);
+  if (!book) throw new Error("the downloaded index contains no passages");
+  return book;
+}
+
+/**
+ * Makes sure the index is in memory, downloading it from private storage when
+ * there is no local copy. Call this once at the start of a request; the
+ * synchronous helpers below then read from memory.
+ */
+export async function ensureBook(): Promise<LoadedBook | null> {
+  const local = loadLocal();
+  if (local) return local;
+
+  const cfg = remoteIndexConfig();
+  if (!cfg) return null;
+  if (cache?.origin === "remote" && cache.key === cfg.url) return cache.book;
+  // after a failure, wait a little before trying again so every request is not slowed down
+  if (Date.now() - remoteFailedAt < 30000) return null;
+
+  if (!remoteLoad) {
+    remoteLoad = fetchRemote(cfg)
+      .then((book) => {
+        if (book) cache = { key: cfg.url, origin: "remote", book };
+        return book;
+      })
+      .catch((err) => {
+        remoteFailedAt = Date.now();
+        console.error("Could not load the book index from private storage:", err?.message || err);
+        return null;
+      })
+      .finally(() => {
+        remoteLoad = null;
+      });
+  }
+  return remoteLoad;
+}
+
+/** The index currently in memory (local file, or the remote copy once ensureBook() has run). */
+export function loadBook(): LoadedBook | null {
+  const local = loadLocal();
+  if (local) return local;
+  return cache?.origin === "remote" ? cache.book : null;
+}
+
+function localPdfPath(book: LoadedBook): string | null {
+  if (cache?.origin !== "local") return null;
+  // basename() guards against a tampered index pointing outside book/
+  const file = path.join(BOOK_DIR, path.basename(book.data.file));
+  return fs.existsSync(file) ? file : null;
+}
+
+/**
+ * "pages": the PDF is on this machine, so a reference opens the page itself.
+ * "reference": only chapter, section, page number and a short quotation are
+ * shown (always the case on a deployed site). BOOK_VIEW=reference forces it.
+ */
+export type BookView = "pages" | "reference";
+export function bookView(): BookView {
+  const book = loadBook();
+  if (!book || process.env.BOOK_VIEW === "reference") return "reference";
+  return localPdfPath(book) ? "pages" : "reference";
 }
 
 /** The PDF's own title, or its first bookmark when the title is just the file name. */
@@ -127,26 +244,26 @@ export interface BookStatus {
   title?: string;
   numPages?: number;
   passages?: number;
+  view?: BookView;
 }
 
-export function getBookStatus(): BookStatus {
-  const book = loadBook();
+export async function getBookStatus(): Promise<BookStatus> {
+  const book = await ensureBook();
   if (!book) return { available: false };
-  if (!fs.existsSync(path.join(BOOK_DIR, book.data.file))) return { available: false };
   return {
     available: true,
     title: displayTitle(book),
     numPages: book.data.numPages,
     passages: book.data.passages.length,
+    view: bookView(),
   };
 }
 
+/** Path of the PDF for the local page viewer; null whenever pages must not be served. */
 export function getBookPdfPath(): string | null {
   const book = loadBook();
-  if (!book) return null;
-  // basename() guards against a tampered index pointing outside book/
-  const file = path.join(BOOK_DIR, path.basename(book.data.file));
-  return fs.existsSync(file) ? file : null;
+  if (!book || bookView() !== "pages") return null;
+  return localPdfPath(book);
 }
 
 export interface BookHit {
